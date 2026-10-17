@@ -65,7 +65,19 @@ body{font-family:'Segoe UI Variable','Segoe UI',system-ui,sans-serif;background:
 #lock{position:fixed;inset:0;z-index:999999;background:inherit;color:#fff;display:flex;flex-direction:column;align-items:center;padding-top:14vh;transition:transform .5s ease-in-out;cursor:pointer;text-shadow:0 2px 12px #0008}
 #lock h1{font-size:96px;font-weight:300}#lock p{font-size:24px}#lock small{position:absolute;bottom:40px;font-size:14px}
 #lock.up{transform:translateY(-100%)}
-</style></head><body>
+</style><style>
+html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+@media(max-width:760px){
+#wd,#tray .tr{display:none}#tb{padding:0 4px}#tb button{width:38px}
+.sd{display:none}.w{min-width:0}.w.mx{inset:0 0 48px 0!important;border-radius:0;resize:none}
+.h{height:40px}.h i{height:40px;line-height:40px;width:52px}
+.ic{width:72px;font-size:11px}.ic b{font-size:30px}
+#menu{width:100vw;max-width:100vw;bottom:48px;border-radius:12px 12px 0 0;height:75vh}.pg6{grid-template-columns:repeat(4,1fr)}.rg{grid-template-columns:1fr}
+.grid{grid-template-columns:repeat(auto-fill,78px)}
+.pg{padding:14px}.term,textarea.ed{font-size:14px}
+}
+</style><style>#tb{overflow:hidden}html,body{max-width:100vw;overflow:hidden}#lock.up{visibility:hidden;transition:transform .5s ease-in-out,visibility 0s .5s}
+@media(max-width:760px){#sr,#pins button:nth-child(n+4){display:none}#tray{flex:0 0 auto}#clk{font-size:11px;padding:0 4px}#ctr{min-width:0;flex:1;justify-content:center}#tasks{display:flex;overflow:hidden}}</style><style>.w.mx,.w.mx{inset:0!important}@media(max-width:760px){.w.mx{inset:0!important}}</style></head><body>
 <div id="desk"></div>
 <div id="menu"></div>
 <div id="tb"><div id="wd"><span style="font-size:26px">☀️</span><span>27°C<br>Jua</span></div>
@@ -84,7 +96,7 @@ function win(title,icon,w,h,body,onclose){
  const el=E('div','w'),hd=E('div','h','<span>'+icon+' &nbsp;'+esc(title)+'</span><i>─</i><i>☐</i><i class="x">✕</i>'),b=E('div','b');
  b.append(body);el.append(hd,b);
  const n=wins.length%8*26;el.style.cssText=`left:${40+n}px;top:${30+n}px;width:${Math.min(w,innerWidth-10)}px;height:${Math.min(h,innerHeight-60)}px;z-index:${++Z}`;
- $('#desk').append(el);
+ $('#desk').append(el);if(innerWidth<760)el.classList.add('mx');
  const tk=E('button','',icon);tk.title=title;$('#tasks').append(tk);
  const o={el,close(){onclose&&onclose();el.remove();tk.remove();wins=wins.filter(x=>x!==o)},foc(){el.style.zIndex=++Z;el.style.display='flex';wins.forEach(x=>x.tk.classList.remove('on'));tk.classList.add('on')},tk};
  wins.push(o);o.foc();
@@ -116,6 +128,8 @@ async function openF(f,n){const s=f.split(' ')[0],e=encodeURIComponent(n)+'.html
  let ok=null;if(location.protocol==='file:')ok=P[0];else for(const p of P.concat(P.map(x=>x.toLowerCase()))){try{const r=await fetch(p,{cache:'no-store'});if(r.ok&&/html/.test(r.headers.get('content-type')||'')){ok=p;break}}catch(_){}}
  if(ok)fr.src=ok;else fr.srcdoc='<body style="font:14px sans-serif;padding:20px"><h3>⚠ Faili halijapatikana</h3><p><b>'+esc(n)+'.html</b> halipo kwenye repo. Nimejaribu:</p><pre>'+P.join('\n')+'</pre><p>Pakia faili hilo kwenye root ya repo.</p>'}
 addEventListener('message',e=>{if(e.data&&e.data.close)wins.slice().forEach(w=>{const r=w.el.querySelector('iframe');if(r&&r.contentWindow===e.source)w.close()})});
+const TAP=matchMedia('(pointer:coarse)').matches;
+document.addEventListener('click',e=>{if(!TAP)return;const t=e.target.closest('.it,.ic');if(t&&t.ondblclick)t.ondblclick(e)});
 /* ===== DESKTOP / START ===== */
 const DI=[['💻','Kompyuta Hii',()=>explorer()],['📁','Nyaraka',()=>explorer('Nyaraka (Documents)')],['🖼️','Picha',()=>explorer('Picha (Pictures)')],['🎬','Video',()=>explorer('Video (Videos)')],['🎵','Muziki',()=>explorer('Muziki (Music)')],['⬛','Terminal',()=>openF('Programu (Programs)','cmd.exe')],['🧮','Calculator',()=>openF('Programu (Programs)','calc.exe')],['🎨','Paint',()=>openF('Programu (Programs)','paint.exe')],['📝','Notepad',()=>openF('Programu (Programs)','notepad.exe')],['🗑️','Recycle Bin',()=>alert('Recycle Bin ni tupu')]];
 DI.forEach(([i,n,f])=>{const d=E('div','ic','<b>'+i+'</b>'+n);d.ondblclick=f;d.onclick=()=>{document.querySelectorAll('.ic').forEach(x=>x.classList.remove('s'));d.classList.add('s')};$('#desk').append(d)});
