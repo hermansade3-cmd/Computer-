@@ -3,9 +3,8 @@
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Music Player</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows Media Player</title>
 
 <style>
 * {
@@ -15,56 +14,62 @@
 body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
-    background: #10151e;
-    color: #ffffff;
-    min-height: 100vh;
+    background: #e4ebf4;
+    color: #213a55;
+}
+
+button, input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
 }
 
 .app {
-    display: flex;
     min-height: 100vh;
+    display: flex;
 }
 
 /* SIDEBAR */
 
 .sidebar {
-    width: 230px;
-    background: #171e2a;
-    padding: 25px 15px;
-    border-right: 1px solid #293244;
+    width: 225px;
     flex-shrink: 0;
+    background: linear-gradient(#f7fbff, #d0deed);
+    border-right: 1px solid #9aafc9;
+    padding: 20px 12px;
 }
 
 .logo {
-    font-size: 23px;
-    font-weight: 700;
-    margin-bottom: 35px;
-    color: #68b8ff;
+    font-size: 21px;
+    font-weight: 600;
+    color: #174c83;
+    margin-bottom: 30px;
 }
 
 .menu-title {
     font-size: 11px;
-    color: #8492a8;
-    margin: 20px 10px 10px;
-    letter-spacing: 1px;
+    font-weight: 700;
+    color: #647f9d;
+    margin: 20px 8px 8px;
 }
 
 .menu button {
+    display: block;
     width: 100%;
-    border: none;
-    background: transparent;
-    color: #c5cedb;
-    padding: 13px 12px;
-    border-radius: 8px;
     text-align: left;
-    cursor: pointer;
-    font-size: 14px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 11px;
+    color: #27415e;
+    background: transparent;
 }
 
 .menu button:hover,
 .menu button.active {
-    background: #283b55;
-    color: #ffffff;
+    background: linear-gradient(#e9f5ff, #bcd9f5);
+    border-color: #8cb2d9;
 }
 
 /* MAIN */
@@ -72,58 +77,63 @@ body {
 .main {
     flex: 1;
     min-width: 0;
-    padding: 28px;
-    padding-bottom: 220px;
+    padding: 25px;
+    padding-bottom: 205px;
+    background: linear-gradient(#f7faff, #e4edf7);
 }
 
 .topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 15px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #bdcde0;
 }
 
 .topbar h1 {
     margin: 0;
-    font-size: 28px;
+    font-size: 25px;
+    font-weight: 500;
+    color: #174c83;
 }
 
-.add-btn {
-    background: #1685e8;
-    color: white;
-    border: none;
-    padding: 13px 20px;
-    border-radius: 9px;
-    font-weight: 600;
-    cursor: pointer;
+.btn {
+    border: 1px solid #86a9cd;
+    border-radius: 3px;
+    padding: 10px 15px;
+    color: #173e68;
+    background: linear-gradient(#fff, #d7e7f8 50%, #b5cee9);
+    box-shadow: inset 0 1px white;
 }
 
-.add-btn:hover {
-    background: #369cff;
+.btn:hover {
+    background: linear-gradient(#fff, #c5e4ff, #9cc8f1);
 }
 
-#fileInput {
+#fileInput,
+#folderInput {
     display: none;
 }
 
 /* SEARCH */
 
 .search {
+    display: block;
     width: 100%;
     max-width: 500px;
-    background: #1b2432;
-    border: 1px solid #303b4d;
-    padding: 14px;
-    color: white;
-    border-radius: 10px;
+    margin: 22px 0;
+    padding: 12px;
+    border: 1px solid #9aafc9;
+    border-radius: 3px;
+    background: white;
+    color: #203b59;
     outline: none;
-    margin-bottom: 25px;
 }
 
 .search:focus {
-    border-color: #1685e8;
+    border-color: #4d91d0;
 }
 
 /* LIBRARY */
@@ -132,78 +142,78 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .library-header h2 {
-    font-size: 19px;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    color: #194c80;
 }
 
 .count {
-    color: #91a2b9;
-    font-size: 13px;
+    color: #536b85;
+    font-size: 12px;
 }
 
 .song-list {
-    background: #171e2a;
-    border: 1px solid #293244;
-    border-radius: 12px;
-    overflow: hidden;
+    border: 1px solid #9aafc9;
+    background: white;
+    box-shadow: 0 1px 3px #c3cfdd;
 }
 
 .song {
     display: grid;
-    grid-template-columns: 38px minmax(0, 1fr) 65px;
+    grid-template-columns: 35px minmax(0, 1fr) 55px;
     align-items: center;
-    gap: 12px;
-    padding: 13px 16px;
-    border-bottom: 1px solid #293244;
+    gap: 10px;
+    padding: 12px;
+    border-bottom: 1px solid #e0e8f1;
     cursor: pointer;
 }
 
-.song:last-child {
-    border-bottom: none;
-}
-
 .song:hover {
-    background: #222e40;
+    background: #eaf4ff;
 }
 
 .song.playing {
-    background: #203c5d;
+    background: linear-gradient(#d5eaff, #b4d6f6);
+    box-shadow: inset 3px 0 #3985c9;
 }
 
 .song-number {
-    color: #8492a8;
-    font-size: 13px;
     text-align: center;
+    color: #647c95;
+    font-size: 13px;
 }
 
 .song-name {
     font-size: 14px;
     font-weight: 600;
+    color: #203b59;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
 .song-info {
+    margin-top: 4px;
     font-size: 12px;
-    color: #91a2b9;
-    margin-top: 5px;
+    color: #647c95;
 }
 
 .song-duration {
-    font-size: 12px;
-    color: #91a2b9;
     text-align: right;
+    font-size: 12px;
+    color: #647c95;
 }
 
 .empty {
-    padding: 45px 20px;
+    padding: 40px 15px;
     text-align: center;
-    color: #9aa9bd;
     line-height: 1.8;
+    color: #647c95;
 }
 
 /* PLAYER */
@@ -211,30 +221,32 @@ body {
 .player {
     position: fixed;
     bottom: 0;
-    left: 230px;
+    left: 225px;
     right: 0;
-    background: #1a2230;
-    border-top: 1px solid #303b4d;
-    padding: 16px 25px;
-    z-index: 5;
+    z-index: 10;
+    padding: 14px 22px;
+    border-top: 1px solid #8ea8c5;
+    background: linear-gradient(#f8fbff, #e1eaf4 40%, #c8d8e9);
+    box-shadow: 0 -2px 5px #c0ccda;
 }
 
 .player-top {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .cover {
-    width: 55px;
-    height: 55px;
+    width: 48px;
+    height: 48px;
     flex-shrink: 0;
-    border-radius: 9px;
-    background: linear-gradient(135deg, #1685e8, #6944b5);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
+    font-size: 25px;
+    background: linear-gradient(135deg, #7aa9d6, #315d91);
+    color: white;
+    border: 1px solid #7c9fc2;
 }
 
 .now-playing {
@@ -243,58 +255,55 @@ body {
 }
 
 .now-playing-title {
-    font-weight: 600;
     font-size: 14px;
+    font-weight: 600;
+    color: #1b3f64;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
 .now-playing-artist {
-    color: #94a4b9;
     font-size: 12px;
-    margin-top: 5px;
+    margin-top: 4px;
+    color: #5b7189;
 }
 
 .controls {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 5px;
 }
 
 .controls button {
     border: none;
-    color: white;
     background: transparent;
-    font-size: 21px;
-    cursor: pointer;
+    color: #285780;
+    font-size: 20px;
     padding: 8px;
 }
 
 .controls button:hover {
-    color: #68b8ff;
+    color: #0877d1;
 }
 
 .controls .play {
-    background: #1685e8;
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    font-size: 20px;
+    border: 1px solid #7099bf;
+    background: linear-gradient(#fff, #c9dff4 50%, #9ebfe1);
+    color: #164b7e;
+    box-shadow: inset 0 1px white;
 }
 
 .progress-area {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 14px;
+    gap: 9px;
     font-size: 11px;
-    color: #9aa9bd;
-}
-
-input[type="range"] {
-    accent-color: #1685e8;
-    cursor: pointer;
+    color: #48627e;
+    margin-top: 12px;
 }
 
 #progress {
@@ -302,22 +311,29 @@ input[type="range"] {
     min-width: 0;
 }
 
+input[type="range"] {
+    accent-color: #367ebd;
+}
+
 .bottom-tools {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 12px;
+    gap: 10px;
+    margin-top: 8px;
 }
 
 .bottom-tools button {
-    color: #a8b8cc;
-    background: transparent;
     border: none;
-    cursor: pointer;
+    background: transparent;
+    color: #426382;
+    padding: 5px;
+    font-size: 12px;
 }
 
 .bottom-tools button.active {
-    color: #68b8ff;
+    color: #006bc1;
+    font-weight: 700;
 }
 
 .volume {
@@ -327,24 +343,25 @@ input[type="range"] {
 }
 
 #volume {
-    width: 95px;
+    width: 90px;
 }
 
-@media (max-width: 700px) {
+/* MOBILE */
+
+@media(max-width: 700px) {
     .app {
         display: block;
     }
 
     .sidebar {
         width: 100%;
-        padding: 12px 15px;
+        padding: 12px;
         border-right: none;
-        border-bottom: 1px solid #293244;
+        border-bottom: 1px solid #9aafc9;
     }
 
     .logo {
-        margin-bottom: 12px;
-        font-size: 20px;
+        margin-bottom: 10px;
     }
 
     .menu-title {
@@ -353,54 +370,49 @@ input[type="range"] {
 
     .menu {
         display: flex;
-        gap: 8px;
+        gap: 5px;
     }
 
     .menu button {
         width: auto;
-        padding: 10px 14px;
+        padding: 9px;
     }
 
     .main {
-        padding: 20px 14px;
-        padding-bottom: 260px;
+        padding: 15px 12px;
+        padding-bottom: 220px;
     }
 
     .topbar h1 {
-        font-size: 23px;
+        font-size: 22px;
     }
 
     .player {
         left: 0;
-        padding: 13px;
-    }
-
-    .player-top {
-        gap: 10px;
-    }
-
-    .cover {
-        width: 43px;
-        height: 43px;
-        font-size: 21px;
+        padding: 12px;
     }
 
     .controls {
-        gap: 3px;
+        gap: 1px;
     }
 
     .controls button {
-        font-size: 18px;
-        padding: 6px;
+        padding: 5px;
+        font-size: 17px;
     }
 
     .controls .play {
-        width: 39px;
-        height: 39px;
+        width: 37px;
+        height: 37px;
+    }
+
+    .cover {
+        width: 40px;
+        height: 40px;
     }
 
     #volume {
-        width: 75px;
+        width: 65px;
     }
 }
 </style>
@@ -412,28 +424,32 @@ input[type="range"] {
 
     <aside class="sidebar">
 
-        <div class="logo">♫ Music Player</div>
+        <div class="logo">♫ Windows Media Player</div>
 
         <div class="menu-title">LIBRARY</div>
 
         <div class="menu">
-            <button class="active" onclick="showAll()">
-                ♫ All Music
+            <button class="active" id="allBtn" onclick="showAll()">
+                ♫ Music
             </button>
 
-            <button onclick="pickMusic()">
+            <button onclick="chooseFiles()">
                 ＋ Add Music
+            </button>
+
+            <button onclick="chooseFolder()">
+                📁 Music Folder
             </button>
         </div>
 
-        <div class="menu-title">PLAYER</div>
+        <div class="menu-title">PLAYBACK</div>
 
         <div class="menu">
-            <button onclick="toggleShuffle()" id="shuffleMenu">
+            <button id="shuffleMenu" onclick="toggleShuffle()">
                 🔀 Shuffle
             </button>
 
-            <button onclick="toggleRepeat()" id="repeatMenu">
+            <button id="repeatMenu" onclick="toggleRepeat()">
                 🔁 Repeat
             </button>
         </div>
@@ -443,30 +459,40 @@ input[type="range"] {
     <main class="main">
 
         <div class="topbar">
-            <h1>My Music</h1>
 
-            <button class="add-btn" onclick="pickMusic()">
+            <h1>Music Library</h1>
+
+            <button class="btn" onclick="chooseFiles()">
                 ＋ Add Music
             </button>
+
         </div>
 
         <input
-            id="fileInput"
             type="file"
+            id="fileInput"
             accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac"
             multiple
         >
 
         <input
-            id="search"
+            type="file"
+            id="folderInput"
+            webkitdirectory
+            directory
+            multiple
+        >
+
+        <input
             class="search"
+            id="search"
             type="search"
-            placeholder="🔍 Search songs..."
+            placeholder="🔍 Search music..."
             oninput="renderSongs()"
         >
 
         <div class="library-header">
-            <h2>Music Library</h2>
+            <h2>All Music</h2>
             <span class="count" id="count">0 songs</span>
         </div>
 
@@ -479,11 +505,11 @@ input[type="range"] {
 
                 <br>
 
-                Chagua nyimbo kutoka kwenye simu au computer yako.
+                Chagua Add Music au Music Folder.
 
                 <br><br>
 
-                <button class="add-btn" onclick="pickMusic()">
+                <button class="btn" onclick="chooseFiles()">
                     Select Music
                 </button>
             </div>
@@ -494,7 +520,7 @@ input[type="range"] {
 
 </div>
 
-<!-- MUSIC PLAYER -->
+<!-- PLAYER CONTROLS -->
 
 <div class="player">
 
@@ -509,7 +535,7 @@ input[type="range"] {
             </div>
 
             <div class="now-playing-artist" id="nowArtist">
-                Music Player
+                Windows Media Player
             </div>
 
         </div>
@@ -566,7 +592,6 @@ input[type="range"] {
         </div>
 
         <div class="volume">
-
             <span>🔊</span>
 
             <input
@@ -577,7 +602,6 @@ input[type="range"] {
                 step="0.01"
                 value="0.8"
             >
-
         </div>
 
     </div>
@@ -589,7 +613,10 @@ input[type="range"] {
 <script>
 
 const audio = document.getElementById("audio");
+
 const fileInput = document.getElementById("fileInput");
+const folderInput = document.getElementById("folderInput");
+
 const songList = document.getElementById("songList");
 
 let songs = [];
@@ -598,38 +625,49 @@ let currentIndex = -1;
 let shuffle = false;
 let repeat = false;
 
-let objectUrls = [];
+/* CHOOSE FILES */
 
-/* OPEN FILE PICKER */
-
-function pickMusic() {
+function chooseFiles() {
     fileInput.click();
 }
 
-/* ADD SONGS */
+/* CHOOSE FOLDER */
 
-fileInput.addEventListener("change", function() {
+function chooseFolder() {
+    folderInput.click();
+}
 
-    const files = Array.from(this.files);
+/* ADD MUSIC */
 
-    files.forEach(file => {
+function addMusic(files) {
+
+    let added = 0;
+
+    Array.from(files).forEach(file => {
 
         if (!file.type.startsWith("audio/")) {
             return;
         }
 
-        const url = URL.createObjectURL(file);
+        // Prevent duplicate files
+        const exists = songs.some(song =>
+            song.file.name === file.name &&
+            song.file.size === file.size &&
+            song.file.lastModified === file.lastModified
+        );
 
-        objectUrls.push(url);
+        if (exists) {
+            return;
+        }
 
-        const song = {
+        songs.push({
             file: file,
             name: file.name.replace(/\.[^/.]+$/, ""),
-            url: url,
+            url: URL.createObjectURL(file),
             duration: 0
-        };
+        });
 
-        songs.push(song);
+        added++;
 
     });
 
@@ -638,6 +676,24 @@ fileInput.addEventListener("change", function() {
     if (currentIndex === -1 && songs.length > 0) {
         loadSong(0, false);
     }
+
+}
+
+/* FILE PICKER */
+
+fileInput.addEventListener("change", function() {
+
+    addMusic(this.files);
+
+    this.value = "";
+
+});
+
+/* FOLDER PICKER */
+
+folderInput.addEventListener("change", function() {
+
+    addMusic(this.files);
 
     this.value = "";
 
@@ -658,14 +714,27 @@ function formatTime(seconds) {
 
 }
 
-/* RENDER SONG LIST */
+/* SAFE TEXT */
+
+function escapeHTML(text) {
+
+    return String(text).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    }[char]));
+
+}
+
+/* DISPLAY SONGS */
 
 function renderSongs() {
 
     const search = document
         .getElementById("search")
-        .value
-        .toLowerCase();
+        .value.toLowerCase();
 
     const filtered = songs
         .map((song, index) => ({song, index}))
@@ -687,6 +756,7 @@ function renderSongs() {
         `;
 
         return;
+
     }
 
     songList.innerHTML = filtered.map((item, position) => {
@@ -694,19 +764,17 @@ function renderSongs() {
         const song = item.song;
         const index = item.index;
 
-        const playingClass =
-            index === currentIndex ? "playing" : "";
-
-        const number =
-            index === currentIndex ? "♫" : position + 1;
+        const playing = index === currentIndex;
 
         return `
             <div
-                class="song ${playingClass}"
+                class="song ${playing ? "playing" : ""}"
                 onclick="loadSong(${index}, true)"
             >
 
-                <div class="song-number">${number}</div>
+                <div class="song-number">
+                    ${playing ? "♫" : position + 1}
+                </div>
 
                 <div>
                     <div class="song-name">
@@ -726,24 +794,6 @@ function renderSongs() {
         `;
 
     }).join("");
-
-}
-
-/* PREVENT HTML INJECTION */
-
-function escapeHTML(text) {
-
-    return String(text).replace(/[&<>"']/g, function(char) {
-
-        return {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#039;"
-        }[char];
-
-    });
 
 }
 
@@ -767,40 +817,35 @@ function loadSong(index, autoplay) {
     document.getElementById("nowArtist").textContent =
         song.file.name;
 
+    document.getElementById("progress").value = 0;
+
+    document.getElementById("currentTime").textContent = "0:00";
+
+    document.getElementById("duration").textContent =
+        formatTime(song.duration);
+
     renderSongs();
 
     if (autoplay) {
-
-        audio.play().then(() => {
-
-            document.getElementById("playBtn").textContent = "❚❚";
-
-        }).catch(() => {
-
-            document.getElementById("playBtn").textContent = "▶";
-
-        });
-
+        audio.play().catch(() => {});
     } else {
-
-        document.getElementById("playBtn").textContent = "▶";
-
+        audio.pause();
     }
 
 }
 
-/* PLAY AND PAUSE */
+/* PLAY / PAUSE */
 
 function togglePlay() {
 
     if (songs.length === 0) {
-        pickMusic();
+        chooseFiles();
         return;
     }
 
     if (audio.paused) {
 
-        if (!audio.src) {
+        if (currentIndex === -1) {
             loadSong(0, true);
             return;
         }
@@ -815,7 +860,7 @@ function togglePlay() {
 
 }
 
-/* PLAYBACK EVENTS */
+/* PLAY BUTTON */
 
 audio.addEventListener("play", function() {
 
@@ -829,7 +874,7 @@ audio.addEventListener("pause", function() {
 
 });
 
-/* DURATION */
+/* SONG DURATION */
 
 audio.addEventListener("loadedmetadata", function() {
 
@@ -846,18 +891,16 @@ audio.addEventListener("loadedmetadata", function() {
 
 });
 
-/* PROGRESS */
+/* PLAYBACK PROGRESS */
 
 audio.addEventListener("timeupdate", function() {
 
-    const progress = document.getElementById("progress");
-
-    if (audio.duration) {
-
-        progress.value =
-            (audio.currentTime / audio.duration) * 100;
-
+    if (!audio.duration) {
+        return;
     }
+
+    document.getElementById("progress").value =
+        (audio.currentTime / audio.duration) * 100;
 
     document.getElementById("currentTime").textContent =
         formatTime(audio.currentTime);
@@ -866,34 +909,36 @@ audio.addEventListener("timeupdate", function() {
 
 /* SEEK */
 
-document.getElementById("progress")
-.addEventListener("input", function() {
+document.getElementById("progress").addEventListener(
+    "input",
+    function() {
 
-    if (audio.duration) {
-
-        audio.currentTime =
-            (this.value / 100) * audio.duration;
+        if (audio.duration) {
+            audio.currentTime =
+                (this.value / 100) * audio.duration;
+        }
 
     }
-
-});
+);
 
 /* VOLUME */
 
-document.getElementById("volume")
-.addEventListener("input", function() {
-
-    audio.volume = Number(this.value);
-
-});
+document.getElementById("volume").addEventListener(
+    "input",
+    function() {
+        audio.volume = Number(this.value);
+    }
+);
 
 audio.volume = 0.8;
 
-/* NEXT SONG */
+/* NEXT */
 
 function nextSong() {
 
-    if (songs.length === 0) return;
+    if (songs.length === 0) {
+        return;
+    }
 
     let next;
 
@@ -924,17 +969,17 @@ function nextSong() {
 
 }
 
-/* PREVIOUS SONG */
+/* PREVIOUS */
 
 function previousSong() {
 
-    if (songs.length === 0) return;
+    if (songs.length === 0) {
+        return;
+    }
 
     if (audio.currentTime > 3) {
-
         audio.currentTime = 0;
         return;
-
     }
 
     let previous = currentIndex - 1;
@@ -947,7 +992,7 @@ function previousSong() {
 
 }
 
-/* AUTO NEXT */
+/* AUTOMATIC NEXT */
 
 audio.addEventListener("ended", function() {
 
@@ -992,7 +1037,7 @@ function toggleRepeat() {
 
 }
 
-/* ALL MUSIC */
+/* SHOW ALL */
 
 function showAll() {
 
@@ -1008,8 +1053,8 @@ window.addEventListener("pagehide", function() {
 
     audio.pause();
 
-    objectUrls.forEach(url => {
-        URL.revokeObjectURL(url);
+    songs.forEach(song => {
+        URL.revokeObjectURL(song.url);
     });
 
 });
