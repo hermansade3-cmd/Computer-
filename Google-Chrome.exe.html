@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Chrome</title>
+<style>
+:root{
+  --tabbar:#dfe3ea; --omnibox:#f1f3f4; --chrome-blue:#1a73e8;
+  --titlebar:#e9edf3; --bg:#ffffff;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
+html,body{height:100%;overflow:hidden;background:#202124;}
+#browser{display:flex;flex-direction:column;height:100vh;background:#fff;}
+/* ---------- Title bar ---------- */
+#titlebar{height:34px;background:var(--titlebar);display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 12px;user-select:none;flex-shrink:0;}
+#titlebar .logo{display:flex;align-items:center;gap:8px;font-size:13px;color:#5f6368;}
+.chromeLogo{width:18px;height:18px;}
+.winBtns{display:flex;gap:2px;}
+.winBtns button{width:46px;height:30px;border:none;background:transparent;cursor:pointer;font-size:14px;color:#5f6368;border-radius:4px;}
+.winBtns button:hover{background:#d6dade;}
+#btnClose:hover{background:#e81123;color:#fff;}
+/* ---------- Tabs ---------- */
+#tabstrip{height:38px;background:var(--tabbar);display:flex;align-items:flex-end;padding:0 4px;flex-shrink:0;}
+.tab{display:flex;align-items:center;gap:8px;background:#f4f6f8;height:36px;min-width:140px;max-width:220px;border-radius:10px 10px 0 0;padding:0 8px 0 12px;cursor:pointer;font-size:12.5px;color:#3c4043;position:relative;user-select:none;}
+.tab.active{background:#fff;height:38px;font-weight:500;}
+.tab .fav{width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.tab .title{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;flex:1;}
+.tab .close{width:16px;height:16px;border-radius:50%;border:none;background:transparent;cursor:pointer;font-size:12px;color:#5f6368;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tab .close:hover{background:#e0e0e0;}
+#newTabBtn{width:26px;height:26px;border:none;border-radius:50%;background:transparent;cursor:pointer;font-size:18px;color:#5f6368;margin-bottom:6px;}
+#newTabBtn:hover{background:#c9ced6;}
+/* ---------- Toolbar ---------- */
+#toolbar{height:52px;background:#fff;display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0;border-bottom:1px solid #e0e0e0;}
+.navBtn{width:32px;height:32px;border:none;border-radius:50%;background:transparent;cursor:pointer;font-size:17px;color:#5f6368;}
+.navBtn:hover{background:#f1f3f4;}
+.navBtn:disabled{opacity:.35;cursor:default;}
+#omnibox{flex:1;height:40px;background:var(--omnibox);border:none;border-radius:22px;padding:0 20px;font-size:14.5px;outline:none;display:flex;align-items:center;}
+#omnibox:focus{background:#fff;box-shadow:0 1px 6px rgba(32,33,36,.28);}
+/* ---------- Page area ---------- */
+#pageArea{flex:1;overflow:auto;background:#fff;position:relative;}
+.pageView{display:none;height:100%;overflow:auto;}
+.pageView.active{display:block;}
+/* ---------- New Tab (Google) ---------- */
+#ntp{display:flex;flex-direction:column;align-items:center;min-height:100%;padding-top:90px;background-size:cover;background-position:center;transition:background-image 1s;}
+#gLogo{font-size:64px;font-weight:500;font-family:Arial,sans-serif;letter-spacing:-2px;}
+#gLogo .b{color:#4285F4}.g{color:#EA4335}.y{color:#FBBC05}.g2{color:#34A853}
+#gSearch{width:min(580px,80%);height:48px;border-radius:24px;border:1px solid #dfe1e5;padding:0 24px;font-size:16px;margin-top:22px;outline:none;box-shadow:0 1px 6px rgba(32,33,36,.18);background:#fff;}
+#gSearch:focus{box-shadow:0 1px 6px rgba(32,33,36,.35);}
+.gBtns{display:flex;gap:12px;margin-top:26px;}
+.gBtns button{padding:10px 20px;border:1px solid #f8f9fa;background:#f8f9fa;border-radius:5px;cursor:pointer;font-size:14px;color:#3c4043;}
+.gBtns button:hover{border:1px solid #dadce0;background:#f8f9fa;box-shadow:0 1px 1px rgba(0,0,0,.1);}
+.shortcuts{display:flex;gap:18px;margin-top:40px;flex-wrap:wrap;justify-content:center;}
+.shcut{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;width:90px;padding:10px;border-radius:12px;}
+.shcut:hover{background:rgba(60,64,67,.08);}
+.shcut .icon{width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.shcut span{font-size:12px;color:#3c4043;background:rgba(255,255,255,.8);padding:2px 8px;border-radius:8px;}
+#ntpClock{font-size:90px;font-weight:300;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.45);position:absolute;top:16px;right:32px;}
+#ntpGreet{position:absolute;bottom:20px;right:32px;color:#fff;font-size:13px;text-shadow:0 1px 4px rgba(0,0,0,.6);}
+#changeBg{position:absolute;bottom:14px;left:14px;background:rgba(255,255,255,.85);border:none;border-radius:18px;padding:8px 16px;cursor:pointer;font-size:12.5px;color:#3c4043;}
+/* ---------- Search results ---------- */
+#resultsWrap{padding:20px 40px;max-width:900px;}
+.resCard{padding:14px 0;border-bottom:1px solid #ebebeb;}
+.resCard .url{font-size:12px;color:#0d652d;}
+.resCard .title{font-size:19px;color:#1a0dab;text-decoration:none;cursor:pointer;}
+.resCard .title:hover{text-decoration:underline;}
+.resCard .snippet{font-size:14px;color:#4d5156;margin-top:3px;}
+.resHead{margin:8px 0 16px;color:#70757a;font-size:14px;}
+/* ---------- Media (Pixabay) ---------- */
+#mediaBar{display:flex;gap:8px;padding:14px 24px;background:#f8f9fa;border-bottom:1px solid #e0e0e0;align-items:center;}
+#mediaBar input{flex:1;height:40px;border:1px solid #dfe1e5;border-radius:20px;padding:0 18px;font-size:14px;outline:none;}
+#mediaBar button{height:40px;padding:0 20px;border:none;border-radius:20px;background:#1a73e8;color:#fff;cursor:pointer;font-size:14px;}
+.mediaTypeBtn{background:#fff !important;color:#5f6368 !important;border:1px solid #dadce0 !important;}
+.mediaTypeBtn.sel{background:#e8f0fe !important;color:#1a73e8 !important;border-color:#1a73e8 !important;}
+#mediaGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;padding:20px 24px;}
+.mItem{border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.15);cursor:pointer;position:relative;background:#000;}
+.mItem img,.mItem video{width:100%;height:170px;object-fit:cover;display:block;}
+.mItem .lbl{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff;font-size:11.5px;padding:24px 8px 6px;}
+.mItem audio{width:100%;}
+/* ---------- Gemini AI ---------- */
+#aiWrap{display:flex;flex-direction:column;height:100%;}
+#aiHeader{background:linear-gradient(90deg,#1b72e8,#4285F4,#9b72cb,#d96570);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:12px;}
+#aiHeader .star{font-size:24px;animation:spin 6s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+#aiMsgs{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px;}
+.aiMsg{max-width:75%;padding:12px 16px;border-radius:18px;font-size:14.5px;line-height:1.55;white-space:pre-wrap;}
+.aiMsg.user{align-self:flex-end;background:#1b72e8;color:#fff;border-bottom-right-radius:4px;}
+.aiMsg.bot{align-self:flex-start;background:#f1f3f4;color:#202124;border-bottom-left-radius:4px;}
+.aiMsg.bot.loading{color:#9aa0a6;font-style:italic;}
+#aiInputBar{display:flex;gap:10px;padding:14px 24px;border-top:1px solid #e0e0e0;background:#fff;}
+#aiInput{flex:1;height:46px;border:1px solid #dfe1e5;border-radius:24px;padding:0 20px;font-size:15px;outline:none;}
+#aiSend{height:46px;width:46px;border:none;border-radius:50%;background:#1b73e8;color:#fff;cursor:pointer;font-size:18px;}
+/* ---------- Generic webview ---------- */
+#webview{position:absolute;inset:0;border:none;display:none;}
+#frameErr{display:none;padding:60px;text-align:center;color:#5f6368;}
+.spinner{width:38px;height:38px;border:4px solid #dfe1e5;border-top-color:#1a73e8;border-radius:50%;animation:sp 1s linear infinite;margin:0 auto;}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="browser">
+  <!-- Title bar -->
+  <div id="titlebar">
+    <div class="logo">
+      <svg class="chromeLogo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#fff" stroke="#ddd"/><path fill="#EA4335" d="M12 2a10 10 0 0 1 8.66 5H12a5 5 0 0 0-4.33 2.5L5.34 5A9.96 9.96 0 0 1 12 2z"/><path fill="#FBBC05" d="M21.78 7.8A10 10 0 0 1 12 22a9.96 9.96 0 0 1-6.66-2.55l4.66-8.07A5 5 0 0 0 12 12z"/><path fill="#34A853" d="M10 12a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"/><path fill="#4285F4" d="M12 7h8.66A10 10 0 0 1 6.5 19.6l2.33-4.03A5 5 0 0 0 12 7z"/></svg>
+      <span id="winTitle">New Tab - Google Chrome</span>
+    </div>
+    <div class="winBtns">
+      <button title="Minimize" onclick="alert('Huu ni mdokezo tu wa Chrome (simulation)')">—</button>
+      <button title="Maximize" onclick="document.getElementById('browser').requestFullscreen()">▢</button>
+      <button id="btnClose" title="Close" onclick="if(confirm('Funga tab?')) window.close()">✕</button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div id="tabstrip">
+    <div id="tabs"></div>
+    <button id="newTabBtn" title="New tab" onclick="newTab()">+</button>
+  </div>
+
+  <!-- Toolbar -->
+  <div id="toolbar">
+    <button class="navBtn" id="btnBack" title="Back" onclick="history.back()">←</button>
+    <button class="navBtn" id="btnFwd" title="Forward" onclick="history.forward()">→</button>
+    <button class="navBtn" id="btnReload" title="Reload" onclick="reloadPage()">⟳</button>
+    <div id="omnibox" contenteditable="true" spellcheck="false"></div>
+  </div>
+
+  <!-- Pages -->
+  <div id="pageArea">
+
+    <!-- New Tab -->
+    <div class="pageView active" id="page-ntp">
+      <div id="ntp">
+        <div id="ntpClock"></div>
+        <div id="gLogo"><span class="b">G</span><span class="g">o</span><span class="y">o</span><span class="b">g</span><span class="g2">l</span><span class="g">e</span></div>
+        <input id="gSearch" placeholder="Tafuta kwenye Google au andika URL...">
+        <div class="gBtns">
+          <button onclick="doSearch(document.getElementById('gSearch').value)">Google Search</button>
+          <button onclick="openTab('gemini')">Jaribu Gemini</button>
+        </div>
+        <div class="shortcuts">
+          <div class="shcut" onclick="openTab('gemini')"><div class="icon">✨</div><span>Gemini</span></div>
+          <div class="shcut" onclick="openTab('media')"><div class="icon">🖼️</div><span>Pixabay</span></div>
+          <div class="shcut" onclick="doSearch('habari leo')"><div class="icon">🔍</div><span>Tavily Search</span></div>
+          <div class="shcut" onclick="doSearch('weather')"><div class="icon">🌤️</div><span>Hali ya hewa</span></div>
+        </div>
+        <button id="changeBg" onclick="changeBg()">🖼 Badilisha mandhari</button>
+        <div id="ntpGreet"></div>
+      </div>
+    </div>
+
+    <!-- Search results -->
+    <div class="pageView" id="page-search">
+      <div id="resultsWrap">
+        <div style="padding:8px 0 4px;"><span id="gLogo2" style="font-size:26px;"><span class="b">G</span><span class="g">o</span><span class="y">o</span><span class="b">g</span><span class="g2">l</span><span class="g">e</span></span></div>
+        <div id="resHead" class="resHead"></div>
+        <div id="resList"></div>
+      </div>
+    </div>
+
+    <!-- Pixabay media -->
+    <div class="pageView" id="page-media">
+      <div id="mediaBar">
+        <button class="mediaTypeBtn sel" data-t="photo" onclick="setMediaType('photo',this)">📷 Picha</button>
+        <button class="mediaTypeBtn" data-t="video" onclick="setMediaType('video',this)">🎬 Video</button>
+        <button class="mediaTypeBtn" data-t="audio" onclick="setMediaType('audio',this)">🎵 Sauti</button>
+        <input id="mediaQ" placeholder="Tafuta picha, video, sauti... (kwa Kiingereza ni bora)">
+        <button onclick="mediaSearch()">Tafuta</button>
+      </div>
+      <div id="mediaGrid"><div class="spinner"></div></div>
+    </div>
+
+    <!-- Gemini AI -->
+    <div class="pageView" id="page-gemini">
+      <div id="aiWrap">
+        <div id="aiHeader"><span class="star">✦</span><div><b>Gemini</b><div style="font-size:12px;opacity:.85;">Asistanti wa AI (Pollination.ai)</div></div></div>
+        <div id="aiMsgs">
+          <div class="aiMsg bot">Habari! Mimi ni Gemini (powered by Pollination.ai). Niambie chochote — maswali, uandishi, matumizi, n.k. 😊</div>
+        </div>
+        <div id="aiInputBar">
+          <input id="aiInput" placeholder="Andika ujumbe wako hapa...">
+          <button id="aiSend" onclick="aiSend()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generic webview iframe -->
+    <div class="pageView" id="page-web">
+      <iframe id="webview" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+      <div id="frameErr">
+        <div class="spinner"></div>
+        <h3 style="margin:18px 0 6px;">Inapakia...</h3>
+        <p>Kama ukurasa hauonekani, tovuti hiyo inaweza kukataa kupakiwa ndani ya iframe (X-Frame-Options). Jaribu kutafuta jina lake hapa chini.</p>
+        <div id="frameFallback" style="margin-top:14px;"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ================= API KEYS ================= */
+const PIXABAY_KEY = "57792634-5e89dd610e4c1c840f815c524";
+const TAVILY_KEY  = "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";
+const POLLIN_KEY  = "sk_IB9ZFb8BOJ4FH9FFOK0YyLYK4EAk8ptE";
+
+/* ================= TABS ================= */
+let tabs = [];
+let activeId = null;
+let tabSeq = 0;
+
+function newTab(){
+  const id = ++tabSeq;
+  tabs.push({id, type:'ntp', title:'New Tab', url:''});
+  renderTabs(); activateTab(id);
+}
+function openTab(type){
+  const id = ++tabSeq;
+  const titles = {media:'Pixabay - Media', gemini:'Gemini', search:'Tavily Search'};
+  tabs.push({id, type, title:titles[type]||type, url:''});
+  renderTabs(); activateTab(id);
+  if(type==='media') mediaSearch();
+}
+function closeTab(id, ev){
+  ev.stopPropagation();
+  tabs = tabs.filter(t=>t.id!==id);
+  if(!tabs.length){ newTab(); return; }
+  if(activeId===id) activateTab(tabs[tabs.length-1].id);
+  renderTabs();
+}
+function renderTabs(){
+  const el = document.getElementById('tabs');
+  el.innerHTML = '';
+  tabs.forEach(t=>{
+    const d = document.createElement('div');
+    d.className = 'tab'+(t.id===activeId?' active':'');
+    d.onclick = ()=>activateTab(t.id);
+    const fav = t.type==='gemini'?'✦':t.type==='media'?'🖼':t.type==='search'?'🔍':'🔵';
+    d.innerHTML = `<div class="fav">${fav}</div><div class="title">${escapeHtml(t.title)}</div><button class="close" onclick="closeTab(${t.id},event)">✕</button>`;
+    el.appendChild(d);
+  });
+}
+function activateTab(id){
+  activeId = id;
+  const t = tabs.find(x=>x.id===id);
+  renderTabs();
+  document.querySelectorAll('.pageView').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+t.type).classList.add('active');
+  document.getElementById('winTitle').textContent = t.title + ' - Google Chrome';
+  document.getElementById('omnibox').textContent = t.url || '';
+  if(t.type==='ntp') startNtp();
+}
+function reloadPage(){
+  const t = tabs.find(x=>x.id===activeId);
+  if(!t) return;
+  if(t.type==='ntp') startNtp();
+  else if(t.type==='media') mediaSearch();
+  else if(t.type==='search' && t.lastQuery) doSearch(t.lastQuery, true);
+  else if(t.type==='web' && t.url) loadUrl(t.url, true);
+}
+
+/* ================= CLOCK & GREETING ================= */
+function startNtp(){
+  const now = new Date();
+  document.getElementById('ntpClock').textContent = now.toLocaleTimeString('sw-KE',{hour:'2-digit',minute:'2-digit'});
+  const h = now.getHours();
+  const greet = h<12?'Habari ya asubuhi':h<17?'Habari ya mchana':h<20?'Habari ya jioni':'Habari ya usiku';
+  document.getElementById('ntpGreet').textContent = greet + ', Karibu Chrome!';
+}
+setInterval(()=>{ if(tabs.find(t=>t.id===activeId)?.type==='ntp') startNtp(); }, 1000);
+
+/* ================= PIXABAY ================= */
+let bgIndex = 0;
+const bgQueries = ['nature landscape','mountains sunrise','ocean beach sunset','forest fog','city night lights','aurora'];
+async function changeBg(){
+  bgIndex = (bgIndex+1)%bgQueries.length;
+  const q = bgQueries[bgIndex];
+  try{
+    const r = await fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(q)}&image_type=photo&orientation=horizontal&per_page=10&safesearch=true`);
+    const d = await r.json();
+    if(d.hits && d.hits.length){
+      const pick = d.hits[Math.floor(Math.random()*d.hits.length)];
+      document.getElementById('ntp').style.backgroundImage = `linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.25)),url(${pick.largeImageURL})`;
+    }
+  }catch(e){ console.error(e); }
+}
+
+let mediaType = 'photo';
+function setMediaType(t, btn){
+  mediaType = t;
+  document.querySelectorAll('.mediaTypeBtn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  mediaSearch();
+}
+async function mediaSearch(){
+  const grid = document.getElementById('mediaGrid');
+  const q = document.getElementById('mediaQ').value.trim() || 'beautiful nature';
+  grid.innerHTML = '<div class="spinner"></div>';
+  try{
+    if(mediaType==='audio'){
+      const r = await fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(q)}&per_page=20&safesearch=true`);
+      const d = await r.json();
+      // Pixabay public API has no audio endpoint; show a friendly note + images fallback
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#5f6368;padding:40px;">⚠️ Pixabay public API haipakii audio moja kwa moja. Onyesha matokeo ya picha badala yake 👇</div>';
+      renderImages(d.hits||[]); return;
+    }
+    if(mediaType==='video'){
+      const r = await fetch(`https://pixabay.com/api/videos/?key=${PIXABAY_KEY}&q=${encodeURIComponent(q)}&per_page=20&safesearch=true`);
+      const d = await r.json();
+      if(!d.hits || !d.hits.length){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#5f6368;">Hakuna video iliyopatikana.</div>'; return; }
+      grid.innerHTML='';
+      d.hits.forEach(v=>{
+        const it = document.createElement('div'); it.className='mItem';
+        it.innerHTML = `<video src="${v.videos.tiny.url}" controls muted loop></video><div class="lbl">▶ ${escapeHtml(v.tags)} · ${v.duration}s · ${v.views} views</div>`;
+        grid.appendChild(it);
+      });
+    } else {
+      const r = await fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(q)}&image_type=photo&per_page=24&safesearch=true`);
+      const d = await r.json();
+      renderImages(d.hits||[]);
+    }
+  }catch(e){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#d93025;">Kosa la mtandao. Angalia muunganisho au API key.</div>';
+  }
+}
+function renderImages(hits){
+  const grid = document.getElementById('mediaGrid');
+  if(!hits.length){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#5f6368;">Hakuna matokeo.</div>'; return; }
+  grid.innerHTML='';
+  hits.forEach(p=>{
+    const it = document.createElement('div'); it.className='mItem';
+    it.innerHTML = `<img src="${p.webformatURL}" loading="lazy" alt="${escapeHtml(p.tags)}"><div class="lbl">📷 ${escapeHtml(p.tags)} · ${p.likes}♥ · ${p.user}</div>`;
+    it.onclick = ()=>window.open(p.largeImageURL,'_blank');
+    grid.appendChild(it);
+  });
+}
+
+/* ================= TAVILY SEARCH ================= */
+async function doSearch(query, isReload){
+  query = (query||'').trim();
+  if(!query) return;
+  let tab = tabs.find(t=>t.id===activeId);
+  const isUrl = /^(https?:\/\/)?[\w-]+(\.[\w-]+)+/.test(query) && query.split(' ').length===1;
+  if(isUrl && !isReload){ loadUrl(/^https?:\/\//.test(query)?query:'https://'+query); return; }
+  if(!tab || (!isReload && (tab.type!=='search' || tab.locked))) {
+    const id = ++tabSeq;
+    tab = {id, type:'search', title:query+' - Google Search', url:''};
+    tabs.push(tab); activeId = id;
+  }
+  tab.title = query+' - Google Search';
+  tab.lastQuery = query;
+  tab.locked = false;
+  renderTabs(); activateTab(tab.id);
+  const t = tabs.find(x=>x.id===tab.id);
+  const list = document.getElementById('resList');
+  const head = document.getElementById('resHead');
+  list.innerHTML = '<div class="spinner" style="margin:50px auto;"></div>';
+  head.textContent = '';
+  try{
+    const r = await fetch('https://api.tavily.com/search',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({api_key:TAVILY_KEY, query, search_depth:'basic', max_results:10, include_answer:true})
+    });
+    const d = await r.json();
+    head.textContent = `Takriban matokeo ${d.results?d.results.length*1500:0} (0.${Math.floor(Math.random()*40)+10} sekunde)`;
+    let html = '';
+    if(d.answer) html += `<div class="resCard"><div class="snippet" style="background:#f8f9fa;border-radius:8px;padding:14px;"><b>Jibu la moja kwa moja:</b><br>${escapeHtml(d.answer)}</div></div>`;
+    (d.results||[]).forEach(res=>{
+      html += `<div class="resCard">
+        <div class="url">🔒 ${escapeHtml(res.url)}</div>
+        <div class="title" onclick="loadUrl('${res.url.replace(/'/g,"")}',false)">${escapeHtml(res.title)}</div>
+        <div class="snippet">${escapeHtml(res.content||'')}</div>
+      </div>`;
+    });
+    if(!html) html = '<div style="padding:40px;text-align:center;color:#5f6368;">Hakuna matokeo yaliyopatikana.</div>';
+    list.innerHTML = html;
+    t.url = 'google.com/search?q='+encodeURIComponent(query);
+    document.getElementById('omnibox').textContent = t.url;
+  }catch(e){
+    list.innerHTML = '<div style="padding:40px;text-align:center;color:#d93025;">Kosa la kutafuta. Angalia muunganisho.</div>';
+  }
+}
+
+/* ================= WEBVIEW (iframe) ================= */
+function loadUrl(url, isReload){
+  let tab = tabs.find(t=>t.id===activeId);
+  if(!tab || tab.type!=='web' || !isReload){
+    const id = ++tabSeq;
+    tab = {id, type:'web', title:url.replace(/^https?:\/\//,'').split('/')[0], url};
+    tabs.push(tab); activeId = id;
+  }
+  tab.url = url;
+  renderTabs(); activateTab(tab.id);
+  const iframe = document.getElementById('webview');
+  const err = document.getElementById('frameErr');
+  iframe.style.display='block'; err.style.display='none';
+  iframe.src = url;
+  iframe.onload = ()=>{
+    try{ iframe.contentWindow.location.href; }catch(e){ /* blocked by X-Frame-Options shows blank */ }
+  };
+  iframe.onerror = ()=>{ iframe.style.display='none'; err.style.display='block'; };
+  document.getElementById('frameFallback').innerHTML =
+    `<button class="gBtns" style="display:inline-block" onclick="window.open('${url}','_blank')">Fungua ${escapeHtml(url)} kwenye tab mpya</button>`;
+}
+
+/* ================= POLLINATION / GEMINI ================= */
+const aiHistory = [];
+async function aiSend(){
+  const inp = document.getElementById('aiInput');
+  const q = inp.value.trim();
+  if(!q) return;
+  inp.value='';
+  const msgs = document.getElementById('aiMsgs');
+  msgs.insertAdjacentHTML('beforeend', `<div class="aiMsg user">${escapeHtml(q)}</div>`);
+  const loading = document.createElement('div');
+  loading.className='aiMsg bot loading'; loading.textContent='Gemini anafikiria...';
+  msgs.appendChild(loading); msgs.scrollTop = msgs.scrollHeight;
+  aiHistory.push({role:'user', content:q});
+  try{
+    let reply = '';
+    const r = await fetch('https://text.pollinations.ai/openai',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+POLLIN_KEY},
+      body: JSON.stringify({model:'openai', messages:[{role:'system',content:'You are Gemini, a helpful AI assistant. Reply in Swahili if the user writes in Swahili.'}, ...aiHistory]})
+    });
+    if(r.ok){
+      const d = await r.json();
+      reply = d.choices && d.choices[0] && d.choices[0].message ? d.choices[0].message.content : '';
+    }
+    if(!reply){
+      // Fallback: GET endpoint
+      const r2 = await fetch('https://text.pollinations.ai/'+encodeURIComponent(q)+'?token='+POLLIN_KEY);
+      reply = await r2.text();
+    }
+    loading.remove();
+    msgs.insertAdjacentHTML('beforeend', `<div class="aiMsg bot">${escapeHtml(reply)}</div>`);
+    aiHistory.push({role:'assistant', content:reply});
+    msgs.scrollTop = msgs.scrollHeight;
+  }catch(e){
+    loading.remove();
+    msgs.insertAdjacentHTML('beforeend', `<div class="aiMsg bot">⚠️ Samahani, kosa limejitokeza. Jaribu tena.</div>`);
+  }
+}
+document.getElementById('aiInput').addEventListener('keydown', e=>{ if(e.key==='Enter') aiSend(); });
+
+/* ================= OMNIBOX ================= */
+const ob = document.getElementById('omnibox');
+ob.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    e.preventDefault();
+    doSearch(ob.textContent);
+  }
+});
+
+/* ================= HELPERS ================= */
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ================= INIT ================= */
+newTab();
+changeBg();
+startNtp();
+document.getElementById('gSearch').addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(e.target.value); });
+</script>
+</body>
+</html>
