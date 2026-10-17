@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OneNote</title>
+<style>
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{font:13px "Segoe UI",Arial,sans-serif;display:flex;flex-direction:column;background:#fff;color:#222}
+#rb{background:#f3f3f3;border-bottom:1px solid #c8c8c8;border-top:3px solid #7719aa;padding:4px 6px;display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+#rb button,#rb select{background:#fff;border:1px solid #c8c8c8;border-radius:3px;padding:4px 8px;cursor:pointer;font:inherit;color:#222}
+#rb button:hover,#rb select:hover{background:#efe1f6;border-color:#7719aa}
+#rb input[type=color]{width:28px;height:26px;padding:0;border:1px solid #c8c8c8;background:#fff}
+.sp{width:1px;height:22px;background:#c8c8c8;margin:0 4px}
+#secs{display:flex;background:#efe6f5;padding:6px 6px 0;gap:2px;overflow-x:auto;align-items:flex-end;border-bottom:3px solid #7719aa}
+#secs button{border:0;background:none;cursor:pointer;padding:5px 8px;font-size:14px}
+.sec{padding:6px 16px;border-radius:5px 5px 0 0;cursor:pointer;color:#fff;opacity:.65;white-space:nowrap}
+.sec.on{opacity:1;font-weight:600}
+#main{flex:1;display:flex;min-height:0}
+#cv{flex:1;overflow:auto;padding:22px 40px;min-width:0}
+#pt{border:0;border-bottom:1px solid #ddd;font:600 28px "Segoe UI",Arial;width:100%;outline:0;padding:4px 0;color:#4a1163}
+#dt{color:#777;margin:6px 0 16px;font-size:12px}
+#ed{min-height:60vh;outline:0;line-height:1.55;font-size:15px}
+#ed img{max-width:100%}#ed table{border-collapse:collapse;margin:6px 0}#ed td{border:1px solid #bbb;min-width:70px;padding:5px}
+#ed blockquote{border-left:3px solid #7719aa;margin:6px 0;padding-left:12px;color:#555}#ed pre{background:#f4f4f4;padding:8px;border-radius:4px}
+#pl{width:220px;border-left:1px solid #ddd;background:#faf6fc;display:flex;flex-direction:column;flex:none}
+#q{margin:8px;padding:6px 8px;border:1px solid #c8c8c8;border-radius:3px;font:inherit}
+#pgs{overflow:auto;flex:1}
+.pg{padding:8px 12px;border-bottom:1px solid #eee;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pg.on{background:#e6d3f0;border-left:3px solid #7719aa}.pg small{display:block;color:#777}
+#sb{background:#7719aa;color:#fff;padding:3px 10px;font-size:12px}
+@media(max-width:700px){#main{flex-direction:column-reverse}#pl{width:auto;max-height:32vh;border-left:0;border-top:1px solid #ddd}#cv{padding:14px}}
+@media print{#rb,#secs,#pl,#sb,#q{display:none}#cv{overflow:visible;padding:0}}
+</style></head><body>
+<div id="rb">
+<button onclick="newNB()">📄 Daftari mpya</button><button onclick="fi.click()">📂 Fungua</button><button onclick="save()">💾 Hifadhi</button>
+<select onchange="exp(this.value);this.value=''"><option value="">⬇ Hamisha nje…</option><option value="html">Ukurasa (HTML)</option><option value="doc">Ukurasa (Word .doc)</option><option value="txt">Ukurasa (TXT)</option><option value="all">Daftari lote (HTML)</option><option value="json">Daftari lote (JSON)</option><option value="pdf">PDF / Chapisha</option></select>
+<span class="sp"></span>
+<button onclick="cmd('cut')">✂ Kata</button><button onclick="cmd('copy')">⧉ Nakili</button><button onclick="pst()">📋 Bandika</button><button onclick="cmd('undo')">↶</button><button onclick="cmd('redo')">↷</button>
+<span class="sp"></span>
+<select onchange="cmd('formatBlock',this.value);this.value=''"><option value="">Mtindo…</option><option value="P">Kawaida</option><option value="H1">Kichwa 1</option><option value="H2">Kichwa 2</option><option value="H3">Kichwa 3</option><option value="PRE">Msimbo</option><option value="BLOCKQUOTE">Nukuu</option></select>
+<select onchange="cmd('fontName',this.value);this.value=''"><option value="">Fonti…</option><option>Segoe UI</option><option>Arial</option><option>Times New Roman</option><option>Georgia</option><option>Verdana</option><option>Courier New</option></select>
+<select onchange="cmd('fontSize',this.value);this.value=''"><option value="">Ukubwa…</option><option value="1">Ndogo sana</option><option value="2">Ndogo</option><option value="3">Kawaida</option><option value="5">Kubwa</option><option value="6">Kubwa sana</option><option value="7">Kubwa zaidi</option></select>
+<button onclick="cmd('bold')"><b>B</b></button><button onclick="cmd('italic')"><i>I</i></button><button onclick="cmd('underline')"><u>U</u></button><button onclick="cmd('strikeThrough')"><s>S</s></button><button onclick="cmd('subscript')">x₂</button><button onclick="cmd('superscript')">x²</button>
+<input type="color" value="#000000" title="Rangi ya maandishi" onchange="cmd('foreColor',this.value)"><input type="color" value="#ffff00" title="Alama ya kung'arisha" onchange="cmd('hiliteColor',this.value)">
+<span class="sp"></span>
+<button onclick="cmd('insertUnorderedList')">• Orodha</button><button onclick="cmd('insertOrderedList')">1. Orodha</button><button onclick="cmd('outdent')">⇤</button><button onclick="cmd('indent')">⇥</button>
+<button onclick="cmd('justifyLeft')">◧</button><button onclick="cmd('justifyCenter')">≡</button><button onclick="cmd('justifyRight')">◨</button>
+<span class="sp"></span>
+<button onclick="cmd('insertHTML','<input type=&quot;checkbox&quot;>&nbsp;')">☑ Kazi</button><button onclick="cmd('insertHTML','<span style=&quot;background:#fff2a8&quot;>⭐ </span>')">⭐ Muhimu</button>
+<button onclick="tbl()">▦ Jedwali</button><button onclick="fimg.click()">🖼 Picha</button><button onclick="lnk()">🔗 Kiungo</button><button onclick="cmd('insertHorizontalRule')">―</button><button onclick="cmd('insertText',new Date().toLocaleString())">🕒 Tarehe</button><button onclick="cmd('removeFormat')">🧹</button>
+</div>
+<div id="secs"></div>
+<div id="main">
+<div id="cv"><input id="pt" placeholder="Kichwa cha ukurasa"><div id="dt"></div><div id="ed" contenteditable="true" spellcheck="true"></div></div>
+<div id="pl"><input id="q" placeholder="🔍 Tafuta kwenye daftari lote…"><div id="pgs"></div>
+<div style="padding:6px;display:flex;flex-wrap:wrap;gap:3px;border-top:1px solid #ddd"><button onclick="addPg()">＋ Ukurasa</button><button onclick="dupPg()">⧉ Rudufu</button><button onclick="mvPg(-1)">▲</button><button onclick="mvPg(1)">▼</button><button onclick="delPg()">🗑</button><select id="mvto" onchange="moveTo(this.value)" style="max-width:100%"></select></div></div>
+</div>
+<div id="sb"><span id="ms">Inahifadhi kiotomatiki · Ctrl+S kuhifadhi faili</span></div>
+<input type="file" id="fi" hidden accept=".json,.html,.htm,.txt"><input type="file" id="fimg" hidden accept="image/*">
+<script>
+const $=i=>document.getElementById(i),ed=$('ed'),pt=$('pt'),fi=$('fi'),fimg=$('fimg'),uid=()=>Math.random().toString(36).slice(2,9);
+const COL=['#7719aa','#0078d4','#107c10','#d83b01','#c239b3','#008272','#986f0b'];
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const txt=h=>{const d=document.createElement('div');d.innerHTML=h;return d.textContent};
+const mkP=(t='',h='')=>({id:uid(),t,h,d:Date.now(),m:Date.now()}),mkS=(n,c)=>({id:uid(),n,c,p:[mkP()]});
+let N,cs=0,cp_=null,rg=null,tm;
+const sec=()=>N.s[cs],pg=()=>sec().p.find(x=>x.id==cp_)||sec().p[0];
+const persist=()=>{try{localStorage.on=JSON.stringify(N)}catch(e){flash('Hifadhi imejaa — hamisha nje faili')}};
+const flash=m=>{$('ms').textContent=m;setTimeout(()=>$('ms').textContent='Inahifadhi kiotomatiki · Ctrl+S kuhifadhi faili',2500)};
+const sv=()=>{clearTimeout(tm);const p=pg();p.h=ed.innerHTML;p.t=pt.value;p.m=Date.now();persist();list()};
+const later=()=>{clearTimeout(tm);tm=setTimeout(sv,300)};
+ed.oninput=later;pt.oninput=later;
+ed.addEventListener('change',e=>{if(e.target.type=='checkbox'){e.target.toggleAttribute('checked',e.target.checked);sv()}});
+document.addEventListener('selectionchange',()=>{const s=getSelection();if(s.rangeCount&&ed.contains(s.anchorNode))rg=s.getRangeAt(0).cloneRange()});
+function cmd(c,v){if(rg){ed.focus();const s=getSelection();s.removeAllRanges();s.addRange(rg)}else ed.focus();document.execCommand(c,false,v);sv()}
+async function pst(){try{cmd('insertText',await navigator.clipboard.readText())}catch(e){alert('Tumia Ctrl+V kubandika.')}}
+function tbl(){const r=+prompt('Safu mlalo',3),c=+prompt('Safu wima',3);if(!r||!c)return;cmd('insertHTML','<table>'+('<tr>'+'<td>&nbsp;</td>'.repeat(c)+'</tr>').repeat(r)+'</table><p><br></p>')}
+function lnk(){const u=prompt('Anwani ya kiungo (https://...)');if(u)cmd('createLink',u)}
+fimg.onchange=()=>{const f=fimg.files[0];if(!f)return;const r=new FileReader();r.onload=()=>cmd('insertImage',r.result);r.readAsDataURL(f);fimg.value=''};
+function secs(){const el=$('secs');el.innerHTML='';N.s.forEach((s,i)=>{const d=document.createElement('div');d.className='sec'+(i==cs?' on':'');d.style.background=s.c;d.textContent=s.n;d.onclick=()=>{sv();cs=i;cp_=s.p[0].id;show()};d.ondblclick=()=>{const n=prompt('Jina la sehemu',s.n);if(n){s.n=n;persist();secs()}};el.appendChild(d)});
+el.insertAdjacentHTML('beforeend','<button onclick="addSec()" title="Sehemu mpya">＋</button><button onclick="mvSec(-1)" title="Hamisha kushoto">◀</button><button onclick="mvSec(1)" title="Hamisha kulia">▶</button><button onclick="colSec()" title="Badilisha rangi">🎨</button><button onclick="delSec()" title="Futa sehemu">🗑</button>')}
+function list(){const q=$('q').value.trim().toLowerCase(),el=$('pgs'),it=[];N.s.forEach((s,si)=>s.p.forEach(p=>{if(q?(p.t+' '+txt(p.h)).toLowerCase().includes(q):si==cs)it.push({s,si,p})}));el.innerHTML='';
+it.forEach(({s,si,p})=>{const d=document.createElement('div');d.className='pg'+(p.id==pg().id&&si==cs?' on':'');d.innerHTML=`${esc(p.t)||'<i>Bila kichwa</i>'}<small>${q?esc(s.n)+' · ':''}${new Date(p.m||p.d).toLocaleDateString()}</small>`;d.onclick=()=>{sv();cs=si;cp_=p.id;show()};el.appendChild(d)});if(!it.length)el.innerHTML='<div class="pg"><small>Hakuna kurasa</small></div>'}
+$('q').oninput=list;
+function show(){secs();const p=pg();cp_=p.id;pt.value=p.t;ed.innerHTML=p.h;$('dt').textContent=new Date(p.d).toLocaleString();$('mvto').innerHTML='<option value="">Hamisha hadi…</option>'+N.s.map((s,i)=>i==cs?'':`<option value="${i}">${esc(s.n)}</option>`).join('');list();persist()}
+function addSec(){const n=prompt('Jina la sehemu mpya');if(!n)return;sv();N.s.push(mkS(n,COL[N.s.length%COL.length]));cs=N.s.length-1;cp_=null;show()}
+function delSec(){if(N.s.length<2)return alert('Lazima kubaki sehemu moja.');if(!confirm('Futa sehemu "'+sec().n+'" na kurasa zake zote?'))return;N.s.splice(cs,1);cs=Math.max(0,cs-1);cp_=null;show()}
+function mvSec(d){const j=cs+d;if(j<0||j>=N.s.length)return;sv();const[s]=N.s.splice(cs,1);N.s.splice(j,0,s);cs=j;show()}
+function colSec(){const s=sec();s.c=COL[(COL.indexOf(s.c)+1)%COL.length];secs();persist()}
+function addPg(){sv();const p=mkP();sec().p.push(p);cp_=p.id;show();pt.focus()}
+function dupPg(){sv();const p={...pg(),id:uid(),t:pg().t+' (nakala)',d:Date.now(),m:Date.now()};const a=sec().p;a.splice(a.findIndex(x=>x.id==cp_)+1,0,p);cp_=p.id;show()}
+function delPg(){if(!confirm('Futa ukurasa huu?'))return;const a=sec().p,i=a.findIndex(x=>x.id==cp_);a.splice(i,1);if(!a.length)a.push(mkP());cp_=a[Math.max(0,i-1)].id;show()}
+function mvPg(d){sv();const a=sec().p,i=a.findIndex(x=>x.id==cp_),j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];show()}
+function moveTo(i){if(i==='')return;sv();const a=sec().p,k=a.findIndex(x=>x.id==cp_),[p]=a.splice(k,1);if(!a.length)a.push(mkP());N.s[+i].p.push(p);cs=+i;cp_=p.id;show();flash('Ukurasa umehamishwa')}
+function newNB(){if(!confirm('Anza daftari jipya? Daftari la sasa litafutwa (hamisha nje kwanza ukitaka).'))return;N=def();cs=0;cp_=null;show()}
+const def=()=>({s:[mkS('Sehemu ya kwanza',COL[0])]});
+const dl=(n,m,d)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([d],{type:m}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),999)};
+function save(){sv();dl('daftari.json','application/json',JSON.stringify(N));flash('Imehifadhiwa ✔')}
+function exp(t){if(!t)return;sv();if(t=='pdf')return print();if(t=='json')return save();const p=pg(),nm=(p.t||'ukurasa').replace(/[\\\/:*?"<>|]/g,'_');
+const wrap=b=>`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${esc(p.t)}</title></head><body style="font-family:Segoe UI,Arial,sans-serif;max-width:800px;margin:30px auto;line-height:1.5">${b}</body></html>`;
+const page=`<h1>${esc(p.t)}</h1><p style="color:#777">${new Date(p.d).toLocaleString()}</p>${p.h}`;
+if(t=='html')dl(nm+'.html','text/html',wrap(page));else if(t=='doc')dl(nm+'.doc','application/msword',wrap(page));else if(t=='txt')dl(nm+'.txt','text/plain','\ufeff'+p.t+'\n\n'+ed.innerText);
+else if(t=='all')dl('daftari.html','text/html',wrap(N.s.map(s=>`<h1 style="color:${s.c}">${esc(s.n)}</h1>`+s.p.map(q=>`<h2>${esc(q.t)}</h2>${q.h}<hr>`).join('')).join('')))}
+fi.onchange=()=>{const f=fi.files[0];if(!f)return;const x=f.name.split('.').pop().toLowerCase(),r=new FileReader();r.onload=()=>{sv();
+if(x=='json'){let o;try{o=JSON.parse(r.result);if(!o.s||!o.s.length)throw 0}catch(e){return alert('Faili si sahihi')}if(confirm('Sawa = badilisha daftari lote.\nGhairi = ongeza sehemu kwenye daftari la sasa.'))N=o;else{o.s.forEach(s=>{s.id=uid();s.p.forEach(p=>p.id=uid())});N.s.push(...o.s)}cs=0;cp_=null}
+else{let h=r.result;if(x=='txt')h=esc(h).replace(/\n/g,'<br>');else{const d=new DOMParser().parseFromString(h,'text/html');h=d.body.innerHTML}const p=mkP(f.name.replace(/\.\w+$/,''),h);sec().p.push(p);cp_=p.id}show()};r.readAsText(f);fi.value=''};
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()=='s'){e.preventDefault();save()}});
+try{N=JSON.parse(localStorage.on)}catch(e){}if(!N||!N.s||!N.s.length)N=def();
+$('rb').addEventListener('mousedown',e=>{if(e.target.tagName=='BUTTON')e.preventDefault()});
+show();
+</script></body></html>
