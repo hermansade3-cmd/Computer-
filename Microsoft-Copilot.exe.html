@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Copilot</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.12.0/pptxgen.bundle.js" defer></script>
+<style>
+:root{--g:linear-gradient(135deg,#0f6cbd,#6b5ce7 55%,#d0489c)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{display:flex;font:14px "Segoe UI",system-ui,sans-serif;background:#f4f4fa;color:#1f1f2b}
+button{font:inherit;cursor:pointer}
+.side{width:250px;background:#fff;border-right:1px solid #e3e3ee;display:flex;flex-direction:column;padding:10px;gap:6px;flex:none}
+.side>button,.side select{border:1px solid #dcdcea;background:#fff;border-radius:8px;padding:8px;text-align:left;font:inherit}
+.side>button:hover{background:#f0eefc}
+#nw{background:var(--g)!important;color:#fff;border:0!important;font-weight:600}
+#cl{flex:1;overflow:auto;display:flex;flex-direction:column;gap:2px}
+.cv{display:flex;justify-content:space-between;padding:7px 8px;border-radius:7px;cursor:pointer;gap:6px}
+.cv span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cv:hover,.cv.on{background:#ecebfb}.cv b{opacity:.5;font-weight:400}
+main{flex:1;display:flex;flex-direction:column;min-width:0;position:relative}
+#menu{display:none;position:absolute;left:8px;top:8px;z-index:5;border:0;background:#fff;border-radius:8px;padding:6px 10px;box-shadow:0 1px 4px #0003}
+#msgs{flex:1;overflow:auto;padding:22px 16px}
+.w{max-width:820px;margin:0 auto}
+.hello{margin:12vh auto 0;text-align:center}
+.hello h1{font-size:30px;margin:0 0 18px;background:var(--g);-webkit-background-clip:text;color:transparent}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chips button{border:1px solid #d9d9ea;background:#fff;border-radius:18px;padding:8px 14px}.chips button:hover{border-color:#6b5ce7}
+.msg{margin:0 auto 18px;max-width:820px}
+.msg.u .bd{background:#e5e3fb;border-radius:16px 16px 4px 16px;padding:10px 14px;margin-left:auto;width:fit-content;max-width:88%;white-space:pre-wrap;word-break:break-word}
+.msg.a .bd{line-height:1.6;word-break:break-word}.bd p{margin:6px 0}.bd h2,.bd h3,.bd h4,.bd h5{margin:14px 0 6px}
+.bd pre{background:#1e1e2e;color:#e6e6f0;padding:12px;border-radius:8px;overflow:auto;position:relative}.bd code{font-family:Consolas,monospace}
+.bd :not(pre)>code{background:#ecebf5;padding:1px 5px;border-radius:4px}
+.cc{position:absolute;right:6px;top:6px;border:0;border-radius:5px;padding:2px 8px;background:#ffffff26;color:#fff}
+.bd table{border-collapse:collapse;margin:8px 0;display:block;overflow:auto}.bd td,.bd th{border:1px solid #d3d3e3;padding:5px 10px}.bd th{background:#ecebf5}
+.bd img{max-width:100%;border-radius:10px}
+.bar{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.bar button{border:1px solid #dcdcea;background:#fff;border-radius:14px;padding:3px 10px;font-size:12px}.bar button:hover{background:#ecebfb;border-color:#6b5ce7}
+#cmp{padding:8px 16px 14px}
+#box{max-width:820px;margin:0 auto;background:#fff;border:1px solid #d3d3e6;border-radius:18px;padding:8px 10px;box-shadow:0 2px 10px #6b5ce722}
+#box:focus-within{border-color:#6b5ce7}
+#in{width:100%;border:0;outline:0;resize:none;font:inherit;max-height:200px;padding:4px;background:none}
+.tl{display:flex;gap:4px;align-items:center}.tl button,.tl select{border:0;background:none;font-size:17px;padding:4px 6px;border-radius:8px}.tl select{font-size:12px;border:1px solid #dcdcea;max-width:120px}
+.tl button:hover{background:#ecebfb}.tl .on{background:#d9d5fb}
+#snd{margin-left:auto;background:var(--g)!important;color:#fff;border-radius:50%!important;width:34px;height:34px;font-size:16px!important}
+#att{font-size:12px;color:#6b5ce7;padding:0 4px}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1f1f2b;color:#fff;padding:8px 16px;border-radius:20px;display:none;z-index:30;max-width:90%;text-align:center}
+dialog{border:0;border-radius:14px;padding:18px;width:min(460px,92vw);box-shadow:0 10px 40px #0005}
+dialog label{display:block;margin:8px 0 2px;font-weight:600}dialog input,dialog textarea{width:100%;padding:7px;border:1px solid #d3d3e6;border-radius:7px;font:inherit}
+@media(max-width:760px){.side{position:fixed;inset:0 auto 0 0;z-index:20;transform:translateX(-100%);transition:.2s}.side.open{transform:none;box-shadow:0 0 30px #0006}#menu{display:block}.hello{margin-top:9vh}}
+</style></head><body>
+<div class="side" id="side">
+<button id="nw" onclick="newChat()">✦ Mazungumzo mapya</button>
+<div id="cl"></div>
+<select id="imp" onchange="imp(this.value);this.value=''"><option value="">📥 Ingiza kutoka…</option><option value="xl">Excel (excel.html)</option><option value="pp">PowerPoint (powerpoint.html)</option><option value="on">OneNote (onenote.html)</option></select>
+<button onclick="exportChat()">⬇ Hamisha mazungumzo (.md)</button>
+<button onclick="$('set').showModal()">⚙ Mipangilio</button>
+</div>
+<main><button id="menu" onclick="$('side').classList.toggle('open')">☰</button>
+<div id="msgs"></div>
+<div id="cmp"><div id="box"><textarea id="in" rows="1" placeholder="Uliza chochote… (au bonyeza 🎨 kutengeneza picha)"></textarea>
+<div class="tl"><button title="Ambatisha faili la maandishi" onclick="$('fl').click()">📎</button><button id="mic" title="Sauti" onclick="mic()">🎙</button><button id="imb" title="Hali ya picha" onclick="imgMode=!imgMode;this.classList.toggle('on',imgMode);toast(imgMode?'Hali ya picha IMEWASHWA':'Hali ya picha imezimwa')">🎨</button><span id="att"></span><button id="snd" onclick="busy?ac.abort():send()">➤</button></div></div></div>
+</main>
+<div id="toast"></div>
+<input type="file" id="fl" hidden accept=".txt,.md,.csv,.json,.html,.js,.py,.xml,.css,.tsv,.log">
+<dialog id="set"><h3 style="margin:0 0 6px">Mipangilio</h3>
+<label>Pollinations API key</label><input id="s_key" type="password"><label>Modeli ya maandishi</label><input id="s_model" list="ml"><datalist id="ml"><option>openai</option><option>openai-fast</option><option>claude</option><option>gemini</option><option>mistral</option><option>deepseek</option></datalist>
+<label>Modeli ya picha</label><input id="s_imodel"><label>Chat URL</label><input id="s_url"><label>Maelekezo ya mfumo</label><textarea id="s_sys" rows="4"></textarea>
+<div style="display:flex;gap:8px;margin-top:14px;justify-content:flex-end"><button onclick="if(confirm('Futa mazungumzo yote?')){convs=[];newChat();$('set').close()}">Futa historia</button><button onclick="saveCfg()" style="background:#6b5ce7;color:#fff;border:0;border-radius:7px;padding:6px 16px">Hifadhi</button></div></dialog>
+<script>
+const $=i=>document.getElementById(i),uid=()=>Math.random().toString(36).slice(2,9);
+const DEF={key:'sk_IB9ZFb8BOJ4FH9FFOK0YyLYK4EAk8ptE',url:'https://gen.pollinations.ai/v1/chat/completions',iurl:'https://gen.pollinations.ai/image/',model:'openai',imodel:'flux',sys:'Wewe ni Copilot, msaidizi mwerevu wa AI. Jibu kwa lugha anayoandikia mtumiaji (Kiswahili kwa chaguo-msingi), kwa uwazi na ufupi. Tumia Markdown (vichwa, orodha, majedwali, code blocks) pale inapofaa.'};
+let cfg={...DEF,...JSON.parse(localStorage.cp_cfg||'{}')},convs=[],cid,busy=false,ac,att=null,imgMode=false,rec=null;
+try{convs=JSON.parse(localStorage.cp_c||'[]')}catch(e){}
+const cv=()=>convs.find(c=>c.id==cid),esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const L=n=>{let s='';for(n++;n;n=Math.floor((n-1)/26))s=String.fromCharCode(65+(n-1)%26)+s;return s};
+const toast=m=>{const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3200)};
+const persist=()=>{try{localStorage.cp_c=JSON.stringify(convs,(k,v)=>k=='img'?undefined:v)}catch(e){}};
+const plain=t=>t.replace(/\*\*/g,'').replace(/^#+\s*/gm,'').replace(/`/g,'');
+const dl=(n,m,d)=>{const a=document.createElement('a');a.href=typeof d=='string'&&d.startsWith('blob:')?d:URL.createObjectURL(new Blob([d],{type:m}));a.download=n;a.click()};
+function tbl(r){r=r.filter(l=>!/^\s*\|?[\s:|-]+\|?\s*$/.test(l)).map(l=>l.trim().replace(/^\||\|$/g,'').split('|').map(x=>x.trim()));return'<table>'+r.map((x,i)=>'<tr>'+x.map(c=>`<${i?'td':'th'}>${c}</${i?'td':'th'}>`).join('')+'</tr>').join('')+'</table>'}
+function md(t){const cb=[];t=esc(t).replace(/```(\w*)\n?([\s\S]*?)```/g,(m,l,c)=>{cb.push(`<pre><button class="cc" onclick="cc(this)">Nakili</button><code>${c}</code></pre>`);return`\u0000${cb.length-1}\u0000`});
+const inl=s=>s.replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/\*([^*\s][^*]*)\*/g,'<i>$1</i>').replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g,'<a href="$2" target="_blank">$1</a>');
+let o='',list=null,tb=[];const fl=()=>{if(list){o+=`</${list}>`;list=null}if(tb.length){o+=tbl(tb);tb=[]}};
+for(const l of t.split('\n')){let m;if(/^\s*\|.*\|\s*$/.test(l)){if(list)fl();tb.push(l);continue}if(tb.length)fl();
+if(m=/^(#{1,4})\s+(.*)/.exec(l)){fl();o+=`<h${m[1].length+1}>${inl(m[2])}</h${m[1].length+1}>`}
+else if(m=/^\s*[-*•]\s+(.*)/.exec(l)){if(list!='ul'){fl();o+='<ul>';list='ul'}o+=`<li>${inl(m[1])}</li>`}
+else if(m=/^\s*\d+[.)]\s+(.*)/.exec(l)){if(list!='ol'){fl();o+='<ol>';list='ol'}o+=`<li>${inl(m[1])}</li>`}
+else if(!l.trim())fl();else{fl();o+=`<p>${inl(l)}</p>`}}fl();return o.replace(/\u0000(\d+)\u0000/g,(m,i)=>cb[i])}
+function cc(b){navigator.clipboard.writeText(b.nextElementSibling.textContent);b.textContent='Imenakiliwa';setTimeout(()=>b.textContent='Nakili',1500)}
+function side(){$('cl').innerHTML=convs.map(c=>`<div class="cv${c.id==cid?' on':''}" onclick="cid='${c.id}';render();$('side').classList.remove('open')"><span>${esc(c.t||'Mazungumzo mapya')}</span><b onclick="event.stopPropagation();del('${c.id}')">✕</b></div>`).reverse().join('')}
+function del(id){convs=convs.filter(c=>c.id!=id);if(cid==id){convs.length?cid=convs[convs.length-1].id:newChat();}persist();render()}
+function newChat(){const c={id:uid(),t:'',m:[]};convs.push(c);cid=c.id;persist();render()}
+const SUG=['Andika barua pepe ya kitaaluma','Tengeneza jedwali la bajeti ya biashara','Tengeneza muhtasari wa wasilisho kuhusu usalama wa moto','Nielezee AI kwa lugha rahisi'];
+function render(){const c=cv(),el=$('msgs');side();
+if(!c.m.length){el.innerHTML=`<div class="hello w"><h1>Habari! Nikusaidie nini leo?</h1><div class="chips">${SUG.map(s=>`<button onclick="send(this.textContent)">${s}</button>`).join('')}</div></div>`;return}
+el.innerHTML=c.m.map((m,i)=>m.role=='user'?`<div class="msg u"><div class="bd">${esc(m.content)}</div></div>`:`<div class="msg a" data-i="${i}"><div class="bd">${m.img?`<img src="${m.img}"><p>${esc(m.content)}</p>`:md(m.content||'…')}</div>${busy&&i==c.m.length-1?'':`<div class="bar">${m.img?'<button data-k="imgdl">⬇ Pakua (Paint)</button><button data-k="imgcopy">⧉ Nakili picha</button>':'<button data-k="copy">⧉ Nakili</button><button data-k="word">W Word</button><button data-k="excel">X Excel</button><button data-k="ppt">P PowerPoint</button><button data-k="one">N OneNote</button><button data-k="paint">🎨 Paint</button>'}${i==c.m.length-1?'<button data-k="redo">↻ Tena</button>':''}</div>`}</div>`).join('');el.scrollTop=el.scrollHeight}
+$('msgs').onclick=e=>{const b=e.target.closest('button[data-k]');if(b)act(+b.closest('.msg').dataset.i,b.dataset.k)};
+async function send(txt){if(busy)return;txt=(txt===undefined?$('in').value:txt).trim();if(!txt&&!att)return;const c=cv();let content=txt;if(att){content+=`\n\n[Faili: ${att.n}]\n\`\`\`\n${att.t}\n\`\`\``;att=null;$('att').textContent=''}
+$('in').value='';fit();c.m.push({role:'user',content});if(!c.t)c.t=txt.slice(0,40);const im=imgMode||/^\/(picha|image)\s/i.test(txt),a={role:'assistant',content:''};c.m.push(a);busy=true;$('snd').textContent='■';render();ac=new AbortController();
+try{im?await gen(a,txt.replace(/^\/(picha|image)\s/i,'')):await chat(a,c)}catch(e){if(e.name!='AbortError')a.content+=(a.content?'\n\n':'')+'⚠️ Hitilafu: '+e.message}
+busy=false;$('snd').textContent='➤';if(!a.content&&!a.img)c.m.pop();persist();render()}
+async function chat(a,c){const msgs=[{role:'system',content:cfg.sys},...c.m.slice(0,-1).filter(m=>!m.img).map(({role,content})=>({role,content}))];
+const r=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+cfg.key},body:JSON.stringify({model:cfg.model,messages:msgs,stream:true}),signal:ac.signal});
+if(!r.ok)throw new Error(r.status+' '+(await r.text()).slice(0,200));
+if(!(r.headers.get('content-type')||'').includes('event-stream')){const j=await r.json();a.content=j.choices[0].message.content;return}
+const rd=r.body.getReader(),dc=new TextDecoder();let buf='';const el=()=>$('msgs').lastElementChild.querySelector('.bd');
+for(;;){const{done,value}=await rd.read();if(done)break;buf+=dc.decode(value,{stream:true});const ls=buf.split('\n');buf=ls.pop();for(const l of ls){if(!l.startsWith('data:'))continue;const d=l.slice(5).trim();if(d=='[DONE]')continue;try{const t=JSON.parse(d).choices?.[0]?.delta?.content;if(t){a.content+=t;el().innerHTML=md(a.content);$('msgs').scrollTop=$('msgs').scrollHeight}}catch(e){}}}}
+async function gen(a,p){const r=await fetch(`${cfg.iurl}${encodeURIComponent(p)}?model=${cfg.imodel}&width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random()*1e6)}`,{headers:{Authorization:'Bearer '+cfg.key},signal:ac.signal});if(!r.ok)throw new Error(r.status+' '+(await r.text()).slice(0,200));a.img=URL.createObjectURL(await r.blob());a.content='🎨 '+p}
+function clipRich(t){const h=new Blob([md(t)],{type:'text/html'}),p=new Blob([plain(t)],{type:'text/plain'});return(navigator.clipboard.write?navigator.clipboard.write([new ClipboardItem({'text/html':h,'text/plain':p})]):Promise.reject()).catch(()=>navigator.clipboard.writeText(plain(t))).catch(()=>{})}
+function rowsFrom(t){const Ls=t.split('\n').filter(l=>l.trim()),tb=Ls.filter(l=>/^\s*\|/.test(l)&&!/^\s*\|?[\s:|-]+\|?\s*$/.test(l));if(tb.length>1)return tb.map(l=>l.trim().replace(/^\||\|$/g,'').split('|').map(x=>x.trim().replace(/\*\*/g,'')));if(Ls.every(l=>l.includes('\t')))return Ls.map(l=>l.split('\t'));if(Ls.length>1&&Ls.every(l=>l.includes(',')))return Ls.map(l=>l.split(',').map(x=>x.trim()));return Ls.map(l=>[l.replace(/^\s*[-*•]\s*|^#+\s*/,'').replace(/\*\*/g,'')])}
+function slidesFrom(t){const out=[];let c=null;for(const l of t.split('\n').map(s=>s.trim()).filter(Boolean)){const h=/^#{1,3}\s+(.*)/.exec(l);if(h){c={t:h[1].replace(/\*\*/g,''),b:[]};out.push(c)}else{if(!c){c={t:'Wasilisho',b:[]};out.push(c)}c.b.push(l.replace(/^[-*•]\s*|^\d+[.)]\s*/,'').replace(/\*\*/g,''))}}return out}
+const mk=(t,x,y,w,h,o={})=>({id:uid(),t,x,y,w,h,fs:28,c:'#000000',fill:'',html:'',...o});
+const open2=f=>window.open(f,'_blank');
+function act(i,k){const c=cv(),a=c.m[i],t=a.content;
+if(k=='copy')return clipRich(t).then(()=>toast('Imenakiliwa — bandika popote'));
+if(k=='redo'){c.m.pop();const u=c.m.pop();send(u.content);return}
+if(k=='imgdl'||k=='paint'&&a.img)return imgPng(a.img).then(b=>{dl('copilot-picha.png','image/png',URL.createObjectURL(b));toast('Picha imepakuliwa — ifungue kwa Paint')});
+if(k=='imgcopy')return imgPng(a.img).then(b=>navigator.clipboard.write([new ClipboardItem({'image/png':b})])).then(()=>toast('Picha imenakiliwa — bandika kwenye Paint/Word/PowerPoint')).catch(()=>toast('Kivinjari kimekataa — tumia Pakua'));
+if(k=='word'){clipRich(t);dl('copilot.doc','application/msword',`<html><head><meta charset="utf-8"></head><body style="font-family:Calibri,Arial">${md(t)}</body></html>`);toast('Faili la Word limepakuliwa, na maudhui yamenakiliwa (Ctrl+V kwenye Word)')}
+if(k=='excel'){const rows=rowsFrom(t);navigator.clipboard.writeText(rows.map(r=>r.join('\t')).join('\n')).catch(()=>{});let B;try{B=JSON.parse(localStorage.xl)}catch(e){}if(!B||!B.s)B={s:[]};const s={n:'Copilot'+(B.s.length+1),d:{},w:{}};rows.slice(0,100).forEach((r,y)=>r.slice(0,26).forEach((v,x)=>{if(v!=='')s.d[L(x)+(y+1)]={v,...(y==0&&rows.length>1?{b:true}:{})}}));B.s.push(s);localStorage.xl=JSON.stringify(B);toast('Karatasi mpya imeongezwa kwenye Excel; pia imenakiliwa (Ctrl+V)');open2('excel.html')}
+if(k=='ppt'){const sl=slidesFrom(t);let P;try{P=JSON.parse(localStorage.pp)}catch(e){}if(!P||!P.slides)P={slides:[]};sl.forEach(s=>P.slides.push({bg:'#ffffff',els:[mk('text',60,40,840,80,{fs:40,b:1,html:esc(s.t)}),mk('text',60,140,840,340,{fs:s.b.length>8?20:26,html:s.b.map(x=>'• '+esc(x)).join('<br>')})]}));localStorage.pp=JSON.stringify(P);navigator.clipboard.writeText(sl.map(s=>s.t+'\n'+s.b.map(x=>'• '+x).join('\n')).join('\n\n')).catch(()=>{});toast(sl.length+' slaidi zimeongezwa kwenye PowerPoint');open2('powerpoint.html')}
+if(k=='one'){let N;try{N=JSON.parse(localStorage.on)}catch(e){}if(!N||!N.s)N={s:[]};let s=N.s.find(x=>x.n=='Copilot');if(!s){s={id:uid(),n:'Copilot',c:'#7719aa',p:[]};N.s.push(s)}const ti=plain(t.split('\n').find(l=>l.trim())||'Ujumbe').slice(0,60);s.p.push({id:uid(),t:ti,h:md(t),d:Date.now(),m:Date.now()});localStorage.on=JSON.stringify(N);clipRich(t);toast('Ukurasa umeongezwa kwenye OneNote (sehemu ya Copilot)');open2('onenote.html')}
+if(k=='paint'){const cv2=document.createElement('canvas'),x=cv2.getContext('2d'),W=1200,lines=[];x.font='28px Segoe UI,Arial';plain(t).split('\n').forEach(p=>{let l='';p.split(' ').forEach(w=>{if(x.measureText(l+w).width>W-80){lines.push(l);l=''}l+=w+' '});lines.push(l)});cv2.width=W;cv2.height=Math.max(300,lines.length*40+80);x.fillStyle='#fff';x.fillRect(0,0,W,cv2.height);x.fillStyle='#000';x.font='28px Segoe UI,Arial';lines.forEach((l,n)=>x.fillText(l,40,60+n*40));cv2.toBlob(b=>{dl('copilot-maelezo.png','image/png',URL.createObjectURL(b));toast('Picha ya maandishi imepakuliwa — ifungue kwa Paint')})}}
+function imgPng(u){return new Promise(r=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');c.width=i.width;c.height=i.height;c.getContext('2d').drawImage(i,0,0);c.toBlob(r,'image/png')};i.src=u})}
+function imp(k){let s='',lab='';try{if(k=='xl'){const B=JSON.parse(localStorage.xl),d=B.s[0].d,m=Object.keys(d).map(x=>/^([A-Z]+)(\d+)$/.exec(x)),R=Math.max(...m.map(x=>+x[2])),C=Math.max(...m.map(x=>[...x[1]].reduce((a,ch)=>a*26+ch.charCodeAt(0)-64,0)));for(let r=1;r<=R;r++){const row=[];for(let c=0;c<C;c++){const v=d[L(c)+r];row.push(v?v.v:'')}s+=row.join('\t')+'\n'}lab='Excel'}
+else if(k=='pp'){const P=JSON.parse(localStorage.pp);s=P.slides.map((x,i)=>`Slaidi ${i+1}: `+x.els.map(e=>(e.html||'').replace(/<br>/g,'\n').replace(/<[^>]+>/g,'')).filter(Boolean).join(' | ')).join('\n');lab='PowerPoint'}
+else{const N=JSON.parse(localStorage.on),p=N.s.flatMap(x=>x.p).sort((a,b)=>b.m-a.m)[0],d=document.createElement('div');d.innerHTML=p.h;s=p.t+'\n'+d.innerText;lab='OneNote'}}catch(e){return toast('Hakuna data ya '+(k=='xl'?'Excel':k=='pp'?'PowerPoint':'OneNote')+' kwenye kivinjari hiki (fungua faili hilo kwanza kutoka folda ile ile)')}
+$('in').value=`Hapa kuna maudhui kutoka ${lab}:\n\`\`\`\n${s.slice(0,20000)}\n\`\`\`\n`;fit();$('in').focus()}
+$('fl').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{att={n:f.name,t:String(r.result).slice(0,30000)};$('att').textContent='📄 '+f.name};r.readAsText(f);e.target.value=''};
+function mic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return toast('Kivinjari hakisaidii sauti');if(rec){rec.stop();return}rec=new SR();rec.lang='sw-TZ';rec.interimResults=false;rec.onresult=e=>{$('in').value+=(e.results[0][0].transcript+' ');fit()};rec.onend=()=>{rec=null;$('mic').classList.remove('on')};rec.start();$('mic').classList.add('on')}
+function exportChat(){const c=cv();dl('copilot-mazungumzo.md','text/markdown','# '+(c.t||'Mazungumzo')+'\n\n'+c.m.map(m=>(m.role=='user'?'**Mimi:** ':'**Copilot:** ')+m.content).join('\n\n---\n\n'))}
+function saveCfg(){cfg={...cfg,key:$('s_key').value.trim(),model:$('s_model').value.trim()||'openai',imodel:$('s_imodel').value.trim()||'flux',url:$('s_url').value.trim(),sys:$('s_sys').value};localStorage.cp_cfg=JSON.stringify(cfg);$('set').close();toast('Mipangilio imehifadhiwa')}
+$('set').addEventListener('toggle',()=>{if($('set').open){$('s_key').value=cfg.key;$('s_model').value=cfg.model;$('s_imodel').value=cfg.imodel;$('s_url').value=cfg.url;$('s_sys').value=cfg.sys}});
+const fit=()=>{const i=$('in');i.style.height='auto';i.style.height=Math.min(i.scrollHeight,200)+'px'};
+$('in').oninput=fit;$('in').onkeydown=e=>{if(e.key=='Enter'&&!e.shiftKey){e.preventDefault();send()}};
+if(!convs.length)newChat();else{cid=convs[convs.length-1].id;render()}
+</script></body></html>
