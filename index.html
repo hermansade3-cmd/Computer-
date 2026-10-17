@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sade Computer</title>
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+
+<!-- ====== MUUNDO WA SKRINI (usiguse) ====== -->
+<div id="desk"></div>
+<div id="menu"></div>
+<div id="tb"><div id="wd"><span style="font-size:26px">☀️</span><span>27°C<br>Jua</span></div>
+<div id="ctr"><button id="st" title="Start"><i></i><i></i><i></i><i></i></button><button id="sr" title="Tafuta">🔍</button><span id="pins"></span><div id="tasks"></div></div>
+<div id="tray"><span class="tr">⌃</span><span class="tr">📶 🔊 🔋</span><div id="clk"></div></div></div>
+<div id="lock"><h1 id="lt"></h1><p id="ld"></p><small>Bonyeza popote kufungua</small></div>
+
+
+<!-- ==========================================================
+     ✅ HAPA NDIPO UNAPOONGEZA MAFAILI  (sehemu pekee ya kuhariri)
+     ==========================================================
+
+     JINSI YA KUONGEZA FAILI:
+     1) Andika jina lake kwenye folda husika hapa chini, mfano: "ripoti.pdf"
+     2) Tengeneza ukurasa wake:  faili/<Folda>/<jina>.html
+        mfano:  faili/Nyaraka/ripoti.pdf.html
+        (nakili faili/_kiolezo.html uanze nalo)
+     3) Basi! Litaonekana kwenye Explorer, Tafuta (Start), na likibonyezwa
+        mara mbili litafunguka ndani ya dirisha lake.
+
+     Folda mpya: ongeza kipengele kipya kwenye FOLDERS.
+     Folda huwekwa kwa jina la kwanza tu:  "Picha (Pictures)" → faili/Picha/
+-->
+<script>
+/* ---------- 1. MAFAILI KWA FOLDA ---------- */
+const FOLDERS = {
+
+  "Nyaraka (Documents)": [
+    "notes.txt",
+    "report.doc",
+    "report.docx",
+    "manual.pdf",
+    "letter.rtf",
+    "document.odt",
+    "presentation.ppt",
+    "presentation.pptx",
+    "budget.xls",
+    "budget.xlsx",
+    "data.csv"
+  ],
+
+  "Picha (Pictures)": [
+    "picha1.jpg",
+    "picha2.jpeg",
+    "nembo.png",
+    "mchezo.gif",
+    "old.bmp",
+    "mpya.webp",
+    "mchoro.svg",
+    "app.ico"
+  ],
+
+  "Video (Videos)": [
+    "video1.mp4",
+    "filamu.mkv",
+    "zamani.avi",
+    "apple.mov",
+    "windows.wmv",
+    "wavuti.webm"
+  ],
+
+  "Muziki (Music)": [
+    "wimbo.mp3",
+    "ubora.wav",
+    "aac-sauti.aac",
+    "flac-sauti.flac",
+    "ogg-sauti.ogg",
+    "app-sauti.m4a"
+  ],
+
+  "Programu (Programs)": [
+    "cmd.exe",
+    "calc.exe",
+    "notepad.exe",
+    "paint.exe",
+    "setup.msi",
+    "vipengele.dll",
+    "driver.sys",
+    "anza.bat",
+    "amri.cmd",
+    "script.ps1",
+    "Calculator.lnk"
+  ],
+
+  "Code (Dev)": [
+    "index.html",
+    "style.css",
+    "app.js",
+    "config.json",
+    "data.xml",
+    "hello.py",
+    "Hello.java",
+    "main.cpp",
+    "index.php",
+    "query.sql",
+    "app.ts",
+    "README.md"
+  ],
+
+  "Zilizobanwa (Archives)": [
+    "mafaili.zip",
+    "backup.rar",
+    "picha.7z",
+    "source.tar",
+    "logs.gz"
+  ],
+
+  "Database": [
+    "app.db",
+    "watu.sqlite",
+    "watu.sqlite3",
+    "ofisi.mdb",
+    "mauzo.accdb",
+    "database.bak"
+  ],
+
+  "Mfumo (System)": [
+    "mfumo.log",
+    "muda.tmp",
+    "settings.ini",
+    "config.cfg",
+    "data.dat",
+    "usajili.reg",
+    "kazi.cab",
+    "hati.vbs",
+    "hitilafu.dmp"
+  ],
+
+  "Diski (Disks)": [
+    "windows.iso",
+    "diski.img",
+    "mashine.vhd",
+    "mashine.vhdx",
+    "vmware.vmdk",
+    "paketi.ova",
+    "paketi.ovf"
+  ]
+
+};
+
+/* ---------- 2. ALAMA (ICON) KWA AINA YA FAILI ----------
+   Aina isiyo hapa itatumia 📄 moja kwa moja. */
+const ICONS = {
+  "txt":"📄", "doc":"📘", "docx":"📘", "pdf":"📕", "rtf":"📝", "odt":"📃",
+  "ppt":"📙", "pptx":"📙", "xls":"📗", "xlsx":"📗", "csv":"📊", "jpg":"🖼️",
+  "jpeg":"🖼️", "png":"🖼️", "gif":"🎞️", "bmp":"🖼️", "webp":"🖼️", "svg":"🎨",
+  "ico":"⭐", "mp4":"🎬", "mkv":"🎬", "avi":"🎬", "mov":"🎬", "wmv":"🎬",
+  "webm":"🎬", "mp3":"🎵", "wav":"🎵", "aac":"🎵", "flac":"🎵", "ogg":"🎵",
+  "m4a":"🎵", "exe":"⚙️", "msi":"📦", "dll":"🧩", "sys":"🛠️", "bat":"📟",
+  "cmd":"📟", "ps1":"📟", "lnk":"🔗", "html":"🌐", "css":"🎨", "js":"🟨",
+  "json":"🧾", "xml":"🧾", "py":"🐍", "java":"☕", "cpp":"➕", "php":"🐘",
+  "sql":"🗃️", "ts":"🟦", "md":"📝", "zip":"🗜️", "rar":"🗜️", "7z":"🗜️",
+  "tar":"🗜️", "gz":"🗜️", "db":"🗄️", "sqlite":"🗄️", "sqlite3":"🗄️", "mdb":"🗄️",
+  "accdb":"🗄️", "bak":"💾", "log":"📜", "tmp":"🕑", "ini":"⚙️", "cfg":"⚙️",
+  "dat":"🔢", "reg":"🧬", "cab":"📦", "vbs":"📜", "dmp":"💥", "iso":"💿",
+  "img":"💿", "vhd":"💽", "vhdx":"💽", "vmdk":"💽", "ova":"🖥️", "ovf":"🖥️"
+};
+
+/* ---------- 3. VITU VYA DESKTOP ----------
+   [alama, jina, aina, ...vigezo]
+   aina: 'explorer' (folda au tupu) | 'file' (folda, faili) | 'alert' (ujumbe) */
+const DESKTOP = [
+  ['💻','Kompyuta Hii','explorer'],
+  ['📁','Nyaraka','explorer','Nyaraka (Documents)'],
+  ['🖼️','Picha','explorer','Picha (Pictures)'],
+  ['🎬','Video','explorer','Video (Videos)'],
+  ['🎵','Muziki','explorer','Muziki (Music)'],
+  ['⬛','Terminal','file','Programu (Programs)','cmd.exe'],
+  ['🧮','Calculator','file','Programu (Programs)','calc.exe'],
+  ['🎨','Paint','file','Programu (Programs)','paint.exe'],
+  ['📝','Notepad','file','Programu (Programs)','notepad.exe'],
+  ['🗑️','Recycle Bin','alert','Recycle Bin ni tupu']
+];
+
+/* ---------- 4. VILIVYOBANDIKWA KWENYE TASKBAR (kwa jina la DESKTOP) ---------- */
+const PINNED = ['Kompyuta Hii','Terminal','Calculator','Paint','Notepad'];
+
+/* ---------- 5. ZINAZOPENDEKEZWA KWENYE START [folda, faili] ---------- */
+const REC = [
+  ['Nyaraka (Documents)','notes.txt'],
+  ['Nyaraka (Documents)','budget.xlsx'],
+  ['Nyaraka (Documents)','presentation.pptx'],
+  ['Picha (Pictures)','picha1.jpg'],
+  ['Muziki (Music)','wimbo.mp3'],
+  ['Code (Dev)','index.html']
+];
+</script>
+
+
+<!-- ====== INJINI (usiguse — kila moja ina kazi yake) ====== -->
+<script src="js/core.js"></script>      <!-- vifaa vidogo + madirisha -->
+<script src="js/explorer.js"></script>  <!-- dirisha la Explorer -->
+<script src="js/loader.js"></script>    <!-- kufungua faili la .html ndani ya iframe -->
+<script src="js/desktop.js"></script>   <!-- desktop, Start menu, lock screen, saa -->
+</body></html>
