@@ -51,6 +51,7 @@ input[type=color]{width:34px;height:30px;border:0;padding:0;background:none;curs
 <label class="row"><span>Hali ya giza<small>Taskbar, Start, madirisha na Explorer</small></span><input type="checkbox" class="sw" data-k="dark"></label>
 <label class="row"><span>Kioo kwenye taskbar na Start<small>Zima kama kifaa chako kinasuasua</small></span><input type="checkbox" class="sw" data-k="glass"></label>
 <label class="row"><span>Animation za madirisha</span><input type="checkbox" class="sw" data-k="anim"></label>
+<div class="row"><span>Mwanga wa skrini (Brightness)</span><span class="v"><input type="range" data-k="bright" min="30" max="100"><b data-o="bright" data-u="%"></b></span></div>
 <div class="row"><span>Pembe za madirisha</span><span class="v"><input type="range" data-k="radius" min="0" max="20"><b data-o="radius" data-u="px"></b></span></div>
 <div class="row"><span>Ukubwa wa icons za desktop</span><span class="v"><input type="range" data-k="iconSize" min="56" max="120"><b data-o="iconSize" data-u="px"></b></span></div>
 <label class="row"><span>Icons za taskbar kushoto<small>Zima ili ziwe katikati</small></span><input type="checkbox" class="sw" data-k="taskLeft"></label></section>
@@ -63,17 +64,20 @@ input[type=color]{width:34px;height:30px;border:0;padding:0;background:none;curs
 <section><h2>💻 Mfumo</h2>
 <label class="row"><span>Skrini ya kufunga unapofungua<small>Zima ili uingie moja kwa moja</small></span><input type="checkbox" class="sw" data-k="lockStart"></label>
 <label class="row"><span>Pakua mafaili offline kiotomatiki<small>Sync ya nyuma ya pazia ukiwa online</small></span><input type="checkbox" class="sw" data-k="autoSync"></label>
+<label class="row"><span>Animation ya kuwasha (boot)<small>Nembo na spinner unapofungua</small></span><input type="checkbox" class="sw" data-k="boot"></label>
+<label class="row"><span>Skrini ya kuingia (login)<small>Avatar na kitufe cha Ingia baada ya lock screen</small></span><input type="checkbox" class="sw" data-k="login"></label>
 <div class="row"><span>Jina la mtumiaji</span><input type="text" data-k="user" maxlength="40"></div>
-<div class="row"><span>Kichwa cha ukurasa</span><input type="text" data-k="title" maxlength="40"></div></section>
+<div class="row"><span>Kichwa cha ukurasa</span><input type="text" data-k="title" maxlength="40"></div>
+<div class="tools"><button class="bt" id="ofo">💾 Fungua Hifadhi Offline</button></div></section>
 
 <div class="tools" style="justify-content:center"><button class="bt dg" id="rs">🧹 Rudisha mipangilio yote</button></div>
 <p class="nt">settings.ini.html — faili hili ndilo kitovu cha mipangilio; index inaisoma na kuitumia kila mahali.</p>
 </div><div id="toast"></div>
 <script>
 const KEY='sadeset1';
-const DEF={wall:'',accent:'#0067c0',dark:false,taskLeft:false,iconSize:80,clock24:false,clockSec:false,showDate:true,glass:true,anim:true,radius:9,lockStart:true,autoSync:true,user:'Lightness',title:'Sade Computer'};
+const DEF={wall:'',accent:'#0067c0',dark:false,taskLeft:false,iconSize:80,clock24:false,clockSec:false,showDate:true,glass:true,anim:true,radius:9,lockStart:true,autoSync:true,boot:true,login:true,bright:100,user:'Lightness',title:'Sade Computer'};
 /* Hariri orodha hizi kuongeza mandhari au rangi mpya */
-const PRESETS=[['Bluu','linear-gradient(135deg,#0b3d91,#1e88e5 55%,#5ec8ff)'],['Kijani','linear-gradient(135deg,#1b5e20,#43a047 55%,#a5d6a7)'],['Zambarau','linear-gradient(135deg,#4a148c,#8e24aa 55%,#f48fb1)'],['Kijivu','linear-gradient(135deg,#111,#37474f 60%,#78909c)'],['Machweo','linear-gradient(135deg,#b71c1c,#f57c00 55%,#ffd54f)'],['Bahari','linear-gradient(135deg,#004d40,#00acc1 55%,#b2ebf2)'],['Usiku','radial-gradient(ellipse at 30% 20%,#283593,#0d1033 70%)'],['Waridi','linear-gradient(135deg,#880e4f,#e91e63 55%,#f8bbd0)']];
+const PRESETS=[['Bloom','radial-gradient(ellipse at 30% 90%,#0a2a8a 0,transparent 55%),radial-gradient(ellipse at 70% 20%,#4fc3f7 0,transparent 50%),radial-gradient(ellipse at 50% 55%,#1565e8 0,transparent 65%),linear-gradient(160deg,#0b1f6b,#1d5fd8 55%,#7ec8ff)'],['Bluu','linear-gradient(135deg,#0b3d91,#1e88e5 55%,#5ec8ff)'],['Kijani','linear-gradient(135deg,#1b5e20,#43a047 55%,#a5d6a7)'],['Zambarau','linear-gradient(135deg,#4a148c,#8e24aa 55%,#f48fb1)'],['Kijivu','linear-gradient(135deg,#111,#37474f 60%,#78909c)'],['Machweo','linear-gradient(135deg,#b71c1c,#f57c00 55%,#ffd54f)'],['Bahari','linear-gradient(135deg,#004d40,#00acc1 55%,#b2ebf2)'],['Usiku','radial-gradient(ellipse at 30% 20%,#283593,#0d1033 70%)'],['Waridi','linear-gradient(135deg,#880e4f,#e91e63 55%,#f8bbd0)']];
 const ACCENTS=['#0067c0','#0f7b6c','#c42b1c','#8e24aa','#e67e22','#d81b60','#2e7d32','#455a64'];
 const $=s=>document.querySelector(s);
 let S={...DEF},tt;
@@ -100,6 +104,7 @@ $('#img').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileRe
   do{const k=Math.min(1,w/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);u=c.toDataURL('image/jpeg',q);w-=300;q-=.08}while(u.length>1.6e6&&w>500);
   S.wall='url('+u+') center/cover no-repeat';save();render()};
   im.onerror=()=>toast('⚠ Picha haisomeki');im.src=r.result};r.readAsDataURL(f);e.target.value=''};
+$('#ofo').onclick=()=>{if(parent!==window)parent.postMessage({sade:'open',app:'offline'},'*');else toast('Fungua kupitia Sade Computer (index.html)')};
 $('#rs').onclick=()=>{if(confirm('Rudisha mipangilio yote kwa chaguo-msingi?')){S={...DEF};save();render()}};
 addEventListener('message',e=>{const d=e.data;if(!d||d.sade!=='set'||e.source!==parent)return;const n={...DEF,...d.data};if(JSON.stringify(n)===JSON.stringify(S))return;S=n;render()});
 addEventListener('storage',e=>{if(e.key===KEY){load();render()}});
