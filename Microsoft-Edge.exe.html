@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Microsoft Edge — Browser Demo</title>
+<style>
+:root{--bg:#f3f6fb;--panel:#fff;--ink:#172033;--muted:#64748b;--line:#dce3ee;--blue:#087cf0;--blue2:#05b7d5}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px "Segoe UI",Arial,sans-serif;height:100vh;display:flex;flex-direction:column}
+.top{height:48px;background:#e9edf5;display:flex;align-items:center;padding:0 12px;gap:9px;border-bottom:1px solid #d4dbe7}
+.dot{width:12px;height:12px;border-radius:50%;background:#c5ccda}
+.brand{font-weight:600;margin-left:7px}
+.tabs{display:flex;gap:5px;align-items:center;flex:1;overflow:hidden}
+.tab{min-width:150px;max-width:230px;height:34px;border-radius:9px 9px 0 0;background:#dce3ee;display:flex;align-items:center;gap:8px;padding:0 12px;color:#475569}
+.tab.active{background:var(--panel);color:var(--ink)}
+.tab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plus{font-size:22px;color:#526078}
+.toolbar{height:56px;background:var(--panel);display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line)}
+.tool{border:0;background:transparent;color:#475569;font-size:20px;width:32px;height:34px;border-radius:8px;cursor:pointer}
+.tool:hover{background:#edf3fb}
+.address{flex:1;display:flex;align-items:center;background:#f0f4fa;border:1px solid #dce3ee;border-radius:22px;height:38px;padding:0 13px;gap:9px}
+.address input{border:0;outline:0;background:transparent;width:100%;font:14px "Segoe UI",Arial}
+.go{border:0;background:var(--blue);color:white;border-radius:18px;padding:8px 15px;cursor:pointer}
+main{flex:1;overflow:auto;display:flex;justify-content:center;padding:28px 16px}
+.home{width:min(820px,100%);text-align:center;padding-top:7vh}
+.logo{font-size:clamp(36px,7vw,62px);font-weight:650;letter-spacing:-2px;margin-bottom:8px}
+.logo em{font-style:normal;background:linear-gradient(100deg,#087cf0,#04b8d3);background-clip:text;color:transparent}
+.tag{color:var(--muted);margin-bottom:28px}
+.search{display:flex;background:white;border:1px solid #d8e1ee;border-radius:28px;padding:7px;box-shadow:0 8px 30px #1b3a6310}
+.search input{flex:1;min-width:0;border:0;outline:0;padding:10px 15px;font-size:16px}
+.search button{border:0;border-radius:22px;background:linear-gradient(100deg,#087cf0,#05b7d5);color:white;padding:0 22px;font-weight:600;cursor:pointer}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}
+.card{background:white;border:1px solid var(--line);border-radius:14px;padding:17px 10px;text-decoration:none;color:var(--ink);font-weight:600}
+.card b{display:block;font-size:23px;margin-bottom:7px}
+.result{width:min(820px,100%);text-align:left}
+.result h2{font-weight:500}
+.result .note{color:var(--muted)}
+.result-item{padding:17px 0;border-bottom:1px solid var(--line)}
+.result-item a{color:#075fc4;font-size:18px;text-decoration:none}
+.result-item p{line-height:1.5;color:#475569}
+.status{font-size:12px;color:var(--muted);padding:9px 16px;background:#fff;border-top:1px solid var(--line)}
+@media(max-width:600px){
+.tab{min-width:105px}
+.toolbar{gap:4px;padding:6px}
+.cards{grid-template-columns:repeat(2,1fr)}
+.home{padding-top:5vh}
+.brand{display:none}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  <div class="brand">Edge</div>
+  <div class="tabs"><div class="tab active">🌐 <span>New tab</span></div></div>
+  <div class="plus" title="New tab">＋</div>
+</div>
+
+<div class="toolbar">
+  <button class="tool" title="Back" onclick="history.back()">‹</button>
+  <button class="tool" title="Forward" onclick="history.forward()">›</button>
+  <button class="tool" title="Refresh" onclick="location.reload()">⟳</button>
+  <div class="address">
+    <span>🔒</span>
+    <input id="url" placeholder="Search or enter web address" autocomplete="off">
+    <button class="tool" title="Favorites">☆</button>
+  </div>
+  <button class="go" onclick="navigate()">Go</button>
+</div>
+
+<main id="main">
+  <section class="home">
+    <div class="logo"><em>Microsoft</em> Edge</div>
+    <div class="tag">Browser-style demo • Search the web or enter a website</div>
+    <div class="search">
+      <input id="query" placeholder="Search the web" autocomplete="off">
+      <button onclick="searchWeb()">Search</button>
+    </div>
+    <div class="cards">
+      <a class="card" href="#" onclick="quick('https://www.microsoft.com/edge');return false"><b>🌐</b>Microsoft Edge</a>
+      <a class="card" href="#" onclick="quick('https://www.youtube.com');return false"><b>▶</b>YouTube</a>
+      <a class="card" href="#" onclick="quick('https://www.google.com');return false"><b>🔎</b>Google</a>
+      <a class="card" href="#" onclick="quick('https://www.wikipedia.org');return false"><b>📚</b>Wikipedia</a>
+    </div>
+    <p style="margin-top:32px;color:#64748b">
+      Tavily Search:
+      <span style="border:1px solid #dce3ee;background:white;border-radius:8px;padding:8px 12px">API key imewekwa</span>
+    </p>
+  </section>
+</main>
+
+<div class="status" id="status">Ready • Demo hii si Microsoft Edge halisi; ni ukurasa wa HTML unaoiga mwonekano wake.</div>
+
+<script>
+let tavilyKey = "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";
+
+function quick(url){
+  document.getElementById('url').value=url;
+  window.open(url,'_blank');
+}
+
+function navigate(){
+  let v=document.getElementById('url').value.trim();
+  if(!v)return;
+
+  if(/^https?:\/\//i.test(v)){
+    window.open(v,'_blank');
+    return;
+  }
+
+  if(v.includes('.')&&!v.includes(' ')){
+    window.open('https://'+v,'_blank');
+    return;
+  }
+
+  document.getElementById('query').value=v;
+  searchWeb();
+}
+
+function searchWeb(){
+  const q=document.getElementById('query').value.trim();
+  if(!q)return;
+
+  document.getElementById('url').value='Search: '+q;
+
+  if(tavilyKey){
+    tavilySearch(q);
+    return;
+  }
+
+  window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank');
+}
+
+async function tavilySearch(q){
+  const main=document.getElementById('main');
+
+  main.innerHTML='<section class="result"><h2>Searching Tavily…</h2><p class="note">Tafadhali subiri.</p></section>';
+
+  try{
+    const r=await fetch('https://api.tavily.com/search',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        api_key:tavilyKey,
+        query:q,
+        search_depth:'basic',
+        include_answer:true,
+        max_results:6
+      })
+    });
+
+    const data=await r.json();
+
+    if(!r.ok){
+      throw new Error(data.detail||data.error||'Tavily request failed');
+    }
+
+    let out='<section class="result"><h2>Matokeo ya Tavily</h2>';
+
+    if(data.answer){
+      out+='<p>'+esc(data.answer)+'</p>';
+    }
+
+    (data.results||[]).forEach(x=>{
+      out+='<div class="result-item"><a target="_blank" rel="noopener" href="'+esc(x.url)+'">'+esc(x.title||x.url)+'</a><p>'+esc(x.content||'')+'</p><small>'+esc(x.url)+'</small></div>';
+    });
+
+    out+='</section>';
+
+    main.innerHTML=out;
+    document.getElementById('status').textContent='Tavily Search • '+(data.results||[]).length+' results';
+
+  }catch(e){
+    main.innerHTML='<section class="result"><h2>Search haikufanikiwa</h2><p>'+esc(e.message)+'</p><p class="note">Huenda API key si sahihi au browser imezuia ombi (CORS). Fungua Google Search badala yake.</p><button onclick="searchGoogleFallback()">Search Google</button></section>';
+    document.getElementById('status').textContent='Search error';
+  }
+}
+
+function searchGoogleFallback(){
+  let q=document.getElementById('query').value;
+  window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank');
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+document.getElementById('url').addEventListener('keydown',e=>{
+  if(e.key==='Enter')navigate();
+});
+
+document.getElementById('query').addEventListener('keydown',e=>{
+  if(e.key==='Enter')searchWeb();
+});
+</script>
+</body>
+</html>
