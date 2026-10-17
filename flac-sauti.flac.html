@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>flac-sauti.flac</title><style>
+*{box-sizing:border-box;margin:0}body{font:13px Segoe UI,system-ui,sans-serif;height:100vh;overflow:hidden;background:linear-gradient(135deg,#0b3d91,#1e88e5 55%,#5ec8ff);user-select:none}
+#desk{position:absolute;inset:0 0 40px 0;padding:8px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:4px}
+.ic{width:84px;padding:6px 2px;text-align:center;color:#fff;border-radius:4px;cursor:pointer;text-shadow:0 1px 3px #000;word-break:break-word}
+.ic:hover,.ic.s{background:rgba(255,255,255,.22)}.ic b{display:block;font-size:34px;font-weight:400}
+#tb{position:absolute;bottom:0;left:0;right:0;height:40px;background:rgba(20,24,36,.94);display:flex;align-items:center;gap:4px;padding:0 6px;color:#fff;z-index:99999}
+#tb button{background:none;border:0;color:#fff;height:32px;padding:0 10px;border-radius:4px;cursor:pointer;font:inherit;max-width:150px;overflow:hidden;white-space:nowrap}
+#tb button:hover{background:#ffffff30}#tb button.on{background:#ffffff38;border-bottom:2px solid #5ec8ff}
+#st{font-size:20px!important;color:#5ec8ff!important}#tasks{flex:1;display:flex;gap:4px;overflow:hidden}#clk{font-size:12px;text-align:right;line-height:1.2;padding:0 6px}
+#menu{position:absolute;bottom:42px;left:4px;width:260px;background:rgba(25,30,45,.97);color:#fff;border-radius:8px;padding:8px;display:none;z-index:99998}
+#menu div{padding:8px 10px;border-radius:4px;cursor:pointer}#menu div:hover{background:#ffffff25}
+.w{position:absolute;background:#fff;border-radius:8px;box-shadow:0 8px 30px #0008;display:flex;flex-direction:column;overflow:hidden;border:1px solid #556;min-width:260px;min-height:160px;resize:both}
+.w.mx{inset:0 0 40px 0!important;width:auto!important;height:auto!important;border-radius:0}
+.h{background:#1f2a44;color:#fff;padding:6px 8px;display:flex;align-items:center;gap:6px;cursor:move;touch-action:none}.h span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.h i{font-style:normal;width:28px;text-align:center;cursor:pointer;border-radius:3px}.h i:hover{background:#ffffff30}.h i.x:hover{background:#e81123}
+.b{flex:1;overflow:auto;display:flex;flex-direction:column;min-height:0;color:#111}
+.bar{background:#eef1f6;padding:5px;display:flex;gap:5px;flex-wrap:wrap;align-items:center;border-bottom:1px solid #ccd}
+.bar button,.bar select,.bar input{padding:3px 9px;border:1px solid #aab;background:#fff;border-radius:3px;cursor:pointer;font:inherit}
+textarea.ed{flex:1;border:0;padding:8px;font:13px Consolas,monospace;resize:none;outline:0;white-space:pre;user-select:text}
+.pg{background:#fff;padding:24px;flex:1;outline:0;line-height:1.6;user-select:text;overflow:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,92px);gap:6px;padding:10px;align-content:start}
+.it{text-align:center;padding:6px;border-radius:4px;cursor:pointer;word-break:break-all;font-size:12px}.it:hover{background:#cfe6ff}.it b{display:block;font-size:34px;font-weight:400}
+table{border-collapse:collapse;font-size:13px}td,th{border:1px solid #bbb;padding:0}th{background:#e8ebf0;padding:3px 10px}td input{border:0;width:100px;padding:4px;font:inherit;outline:0}td input:focus{background:#e3f0ff}
+.term{background:#0c0c0c;color:#ddd;font:13px Consolas,monospace;padding:8px;flex:1;overflow:auto;white-space:pre-wrap;user-select:text}.term input{background:none;border:0;color:#fff;font:inherit;outline:0;width:70%}
+.sl{background:#222;flex:1;display:flex;align-items:center;justify-content:center;padding:10px}.sl div{background:#fff;aspect-ratio:16/9;width:min(100%,520px);padding:24px;display:flex;flex-direction:column;justify-content:center}
+.sl h2{color:#c43e1c;margin-bottom:10px}.pdf{background:#777;flex:1;padding:14px;overflow:auto}.pdf div{background:#fff;max-width:520px;margin:auto;padding:30px;min-height:480px;box-shadow:0 2px 8px #0006;user-select:text;line-height:1.6}
+pre{padding:10px;font:12px Consolas,monospace;white-space:pre-wrap;user-select:text}canvas{max-width:100%;background:#000}
+
+html,body{height:100%;margin:0;background:#fff;display:flex;flex-direction:column;overflow:hidden;font:13px 'Segoe UI',system-ui,sans-serif;user-select:auto}
+.bar button,.bar select,.bar input{border:1px solid transparent;background:transparent;border-radius:5px;padding:4px 10px}.bar button:hover{background:#0000000d}.bar input{background:#fff;border:1px solid #ddd}
+.ov{position:fixed;inset:16px;background:#fff;border:1px solid #888;box-shadow:0 8px 30px #0008;display:flex;flex-direction:column;z-index:9;border-radius:8px;overflow:hidden}.oh{background:#f3f3f3;padding:7px 12px;display:flex;justify-content:space-between}.oh b{cursor:pointer}</style></head><body><script>const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const ico={"txt": "📄", "doc": "📘", "docx": "📘", "pdf": "📕", "rtf": "📝", "odt": "📃", "ppt": "📙", "pptx": "📙", "xls": "📗", "xlsx": "📗", "csv": "📊", "jpg": "🖼️", "jpeg": "🖼️", "png": "🖼️", "gif": "🎞️", "bmp": "🖼️", "webp": "🖼️", "svg": "🎨", "ico": "⭐", "mp4": "🎬", "mkv": "🎬", "avi": "🎬", "mov": "🎬", "wmv": "🎬", "webm": "🎬", "mp3": "🎵", "wav": "🎵", "aac": "🎵", "flac": "🎵", "ogg": "🎵", "m4a": "🎵", "exe": "⚙️", "msi": "📦", "dll": "🧩", "sys": "🛠️", "bat": "📟", "cmd": "📟", "ps1": "📟", "lnk": "🔗", "html": "🌐", "css": "🎨", "js": "🟨", "json": "🧾", "xml": "🧾", "py": "🐍", "java": "☕", "cpp": "➕", "php": "🐘", "sql": "🗃️", "ts": "🟦", "md": "📝", "zip": "🗜️", "rar": "🗜️", "7z": "🗜️", "tar": "🗜️", "gz": "🗜️", "db": "🗄️", "sqlite": "🗄️", "sqlite3": "🗄️", "mdb": "🗄️", "accdb": "🗄️", "bak": "💾", "log": "📜", "tmp": "🕑", "ini": "⚙️", "cfg": "⚙️", "dat": "🔢", "reg": "🧬", "cab": "📦", "vbs": "📜", "dmp": "💥", "iso": "💿", "img": "💿", "vhd": "💽", "vhdx": "💽", "vmdk": "💽", "ova": "🖥️", "ovf": "🖥️"};
+const ext=n=>n.split('.').pop().toLowerCase();
+function bar(...a){const d=E('div','bar');a.forEach(x=>{if(typeof x==='string')d.append(E('span','',x));else{const bt=E('button','',x[0]);bt.onclick=x[1];d.append(bt)}});return d}
+const wrap=(...c)=>{const d=E('div');d.style.cssText='display:flex;flex-direction:column;flex:1;min-height:0';d.append(...c);return d};
+const CT={};const FILE=["Muziki (Music)", "flac-sauti.flac"],C="Faili: flac-sauti.flac\nHii ni faili ya mfano.",e="flac";
+
+let _n=0;function win(t,i,w,h,body,oc){document.title=t;body.style.flex='1';body.style.overflow='auto';
+ if(!_n++){body.style.minHeight='0';document.body.append(body);addEventListener('pagehide',()=>oc&&oc());return{close(){parent!==window?parent.postMessage({close:1},'*'):window.close()}}}
+ const o=E('div','ov'),hd=E('div','oh','<span>'+esc(t)+'</span><b>✕</b>');o.append(hd,body);document.body.append(o);hd.querySelector('b').onclick=()=>{oc&&oc();o.remove()};return{close(){hd.querySelector('b').click()}}}
+const key=(f,n)=>f+'/'+n,FS=new Proxy({},{get:(_,k)=>localStorage.getItem('sadepc/'+k)});
+const save=(f,n,c)=>localStorage.setItem('sadepc/'+f+'/'+n,c);
+const getC=(f,n)=>{const s=localStorage.getItem('sadepc/'+f+'/'+n);if(s!=null)return s;if(n===FILE[1])return C;return CT[ext(n)]||'Faili: '+n};
+function aud(n,e){let ac,on=false,iv,i=0;const N=[262,294,330,349,392,440,494,523,494,440,392,349,330,294],wv={mp3:'sine',wav:'triangle',aac:'sine',flac:'sawtooth',ogg:'square',m4a:'sine'}[e];
+ const bars=E('div');bars.style.cssText='display:flex;align-items:flex-end;gap:4px;height:120px;background:#111;padding:10px;flex:1;justify-content:center';for(let k=0;k<14;k++){const b=E('div');b.style.cssText='width:14px;background:#5ec8ff;height:8px;transition:.15s';bars.append(b)}
+ const stop=()=>{on=false;clearInterval(iv);bars.childNodes.forEach(b=>b.style.height='8px')};const bt=E('button','','▶ Cheza');
+ bt.onclick=()=>{if(on){stop();bt.textContent='▶ Cheza';return}ac=ac||new AudioContext();on=true;bt.textContent='⏸ Simamisha';iv=setInterval(()=>{const o=ac.createOscillator(),g=ac.createGain();o.type=wv;o.frequency.value=N[i%N.length];g.gain.value=.12;g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.35);o.connect(g).connect(ac.destination);o.start();o.stop(ac.currentTime+.36);bars.childNodes.forEach((b,k)=>b.style.height=(k===i%14?110:10+Math.random()*50)+'px');i++},380)};
+ const b=E('div','bar');b.append(bt,E('span','','🎵 '+n));win(n,ico[e],380,260,wrap(bars,b),stop)}
+/* ---- exe apps ---- */
+
+aud(FILE[1],e);</script></body></html>
