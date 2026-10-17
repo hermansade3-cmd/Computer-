@@ -77,14 +77,252 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
 .pg{padding:14px}.term,textarea.ed{font-size:14px}
 }
 </style><style>#tb{overflow:hidden}html,body{max-width:100vw;overflow:hidden}#lock.up{visibility:hidden;transition:transform .5s ease-in-out,visibility 0s .5s}
-@media(max-width:760px){#sr,#pins button:nth-child(n+4){display:none}#tray{flex:0 0 auto}#clk{font-size:11px;padding:0 4px}#ctr{min-width:0;flex:1;justify-content:center}#tasks{display:flex;overflow:hidden}}</style><style>.w.mx,.w.mx{inset:0!important}@media(max-width:760px){.w.mx{inset:0!important}}</style></head><body>
+@media(max-width:760px){#sr,#pins button:nth-child(n+4){display:none}#tray{flex:0 0 auto}#clk{font-size:11px;padding:0 4px}#ctr{min-width:0;flex:1;justify-content:center}#tasks{display:flex;overflow:hidden}}</style><style>.w.mx,.w.mx{inset:0!important}@media(max-width:760px){.w.mx{inset:0!important}}</style><style>
+.grid.lst{display:flex;flex-direction:column;gap:0;padding:0;align-content:normal}
+.lst .lh,.lst .it{display:grid;grid-template-columns:34px 34px 1fr 150px;align-items:center;gap:6px;text-align:left;padding:5px 10px;border-radius:0;font-size:13px;word-break:normal}
+.lst .lh{position:sticky;top:0;z-index:1;background:#f3f3f3;border-bottom:1px solid #ddd;font-weight:600;color:#555;cursor:default}
+.lst .it{border-bottom:1px solid #f0f0f0}.lst .it:nth-child(even){background:#fafafa}.lst .it:hover{background:#cfe6ff}
+.lst .it b{font-size:22px;text-align:center}.lst .it em{font-style:normal;color:#888;font-size:11px;text-align:right}
+.lst .it span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lst .it small{color:#666}
+@media(max-width:760px){.lst .lh,.lst .it{grid-template-columns:26px 28px 1fr 84px}}
+</style></head><body>
+<!--
+  SADE COMPUTER — ORODHA YA MAFAILI (kushuka chini)
+  Kila faili linafunguliwa kama  <jina-la-faili>.html  (mf. notes.txt.html)
+  01. 📁 Nyaraka (Documents)  (11)
+        01. notes.txt
+        02. report.doc
+        03. report.docx
+        04. manual.pdf
+        05. letter.rtf
+        06. document.odt
+        07. presentation.ppt
+        08. presentation.pptx
+        09. budget.xls
+        10. budget.xlsx
+        11. data.csv
+  02. 📁 Picha (Pictures)  (8)
+        01. picha1.jpg
+        02. picha2.jpeg
+        03. nembo.png
+        04. mchezo.gif
+        05. old.bmp
+        06. mpya.webp
+        07. mchoro.svg
+        08. app.ico
+  03. 📁 Video (Videos)  (6)
+        01. video1.mp4
+        02. filamu.mkv
+        03. zamani.avi
+        04. apple.mov
+        05. windows.wmv
+        06. wavuti.webm
+  04. 📁 Muziki (Music)  (6)
+        01. wimbo.mp3
+        02. ubora.wav
+        03. aac-sauti.aac
+        04. flac-sauti.flac
+        05. ogg-sauti.ogg
+        06. app-sauti.m4a
+  05. 📁 Programu (Programs)  (21)
+        01. cmd.exe
+        02. calc.exe
+        03. notepad.exe
+        04. paint.exe
+        05. setup.msi
+        06. vipengele.dll
+        07. driver.sys
+        08. anza.bat
+        09. amri.cmd
+        10. script.ps1
+        11. Calculator.lnk
+        12. Microsoft-Edge.exe
+        13. Microsoft-Copilot.exe
+        14. Microsoft-Office.exe
+        15. Microsoft-Word.exe
+        16. Microsoft-Excel.exe
+        17. Microsoft-PowerPoint.exe
+        18. Microsoft-Outlook.exe
+        19. Microsoft-OneNote.exe
+        20. Mozilla-Firefox.exe
+        21. Google-Chrome.exe
+  06. 📁 Code (Dev)  (12)
+        01. index.html
+        02. style.css
+        03. app.js
+        04. config.json
+        05. data.xml
+        06. hello.py
+        07. Hello.java
+        08. main.cpp
+        09. index.php
+        10. query.sql
+        11. app.ts
+        12. README.md
+  07. 📁 Zilizobanwa (Archives)  (5)
+        01. mafaili.zip
+        02. backup.rar
+        03. picha.7z
+        04. source.tar
+        05. logs.gz
+  08. 📁 Database  (6)
+        01. app.db
+        02. watu.sqlite
+        03. watu.sqlite3
+        04. ofisi.mdb
+        05. mauzo.accdb
+        06. database.bak
+  09. 📁 Mfumo (System)  (9)
+        01. mfumo.log
+        02. muda.tmp
+        03. settings.ini
+        04. config.cfg
+        05. data.dat
+        06. usajili.reg
+        07. kazi.cab
+        08. hati.vbs
+        09. hitilafu.dmp
+  10. 📁 Diski (Disks)  (7)
+        01. windows.iso
+        02. diski.img
+        03. mashine.vhd
+        04. mashine.vhdx
+        05. vmware.vmdk
+        06. paketi.ova
+        07. paketi.ovf
+-->
+
 <div id="desk"></div>
 <div id="menu"></div>
 <div id="tb"><div id="wd"><span style="font-size:26px">☀️</span><span>27°C<br>Jua</span></div>
 <div id="ctr"><button id="st" title="Start"><i></i><i></i><i></i><i></i></button><button id="sr" title="Tafuta">🔍</button><span id="pins"></span><div id="tasks"></div></div>
 <div id="tray"><span class="tr">⌃</span><span class="tr">📶 🔊 🔋</span><div id="clk"></div></div></div>
 <div id="lock"><h1 id="lt"></h1><p id="ld"></p><small>Bonyeza popote kufungua</small></div>
-<script>const FOLD={"Nyaraka (Documents)": "notes.txt,report.doc,report.docx,manual.pdf,letter.rtf,document.odt,presentation.ppt,presentation.pptx,budget.xls,budget.xlsx,data.csv", "Picha (Pictures)": "picha1.jpg,picha2.jpeg,nembo.png,mchezo.gif,old.bmp,mpya.webp,mchoro.svg,app.ico", "Video (Videos)": "video1.mp4,filamu.mkv,zamani.avi,apple.mov,windows.wmv,wavuti.webm", "Muziki (Music)": "wimbo.mp3,ubora.wav,aac-sauti.aac,flac-sauti.flac,ogg-sauti.ogg,app-sauti.m4a", "Programu (Programs)": "cmd.exe,calc.exe,notepad.exe,paint.exe,setup.msi,vipengele.dll,driver.sys,anza.bat,amri.cmd,script.ps1,Calculator.lnk,Microsoft-Edge.exe,Microsoft-Copilot.exe,Microsoft-Office.exe,Microsoft-Word.exe,Microsoft-Excel.exe,Microsoft-PowerPoint.exe,Microsoft-Outlook.exe,Microsoft-OneNote.exe,Mozilla-Firefox.exe,Google-Chrome.exe", "Code (Dev)": "index.html,style.css,app.js,config.json,data.xml,hello.py,Hello.java,main.cpp,index.php,query.sql,app.ts,README.md", "Zilizobanwa (Archives)": "mafaili.zip,backup.rar,picha.7z,source.tar,logs.gz", "Database": "app.db,watu.sqlite,watu.sqlite3,ofisi.mdb,mauzo.accdb,database.bak", "Mfumo (System)": "mfumo.log,muda.tmp,settings.ini,config.cfg,data.dat,usajili.reg,kazi.cab,hati.vbs,hitilafu.dmp", "Diski (Disks)": "windows.iso,diski.img,mashine.vhd,mashine.vhdx,vmware.vmdk,paketi.ova,paketi.ovf"};
+<script>/* ================= MAFAILI YOTE (kila faili mstari wake) ================= */
+const _j=a=>a.join(',');
+const FOLD={
+/* 01. Nyaraka (Documents) — mafaili 11 */
+"Nyaraka (Documents)":_j([
+  "notes.txt",                 // 01
+  "report.doc",                // 02
+  "report.docx",               // 03
+  "manual.pdf",                // 04
+  "letter.rtf",                // 05
+  "document.odt",              // 06
+  "presentation.ppt",          // 07
+  "presentation.pptx",         // 08
+  "budget.xls",                // 09
+  "budget.xlsx",               // 10
+  "data.csv",                  // 11
+]),
+/* 02. Picha (Pictures) — mafaili 8 */
+"Picha (Pictures)":_j([
+  "picha1.jpg",                // 01
+  "picha2.jpeg",               // 02
+  "nembo.png",                 // 03
+  "mchezo.gif",                // 04
+  "old.bmp",                   // 05
+  "mpya.webp",                 // 06
+  "mchoro.svg",                // 07
+  "app.ico",                   // 08
+]),
+/* 03. Video (Videos) — mafaili 6 */
+"Video (Videos)":_j([
+  "video1.mp4",                // 01
+  "filamu.mkv",                // 02
+  "zamani.avi",                // 03
+  "apple.mov",                 // 04
+  "windows.wmv",               // 05
+  "wavuti.webm",               // 06
+]),
+/* 04. Muziki (Music) — mafaili 6 */
+"Muziki (Music)":_j([
+  "wimbo.mp3",                 // 01
+  "ubora.wav",                 // 02
+  "aac-sauti.aac",             // 03
+  "flac-sauti.flac",           // 04
+  "ogg-sauti.ogg",             // 05
+  "app-sauti.m4a",             // 06
+]),
+/* 05. Programu (Programs) — mafaili 21 */
+"Programu (Programs)":_j([
+  "cmd.exe",                   // 01
+  "calc.exe",                  // 02
+  "notepad.exe",               // 03
+  "paint.exe",                 // 04
+  "setup.msi",                 // 05
+  "vipengele.dll",             // 06
+  "driver.sys",                // 07
+  "anza.bat",                  // 08
+  "amri.cmd",                  // 09
+  "script.ps1",                // 10
+  "Calculator.lnk",            // 11
+  "Microsoft-Edge.exe",        // 12
+  "Microsoft-Copilot.exe",     // 13
+  "Microsoft-Office.exe",      // 14
+  "Microsoft-Word.exe",        // 15
+  "Microsoft-Excel.exe",       // 16
+  "Microsoft-PowerPoint.exe",  // 17
+  "Microsoft-Outlook.exe",     // 18
+  "Microsoft-OneNote.exe",     // 19
+  "Mozilla-Firefox.exe",       // 20
+  "Google-Chrome.exe",         // 21
+]),
+/* 06. Code (Dev) — mafaili 12 */
+"Code (Dev)":_j([
+  "index.html",                // 01
+  "style.css",                 // 02
+  "app.js",                    // 03
+  "config.json",               // 04
+  "data.xml",                  // 05
+  "hello.py",                  // 06
+  "Hello.java",                // 07
+  "main.cpp",                  // 08
+  "index.php",                 // 09
+  "query.sql",                 // 10
+  "app.ts",                    // 11
+  "README.md",                 // 12
+]),
+/* 07. Zilizobanwa (Archives) — mafaili 5 */
+"Zilizobanwa (Archives)":_j([
+  "mafaili.zip",               // 01
+  "backup.rar",                // 02
+  "picha.7z",                  // 03
+  "source.tar",                // 04
+  "logs.gz",                   // 05
+]),
+/* 08. Database — mafaili 6 */
+"Database":_j([
+  "app.db",                    // 01
+  "watu.sqlite",               // 02
+  "watu.sqlite3",              // 03
+  "ofisi.mdb",                 // 04
+  "mauzo.accdb",               // 05
+  "database.bak",              // 06
+]),
+/* 09. Mfumo (System) — mafaili 9 */
+"Mfumo (System)":_j([
+  "mfumo.log",                 // 01
+  "muda.tmp",                  // 02
+  "settings.ini",              // 03
+  "config.cfg",                // 04
+  "data.dat",                  // 05
+  "usajili.reg",               // 06
+  "kazi.cab",                  // 07
+  "hati.vbs",                  // 08
+  "hitilafu.dmp",              // 09
+]),
+/* 10. Diski (Disks) — mafaili 7 */
+"Diski (Disks)":_j([
+  "windows.iso",               // 01
+  "diski.img",                 // 02
+  "mashine.vhd",               // 03
+  "mashine.vhdx",              // 04
+  "vmware.vmdk",               // 05
+  "paketi.ova",                // 06
+  "paketi.ovf",                // 07
+]),
+};
 const ico={"txt": "📄", "doc": "📘", "docx": "📘", "pdf": "📕", "rtf": "📝", "odt": "📃", "ppt": "📙", "pptx": "📙", "xls": "📗", "xlsx": "📗", "csv": "📊", "jpg": "🖼️", "jpeg": "🖼️", "png": "🖼️", "gif": "🎞️", "bmp": "🖼️", "webp": "🖼️", "svg": "🎨", "ico": "⭐", "mp4": "🎬", "Music": "🎵", "exe": "⚙️", "msi": "📦", "dll": "🧩", "sys": "🛠️", "bat": "📟", "cmd": "📟", "ps1": "📟", "lnk": "🔗", "html": "🌐", "css": "🎨", "js": "🟨", "json": "🧾", "xml": "🧾", "py": "🐍", "java": "☕", "cpp": "➕", "php": "🐘", "sql": "🗃️", "ts": "🟦", "md": "📝", "zip": "🗜️", "rar": "🗜️", "7z": "🗜️", "tar": "🗜️", "gz": "🗜️", "db": "🗄️", "sqlite": "🗄️", "sqlite3": "🗄️", "mdb": "🗄️", "accdb": "🗄️", "bak": "💾", "log": "📜", "tmp": "🕑", "ini": "⚙️", "cfg": "⚙️", "dat": "🔢", "reg": "🧬", "cab": "📦", "vbs": "📜", "dmp": "💥", "iso": "💿", "img": "💿", "vhd": "💽", "vhdx": "💽", "vmdk": "💽", "ova": "🖥️", "ovf": "🖥️"};
 const ICN={"Microsoft-Edge.exe":"🌐","Microsoft-Copilot.exe":"✨","Microsoft-Office.exe":"🏢","Microsoft-Word.exe":"📘","Microsoft-Excel.exe":"📗","Microsoft-PowerPoint.exe":"📙","Microsoft-Outlook.exe":"📧","Microsoft-OneNote.exe":"📓","Mozilla-Firefox.exe":"🦊","Google-Chrome.exe":"🌍"};
 const fi=n=>ICN[n]||ico[n.split(".").pop().toLowerCase()]||"📄";
@@ -119,16 +357,45 @@ function explorer(f){
  const nav=E('div','bar');nav.append(bk,fw,up,ad,q);const row=E('div');row.style.cssText='display:flex;flex:1;min-height:0';row.append(side,body);body.style.flex=1;body.style.overflow='auto';
  function draw(){ad.textContent='💻 Kompyuta Hii › Diski (C:)'+(cur?' › '+cur:'');side.innerHTML='';
   const si=(t,c)=>{const d=E('div',c===cur?'on':'',t);d.onclick=()=>go(c);side.append(d)};si('💻 Kompyuta Hii',null);Object.keys(FOLD).forEach(k=>si('📁 '+k.split(' ')[0],k));
-  body.innerHTML='';let n=0;const t=q.value.toLowerCase();
-  if(!cur)Object.keys(FOLD).filter(k=>k.toLowerCase().includes(t)).forEach(k=>{n++;const i=E('div','it','<b>📁</b>'+esc(k));i.ondblclick=()=>go(k);body.append(i)});
-  else FOLD[cur].split(',').filter(x=>x.toLowerCase().includes(t)).forEach(x=>{n++;const i=E('div','it','<b>'+(fi(x))+'</b>'+esc(x));i.ondblclick=()=>openF(cur,x);i.onclick=()=>{body.querySelectorAll('.it').forEach(z=>z.style.background='');i.style.background='#cce4f7'};body.append(i)});
-  stt.textContent=n+' vitu'}
+  body.innerHTML='';body.classList.add('lst');let n=0;const t=q.value.toLowerCase();
+  body.append(E('div','lh','<span>#</span><span></span><span>Jina</span><span>Aina</span>'));
+  const mk=(ic,nm,ty,fn)=>{n++;const i=E('div','it','<em>'+String(n).padStart(2,'0')+'</em><b>'+ic+'</b><span>'+esc(nm)+'</span><small>'+ty+'</small>');i.ondblclick=fn;i.onclick=()=>{body.querySelectorAll('.it').forEach(z=>z.style.background='');i.style.background='#cce4f7'};body.append(i)};
+  if(!cur)Object.keys(FOLD).filter(k=>k.toLowerCase().includes(t)).forEach(k=>mk('📁',k,'Folda · '+FOLD[k].split(',').length+' vitu',()=>go(k)));
+  else FOLD[cur].split(',').filter(x=>x.toLowerCase().includes(t)).sort((x,y)=>x.localeCompare(y,undefined,{sensitivity:'base'})).forEach(x=>mk(fi(x),x,ext(x).toUpperCase()+' · Faili',()=>openF(cur,x)));
+  stt.textContent=n+' vitu'+(OFFN?'  ·  💾 '+OFFN+' vimehifadhiwa offline':'')}
  q.oninput=draw;draw();box.append(nav,row,stt);win('Explorer','📁',680,420,box)}
+/* ===== OFFLINE STORAGE (IndexedDB) ===== */
+let OFFN=0,PAT=null,syncing=0;
+const DB=(()=>{let p;const open=()=>p||(p=new Promise((res,rej)=>{if(!window.indexedDB)return rej();const q=indexedDB.open('SadeComputerDB',1);q.onupgradeneeded=()=>{q.result.createObjectStore('files');q.result.createObjectStore('meta')};q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)}));
+ const tx=(st,m,f)=>open().then(d=>new Promise((res,rej)=>{const t=d.transaction(st,m),r=f(t.objectStore(st));t.oncomplete=()=>res(r.result);t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)})).catch(()=>null);
+ return{get:k=>tx('files','readonly',s=>s.get(k)),put:(k,v)=>tx('files','readwrite',s=>s.put(v,k)),keys:()=>tx('files','readonly',s=>s.getAllKeys()),
+  getM:k=>tx('meta','readonly',s=>s.get(k)),putM:(k,v)=>tx('meta','readwrite',s=>s.put(v,k))}})();
+const cnt=()=>DB.keys().then(k=>{OFFN=k?k.length:0;const o=$('#off');if(o)o.title='💾 Mafaili '+OFFN+' yamehifadhiwa kwa matumizi ya offline (IndexedDB)'});
+const paths=(s,n)=>{const e=encodeURIComponent(n)+'.html',P=[e,'faili/'+s+'/'+e,'Sade-Computer/'+e,'Sade-Computer/faili/'+s+'/'+e,'faili/'+e];return P.concat(P.map(x=>x.toLowerCase()))};
+async function fetchF(s,n,fast){const L=paths(s,n);if(location.protocol==='file:')return{p:L[0]};if(!navigator.onLine)return null;
+ for(const i of(fast&&PAT!=null?[PAT]:[...L.keys()])){const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);
+  try{const r=await fetch(L[i],{cache:'no-store',signal:c.signal});if(r.ok&&/html/.test(r.headers.get('content-type')||'')){const txt=await r.text();clearTimeout(t);if(PAT==null)PAT=i;return{p:L[i],txt}}}catch(_){}clearTimeout(t)}
+ return null}
+/* Pakua mafaili yote nyuma ya pazia mtu akiwa online, yahifadhiwe kwenye IndexedDB */
+async function sync(){if(syncing||location.protocol==='file:'||!navigator.onLine)return;syncing=1;
+ DB.putM('manifest',{FOLD,t:Date.now()});const jobs=[];Object.keys(FOLD).forEach(k=>FOLD[k].split(',').forEach(n=>jobs.push([k.split(' ')[0],n])));
+ const now=Date.now(),AGE=432e5;let idx=0;
+ const work=async()=>{while(idx<jobs.length){const[s,n]=jobs[idx++],key=s+'/'+n,old=await DB.get(key),ms=await DB.getM('miss:'+key);
+  if(old&&now-old.t<AGE)continue;if(ms&&now-ms<AGE)continue;
+  const r=await fetchF(s,n,1);if(r&&r.txt!=null){await DB.put(key,{html:r.txt,t:Date.now()});cnt()}else if(navigator.onLine)DB.putM('miss:'+key,Date.now())}};
+ await Promise.all([work(),work(),work()]);syncing=0;cnt()}
+const _off=E('span','tr','💾');_off.id='off';_off.title='💾 Offline inaandaa…';$('#tray').insertBefore(_off,$('#tray').firstChild);
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+addEventListener('load',()=>{setTimeout(cnt,300);setTimeout(sync,1500)});addEventListener('online',sync);
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 /* ===== OPEN FILE ===== */
-async function openF(f,n){const s=f.split(' ')[0],e=encodeURIComponent(n)+'.html',P=[e,'faili/'+s+'/'+e,'Sade-Computer/'+e,'Sade-Computer/faili/'+s+'/'+e,'faili/'+e];
+async function openF(f,n){const s=f.split(' ')[0],P=paths(s,n).slice(0,5),key=s+'/'+n;
  const fr=E('iframe');fr.style.cssText='flex:1;border:0;width:100%;background:#fff';fr.onload=()=>{if(TAP)try{fr.contentDocument.activeElement.blur()}catch(_){}};win(n,fi(n),640,430,fr);
- let ok=null;if(location.protocol==='file:')ok=P[0];else for(const p of P.concat(P.map(x=>x.toLowerCase()))){try{const r=await fetch(p,{cache:'no-store'});if(r.ok&&/html/.test(r.headers.get('content-type')||'')){ok=p;break}}catch(_){}}
- if(ok)fr.src=ok;else fr.srcdoc='<body style="font:14px sans-serif;padding:20px"><h3>⚠ Faili halijapatikana</h3><p><b>'+esc(n)+'.html</b> halipo kwenye repo. Nimejaribu:</p><pre>'+P.join('\n')+'</pre><p>Pakia faili hilo kwenye root ya repo.</p>'}
+ const r=await fetchF(s,n);
+ if(r&&r.txt!=null)DB.put(key,{html:r.txt,t:Date.now()}).then(cnt);
+ if(r)fr.src=r.p;
+ else{const c=await DB.get(key);if(c&&c.html)fr.srcdoc=c.html;
+  else fr.srcdoc='<body style="font:14px sans-serif;padding:20px"><h3>⚠ Faili halijapatikana</h3><p><b>'+esc(n)+'.html</b> halipo kwenye repo (na halijahifadhiwa offline bado). Nimejaribu:</p><pre>'+P.join('\n')+'</pre><p>Pakia faili hilo kwenye root ya repo, kisha fungua ukiwa online mara moja.</p>'}}
 addEventListener('message',e=>{if(e.data&&e.data.close)wins.slice().forEach(w=>{const r=w.el.querySelector('iframe');if(r&&r.contentWindow===e.source)w.close()})});
 const TAP=matchMedia('(pointer:coarse)').matches;
 document.addEventListener('click',e=>{if(!TAP)return;const t=e.target.closest('.it,.ic');if(t&&t.ondblclick)t.ondblclick(e)});
