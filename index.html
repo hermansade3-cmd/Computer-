@@ -267,7 +267,7 @@ const FOLD={
   "Microsoft-OneNote.exe",     // 19
   "Mozilla-Firefox.exe",       // 20
   "Google-Chrome.exe",         // 21
-  "Microsoft-Game.exe",        // 22
+  "Microsoft-Games.exe",        // 22
 ]),
 /* 06. Code (Dev) — mafaili 12 */
 "Code (Dev)":_j([
@@ -325,7 +325,7 @@ const FOLD={
 ]),
 };
 const ico={"txt": "📄", "doc": "📘", "docx": "📘", "pdf": "📕", "rtf": "📝", "odt": "📃", "ppt": "📙", "pptx": "📙", "xls": "📗", "xlsx": "📗", "csv": "📊", "jpg": "🖼️", "jpeg": "🖼️", "png": "🖼️", "gif": "🎞️", "bmp": "🖼️", "webp": "🖼️", "svg": "🎨", "ico": "⭐", "mp4": "🎬", "Music": "🎵", "exe": "⚙️", "msi": "📦", "dll": "🧩", "sys": "🛠️", "bat": "📟", "cmd": "📟", "ps1": "📟", "lnk": "🔗", "html": "🌐", "css": "🎨", "js": "🟨", "json": "🧾", "xml": "🧾", "py": "🐍", "java": "☕", "cpp": "➕", "php": "🐘", "sql": "🗃️", "ts": "🟦", "md": "📝", "zip": "🗜️", "rar": "🗜️", "7z": "🗜️", "tar": "🗜️", "gz": "🗜️", "db": "🗄️", "sqlite": "🗄️", "sqlite3": "🗄️", "mdb": "🗄️", "accdb": "🗄️", "bak": "💾", "log": "📜", "tmp": "🕑", "ini": "⚙️", "cfg": "⚙️", "dat": "🔢", "reg": "🧬", "cab": "📦", "vbs": "📜", "dmp": "💥", "iso": "💿", "img": "💿", "vhd": "💽", "vhdx": "💽", "vmdk": "💽", "ova": "🖥️", "ovf": "🖥️"};
-const ICN={"Microsoft-Edge.exe":"🌐","Microsoft-Copilot.exe":"✨","Microsoft-Office.exe":"🏢","Microsoft-Word.exe":"📘","Microsoft-Excel.exe":"📗","Microsoft-PowerPoint.exe":"📙","Microsoft-Outlook.exe":"📧","Microsoft-OneNote.exe":"📓","Mozilla-Firefox.exe":"🦊","Google-Chrome.exe":"🌍","Microsoft-Game.exe":"🎮"};
+const ICN={"Microsoft-Edge.exe":"🌐","Microsoft-Copilot.exe":"✨","Microsoft-Office.exe":"🏢","Microsoft-Word.exe":"📘","Microsoft-Excel.exe":"📗","Microsoft-PowerPoint.exe":"📙","Microsoft-Outlook.exe":"📧","Microsoft-OneNote.exe":"📓","Mozilla-Firefox.exe":"🦊","Google-Chrome.exe":"🌍","Microsoft-Games.exe":"🎮"};
 const fi=n=>ICN[n]||ico[n.split(".").pop().toLowerCase()]||"📄";
 </script>
 <script>const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
@@ -401,7 +401,7 @@ addEventListener('message',e=>{if(e.data&&e.data.close)wins.slice().forEach(w=>{
 const TAP=matchMedia('(pointer:coarse)').matches;
 document.addEventListener('click',e=>{if(!TAP)return;const t=e.target.closest('.it,.ic');if(t&&t.ondblclick)t.ondblclick(e)});
 /* ===== DESKTOP / START ===== */
-const DI=[['💻','Kompyuta Hii',()=>explorer()],['📁','Nyaraka',()=>explorer('Nyaraka (Documents)')],['🖼️','Picha',()=>explorer('Picha (Pictures)')],['⬛','Terminal',()=>openF('Programu (Programs)','cmd.exe')],['🧮','Calculator',()=>openF('Programu (Programs)','calc.exe')],['🎨','Paint',()=>openF('Programu (Programs)','paint.exe')],['📝','Notepad',()=>openF('Programu (Programs)','notepad.exe')],['🌐','Microsoft Edge',()=>openF('Programu (Programs)','Microsoft-Edge.exe'),1],['✨','Microsoft Copilot',()=>openF('Programu (Programs)','Microsoft-Copilot.exe'),1],['🏢','Microsoft Office',()=>openF('Programu (Programs)','Microsoft-Office.exe'),1],['📘','Microsoft Word',()=>openF('Programu (Programs)','Microsoft-Word.exe'),1],['📗','Microsoft Excel',()=>openF('Programu (Programs)','Microsoft-Excel.exe'),1],['📙','Microsoft PowerPoint',()=>openF('Programu (Programs)','Microsoft-PowerPoint.exe'),1],['📧','Microsoft Outlook',()=>openF('Programu (Programs)','Microsoft-Outlook.exe'),1],['📓','Microsoft OneNote',()=>openF('Programu (Programs)','Microsoft-OneNote.exe'),1],['🦊','Mozilla Firefox',()=>openF('Programu (Programs)','Mozilla-Firefox.exe'),1],['🌍','Google Chrome',()=>openF('Programu (Programs)','Google-Chrome.exe'),1],['🎮','Microsoft Game',()=>openF('Programu (Programs)','Microsoft-Game.exe'),1],['🗑️','Recycle Bin',()=>alert('Recycle Bin ni tupu')]];
+const DI=[['💻','Kompyuta Hii',()=>explorer()],['📁','Nyaraka',()=>explorer('Nyaraka (Documents)')],['🖼️','Picha',()=>explorer('Picha (Pictures)')],['⬛','Terminal',()=>openF('Programu (Programs)','cmd.exe')],['🧮','Calculator',()=>openF('Programu (Programs)','calc.exe')],['🎨','Paint',()=>openF('Programu (Programs)','paint.exe')],['📝','Notepad',()=>openF('Programu (Programs)','notepad.exe')],['🌐','Microsoft Edge',()=>openF('Programu (Programs)','Microsoft-Edge.exe'),1],['✨','Microsoft Copilot',()=>openF('Programu (Programs)','Microsoft-Copilot.exe'),1],['🏢','Microsoft Office',()=>openF('Programu (Programs)','Microsoft-Office.exe'),1],['📘','Microsoft Word',()=>openF('Programu (Programs)','Microsoft-Word.exe'),1],['📗','Microsoft Excel',()=>openF('Programu (Programs)','Microsoft-Excel.exe'),1],['📙','Microsoft PowerPoint',()=>openF('Programu (Programs)','Microsoft-PowerPoint.exe'),1],['📧','Microsoft Outlook',()=>openF('Programu (Programs)','Microsoft-Outlook.exe'),1],['📓','Microsoft OneNote',()=>openF('Programu (Programs)','Microsoft-OneNote.exe'),1],['🦊','Mozilla Firefox',()=>openF('Programu (Programs)','Mozilla-Firefox.exe'),1],['🌍','Google Chrome',()=>openF('Programu (Programs)','Google-Chrome.exe'),1],['🎮','Microsoft Game',()=>openF('Programu (Programs)','Microsoft-Games.exe'),1],['🗑️','Recycle Bin',()=>alert('Recycle Bin ni tupu')]];
 DI.filter(x=>!x[3]).forEach(([i,n,f])=>{const d=E('div','ic','<b>'+i+'</b>'+n);d.ondblclick=f;d.onclick=()=>{document.querySelectorAll('.ic').forEach(x=>x.classList.remove('s'));d.classList.add('s')};$('#desk').append(d)});
 [0,5,6,7,8].forEach(k=>{const b=E('button','',DI[k][0]);b.title=DI[k][1];b.onclick=DI[k][2];$('#pins').append(b)});
 const M=$('#menu'),REC=[['Nyaraka (Documents)','notes.txt'],['Nyaraka (Documents)','budget.xlsx'],['Nyaraka (Documents)','presentation.pptx'],['Picha (Pictures)','picha1.jpg'],['Muziki (Music)','Music'],['Code (Dev)','index.html']];
@@ -410,10 +410,123 @@ function buildMenu(){M.innerHTML='';const q=E('input');q.placeholder='Tafuta pro
   sc.append(E('h4','','Zinazopendekezwa'));const r=E('div','rg');REC.forEach(([fo,n])=>{const d=E('div','rc','<b>'+fi(n)+'</b><span>'+n+'<br><small style="color:#666">'+fo.split(' ')[0]+'</small></span>');d.onclick=()=>{close();openF(fo,n)};r.append(d)});sc.append(r)};
  q.oninput=()=>{const t=q.value.toLowerCase();if(!t)return home();sc.innerHTML='<h4>Matokeo</h4>';const L=[];DI.forEach(x=>x[1].toLowerCase().includes(t)&&L.push([x[0],x[1],x[2]]));Object.keys(FOLD).forEach(k=>FOLD[k].split(',').forEach(n=>n.toLowerCase().includes(t)&&L.push([fi(n),n,()=>openF(k,n)])));
   L.slice(0,9).forEach(([i,n,f])=>{const d=E('div','rc','<b>'+i+'</b><span>'+n+'</span>');d.onclick=()=>{close();f()};sc.append(d)});if(!L.length)sc.append('Hakuna kilichopatikana')};
- const ft=E('div','ft','<span>🧑‍💻 Lightness</span>');const pw=E('span','','⏻ Funga');pw.onclick=()=>{close();lock()};const rs=E('span','','🧹 Reset');rs.onclick=()=>{localStorage.removeItem('sadepc');location.reload()};const r2=E('div');r2.append(rs,pw);ft.append(r2);
+ const ft=E('div','ft','<span>🧑‍💻 Lightness</span>');const pw=E('span','','⏻ Funga');pw.onclick=()=>{close();lock()};const rs=E('span','','🧹 Reset');rs.onclick=()=>{localStorage.removeItem('sadepc');localStorage.removeItem('sadevfs2');location.reload()};const r2=E('div');r2.append(rs,pw);ft.append(r2);
  home();M.append(q,sc,ft);if(!TAP)setTimeout(()=>q.focus(),50)}
 const toggle=e=>{e.stopPropagation();if(M.style.display==='flex')M.style.display='none';else{buildMenu();M.style.display='flex'}};
 $('#st').onclick=toggle;$('#sr').onclick=toggle;M.onclick=e=>e.stopPropagation();document.addEventListener('click',()=>M.style.display='none');
 const L=$('#lock');function lock(){L.classList.remove('up')}L.onclick=()=>L.classList.add('up');addEventListener('keydown',()=>L.classList.add('up'));
 const tick=()=>{const n=new Date();$('#clk').innerHTML=n.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'<br>'+n.toLocaleDateString();$('#lt').textContent=n.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});$('#ld').textContent=n.toLocaleDateString('sw-TZ',{weekday:'long',day:'numeric',month:'long'})};tick();setInterval(tick,1000);
-</script></body></html>
+</script>
+<style>
+#cm{position:fixed;display:none;z-index:100001;min-width:200px;background:rgba(250,250,252,.98);color:#111;border-radius:8px;box-shadow:0 8px 30px #0006;padding:4px;border:1px solid #ccd;font:13px Segoe UI,system-ui,sans-serif}
+#cm div{padding:9px 12px;border-radius:4px;cursor:pointer;white-space:nowrap}#cm div:hover{background:#cce4f7}#cm div.off{color:#999;cursor:default}#cm div.off:hover{background:none}#cm hr{border:0;border-top:1px solid #ddd;margin:3px 0}
+.it.sel{background:#cce4f7!important}.it.cut{opacity:.5}.gh{position:fixed;z-index:100002;pointer-events:none;background:#1e88e5;color:#fff;padding:4px 10px;border-radius:12px;font:12px sans-serif;box-shadow:0 2px 8px #0005}
+#pins{overflow-x:auto;scrollbar-width:none}@media(max-width:760px){#pins button:nth-child(n+4){display:inline-block!important}#pins{max-width:46vw}}
+</style>
+<script>
+/* ===== MFUMO WA MAFAILI (VFS): copy, cut, paste, delete, rename, desktop, pin, recycle bin ===== */
+const VK='sadevfs2',BIN='Recycle Bin';let V,CB=null,ACT=null,lpT=0;const EXP=new Set(),dsel=new Set();
+try{V=JSON.parse(localStorage.getItem(VK)||'null')}catch(_){}
+V=V||{};V.F=V.F||{};V.U=V.U||[];V.seen=V.seen||{};V.sp=V.sp||[];V.wp=V.wp||0;
+V.pin=V.pin||[0,5,6,7,8].map(k=>({t:'d',k}));
+Object.keys(FOLD).forEach(k=>{V.F[k]=V.F[k]||[];FOLD[k].split(',').forEach(n=>{const id=k+'/'+n;if(!V.seen[id]){V.seen[id]=1;V.F[k].push({n,o:[k,n]})}})});
+V.F.Desktop=V.F.Desktop||[];V.F[BIN]=V.F[BIN]||[];
+const keys=()=>[...Object.keys(FOLD),'Desktop',...V.U,BIN],get=(fo,n)=>(V.F[fo]||[]).find(x=>x.n===n);
+const persist=()=>{try{localStorage.setItem(VK,JSON.stringify(V))}catch(_){}refresh()};
+const refresh=()=>{EXP.forEach(f=>f());drawDesk();drawPins()};
+const uniq=(fo,n)=>{const L=V.F[fo].map(x=>x.n);if(!L.includes(n))return n;const i=n.lastIndexOf('.'),b=i>0?n.slice(0,i):n,x=i>0?n.slice(i):'';let k=1,m;do{m=b+' - Copy'+(k>1?' ('+k+')':'')+x;k++}while(L.includes(m));return m};
+function xfer(items,dest,cut){items.forEach(([fo,n])=>{const e=get(fo,n);if(!e||(cut&&fo===dest))return;V.F[dest].push({n:uniq(dest,n),o:e.o});if(cut)V.F[fo]=V.F[fo].filter(x=>x!==e)})}
+function del(items){if(!items.length)return;if(items.every(x=>x[0]===BIN)){if(!confirm('Futa kabisa vitu '+items.length+'? Haviwezi kurejeshwa.'))return;items.forEach(([fo,n])=>V.F[BIN]=V.F[BIN].filter(x=>x.n!==n))}
+ else items.forEach(([fo,n])=>{if(fo===BIN)return;const e=get(fo,n);if(!e)return;V.F[fo]=V.F[fo].filter(x=>x!==e);V.F[BIN].push({n:e.n,o:e.o,d:fo})});persist()}
+function restore(items){items.forEach(([fo,n])=>{const e=get(BIN,n);if(!e)return;const d=V.F[e.d]?e.d:'Desktop';V.F[BIN]=V.F[BIN].filter(x=>x!==e);V.F[d].push({n:uniq(d,e.n),o:e.o})});persist()}
+function paste(d){if(!CB||!d)return;if(d===BIN){if(CB.cut){del(CB.items);CB=null}return}xfer(CB.items,d,CB.cut);if(CB.cut)CB=null;persist()}
+function ren(fo,n){const e=get(fo,n);if(!e)return;const v=(prompt('Jina jipya:',n)||'').trim();if(!v||v===n)return;if(get(fo,v)){alert('Jina hilo lipo tayari.');return}e.n=v;persist()}
+const cp=(items,cut)=>{if(items.length){CB={cut,items:items.slice()};refresh()}};
+function newF(){const v=(prompt('Jina la folda mpya:','Folda mpya')||'').trim();if(!v)return;if(V.F[v]){alert('Jina hilo lipo tayari.');return}V.F[v]=[];V.U.push(v);persist()}
+function delF(k){if(V.F[k].length){alert('Folda ina vitu. Vihamishe au vifute kwanza.');return}delete V.F[k];V.U=V.U.filter(x=>x!==k);persist()}
+const pinFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.pin.some(p=>p.t==='f'&&p.n===e.n&&p.o+''===e.o+''))V.pin.push({t:'f',o:e.o,n:e.n})};
+const ORIG=DI.length;
+function startAdd(o,n){DI.push([fi(o[1]),n,()=>openE({n,o}),1,o])}
+const startFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.sp.some(p=>p.n===e.n&&p.o+''===e.o+'')){V.sp.push({o:e.o,n:e.n});startAdd(e.o,e.n)}};
+V.sp.forEach(p=>startAdd(p.o,p.n));
+DI.forEach(d=>{if(d[1]==='Recycle Bin')d[2]=()=>explorer(BIN)});
+function openE(e){if(!e)return;openF(e.o[0],e.o[1]);const w=wins[wins.length-1];if(w&&e.n!==e.o[1]){const s=w.el.querySelector('.h span');if(s)s.innerHTML=fi(e.o[1])+' &nbsp;'+esc(e.n)}}
+/* ----- menyu ya kubofya kulia / kubonyeza muda mrefu ----- */
+const CM=E('div');CM.id='cm';document.body.append(CM);
+function menu(x,y,items){CM.innerHTML='';items.forEach(it=>{if(!it){CM.append(E('hr'));return}const d=E('div',it[2]?'off':'',it[0]);if(!it[2])d.onclick=ev=>{ev.stopPropagation();CM.style.display='none';it[1]()};CM.append(d)});CM.style.display='block';const r=CM.getBoundingClientRect();CM.style.left=Math.max(4,Math.min(x,innerWidth-r.width-4))+'px';CM.style.top=Math.max(4,Math.min(y,innerHeight-r.height-4))+'px'}
+document.addEventListener('pointerdown',e=>{if(!CM.contains(e.target))CM.style.display='none'},true);
+function lp(el,fn){el.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation();lpT=Date.now();fn(e.clientX,e.clientY,e)});
+ let t,sx,sy;el.addEventListener('touchstart',e=>{const p=e.touches[0];sx=p.clientX;sy=p.clientY;clearTimeout(t);t=setTimeout(()=>{lpT=Date.now();fn(sx,sy,e)},520)},{passive:true});
+ ['touchmove','touchend','touchcancel'].forEach(k=>el.addEventListener(k,e=>{if(k==='touchmove'){const p=e.touches[0];if(Math.hypot(p.clientX-sx,p.clientY-sy)<10)return}clearTimeout(t)},{passive:true}))}
+function fileMenu(x,y,fo,names){const it=names.map(n=>[fo,n]),one=names.length===1,bin=fo===BIN,M=[];
+ if(!bin)M.push(['Fungua',()=>names.forEach(n=>openE(get(fo,n)))],null);
+ if(bin)M.push(['Rejesha (Restore)',()=>restore(it)],null);
+ M.push(['✂️ Kata (Cut)',()=>cp(it,1)],['⧉ Nakili (Copy)',()=>cp(it,0),bin],['✏️ Badili jina',()=>ren(...it[0]),!one||bin],['🗑️ Futa',()=>del(it)]);
+ if(!bin){M.push(null,['🖥️ Tuma Desktop',()=>{xfer(it,'Desktop',0);persist()},fo==='Desktop'],['📌 Pin kwenye Taskbar',()=>{it.forEach(a=>pinFile(...a));persist()}],['🔲 Pin kwenye Start',()=>{it.forEach(a=>startFile(...a));persist()}]);
+  if(fo==='Desktop')M.push(['↩️ Rudisha kwenye folda asili',()=>{it.forEach(a=>xfer([a],get(...a).o[0],1));persist()}])}
+ menu(x,y,M)}
+/* ----- kuburuta (drag & drop) kwa kipanya ----- */
+function drag(e,items){const sx=e.clientX,sy=e.clientY;let g=null;
+ const mv=ev=>{if(!g&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>6){g=E('div','gh','📄 '+items().length);document.body.append(g)}if(g){g.style.left=ev.clientX+12+'px';g.style.top=ev.clientY+12+'px'}};
+ const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);if(!g)return;g.remove();lpT=Date.now();drop(ev,items(),ev.ctrlKey)};
+ addEventListener('pointermove',mv);addEventListener('pointerup',up)}
+function drop(ev,items,copy){const el=document.elementFromPoint(ev.clientX,ev.clientY);if(!el||!items.length)return;
+ if(el.closest('#tb')){items.forEach(a=>pinFile(...a));persist();return}
+ const t=el.closest('[data-fold]');if(!t||!t.dataset.fold||(t.id==='desk'&&el.closest('.w')))return;const d=t.dataset.fold;
+ if(d===BIN){del(items);return}xfer(items,d,!copy);persist()}
+/* ----- Explorer mpya ----- */
+function explorer(f){
+ let cur=f||null,H=[cur],hi=0,multi=0,sel=new Set(),last=null,order=[],n=0;const box=wrap(),side=E('div','sd'),body=E('div','grid'),ad=E('div','ad'),stt=E('div','stt'),q=E('input');q.placeholder='Tafuta';q.style.width='120px';
+ const go=(c,p)=>{cur=c;sel.clear();last=null;if(!p){H=H.slice(0,hi+1);H.push(c);hi++}q.value='';draw()};
+ const bk=E('button','','←'),fw=E('button','','→'),up=E('button','','↑');bk.onclick=()=>{if(hi>0){hi--;go(H[hi],1)}};fw.onclick=()=>{if(hi<H.length-1){hi++;go(H[hi],1)}};up.onclick=()=>go(null);
+ const nav=E('div','bar');nav.append(bk,fw,up,ad,q);const tbr=E('div','bar');
+ const S=()=>cur?[...sel].map(x=>[cur,x]):[],ctx={folder:()=>cur,S,all:()=>{if(cur){V.F[cur].forEach(e=>sel.add(e.n));paint()}}};
+ const B=(t,ti,fn)=>{const b=E('button','',t);b.title=ti;b.onclick=()=>{ACT=ctx;fn()};tbr.append(b);return b};
+ B('✂️','Kata (Cut)',()=>cp(S(),1));B('⧉','Nakili (Copy)',()=>cp(S(),0));B('📋','Bandika (Paste)',()=>paste(cur));B('✏️','Badili jina',()=>{const s=S();if(s.length===1)ren(...s[0])});B('🗑️','Futa',()=>del(S()));
+ B('🖥️','Tuma Desktop',()=>{xfer(S(),'Desktop',0);persist()});B('📌','Pin Taskbar',()=>{S().forEach(a=>pinFile(...a));persist()});B('➕','Folda mpya',()=>cur?alert('Fungua "Kompyuta Hii" kutengeneza folda mpya.'):newF());
+ const mb=B('☑','Chagua vingi (multi-select)',()=>{multi=!multi;mb.style.background=multi?'#cce4f7':''});
+ const row=E('div');row.style.cssText='display:flex;flex:1;min-height:0';row.append(side,body);body.style.flex=1;body.style.overflow='auto';
+ const status=()=>{stt.textContent=n+' vitu'+(sel.size?'  ·  '+sel.size+' vimechaguliwa':'')+(CB?'  ·  📋 '+CB.items.length+(CB.cut?' vimekatwa':' vimenakiliwa'):'')};
+ const paint=()=>{body.querySelectorAll('.it').forEach(r=>r.classList.toggle('sel',sel.has(r.dataset.k)));status()};
+ const pick=(k,e)=>{if(multi||e.ctrlKey||e.metaKey){sel.has(k)?sel.delete(k):sel.add(k)}else if(e.shiftKey&&last!=null){const a=order.indexOf(last),b=order.indexOf(k);order.slice(Math.min(a,b),Math.max(a,b)+1).forEach(x=>sel.add(x))}else{sel.clear();sel.add(k)}last=k;paint()};
+ const nm=k=>k===BIN?'🗑️ Recycle Bin':k==='Desktop'?'🖥️ Desktop':'📁 '+k.split(' ')[0];
+ function draw(){if(cur&&!V.F[cur])cur=null;ad.textContent='💻 Kompyuta Hii › Diski (C:)'+(cur?' › '+cur:'');side.innerHTML='';
+  const si=(t,c)=>{const d=E('div',c===cur?'on':'',t);d.onclick=()=>go(c);if(c)d.dataset.fold=c;side.append(d)};si('💻 Kompyuta Hii',null);keys().forEach(k=>si(nm(k),k));
+  body.innerHTML='';body.classList.add('lst');body.dataset.fold=cur||'';order=[];n=0;const t=q.value.toLowerCase();
+  body.append(E('div','lh','<span>#</span><span></span><span>Jina</span><span>Aina</span>'));
+  const mk=(ic,name,ty,fn,key)=>{n++;order.push(key);const cut=CB&&CB.cut&&cur&&CB.items.some(x=>x[0]===cur&&x[1]===key);
+   const i=E('div','it'+(sel.has(key)?' sel':'')+(cut?' cut':''),'<em>'+String(n).padStart(2,'0')+'</em><b>'+ic+'</b><span>'+esc(name)+'</span><small>'+ty+'</small>');i.dataset.k=key;if(!cur)i.dataset.fold=key;
+   i.ondblclick=()=>{if(!multi&&Date.now()-lpT>700)fn()};i.onclick=e=>{ACT=ctx;pick(key,e)};
+   i.onpointerdown=e=>{if(!cur||e.pointerType!=='mouse'||e.button)return;if(!sel.has(key)&&!e.ctrlKey){sel.clear();sel.add(key);paint()}drag(e,S)};
+   lp(i,(x,y)=>{ACT=ctx;if(!cur)return menu(x,y,[['Fungua',()=>go(key)],['Futa folda',()=>delF(key),!V.U.includes(key)]]);if(!sel.has(key)){sel.clear();sel.add(key);paint()}fileMenu(x,y,cur,[...sel])});body.append(i)};
+  if(!cur)keys().filter(k=>k.toLowerCase().includes(t)).forEach(k=>mk(k===BIN?'🗑️':k==='Desktop'?'🖥️':'📁',k,'Folda · '+V.F[k].length+' vitu',()=>go(k),k));
+  else V.F[cur].filter(e=>e.n.toLowerCase().includes(t)).sort((x,y)=>x.n.localeCompare(y.n,undefined,{sensitivity:'base'})).forEach(e=>mk(fi(e.o[1]),e.n,ext(e.n).toUpperCase()+' · Faili',()=>cur===BIN?alert('Rejesha faili kwanza ili kulifungua.'):openE(e),e.n));
+  status()}
+ lp(body,(x,y,e)=>{if(e.target.closest('.it'))return;ACT=ctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste(cur),!CB||!cur],['Chagua zote',ctx.all,!cur],['➕ Folda mpya',newF,!!cur],['🔄 Onyesha upya',draw],cur===BIN?['🧹 Mwaga Recycle Bin',()=>del(V.F[BIN].map(a=>[BIN,a.n])),!V.F[BIN].length]:null].filter(Boolean))});
+ q.oninput=draw;EXP.add(draw);draw();box.append(nav,tbr,row,stt);win('Explorer','📁',680,420,box,()=>{EXP.delete(draw);if(ACT===ctx)ACT=dctx})}
+/* ----- Desktop ----- */
+const D=$('#desk');D.dataset.fold='Desktop';
+const dctx={folder:()=>'Desktop',S:()=>[...dsel].map(x=>['Desktop',x]),all:()=>{V.F.Desktop.forEach(e=>dsel.add(e.n));paintD()}};ACT=dctx;
+const paintD=()=>D.querySelectorAll(':scope>.ic').forEach(r=>r.classList.toggle('s',dsel.has(r.dataset.k)));
+const WP=['linear-gradient(135deg,#0b3d91,#1e88e5 55%,#5ec8ff)','linear-gradient(135deg,#1b5e20,#43a047 55%,#a5d6a7)','linear-gradient(135deg,#4a148c,#8e24aa 55%,#f48fb1)','linear-gradient(135deg,#111,#37474f 60%,#78909c)'];
+function drawDesk(){document.body.style.background=WP[V.wp%WP.length];D.querySelectorAll(':scope>.ic').forEach(x=>x.remove());
+ DI.forEach(([i,name,fn,fl],k)=>{if(fl)return;const d=E('div','ic','<b>'+i+'</b>'+name);d.dataset.k='#'+k;d.ondblclick=()=>{if(Date.now()-lpT>700)fn()};d.onclick=()=>{dsel.clear();paintD();d.classList.add('s');ACT=dctx};
+  lp(d,(x,y)=>menu(x,y,[['Fungua',fn],['📌 Pin kwenye Taskbar',()=>{if(!V.pin.some(p=>p.t==='d'&&p.k===k))V.pin.push({t:'d',k});persist()}]]));D.append(d)});
+ V.F.Desktop.forEach(e=>{const d=E('div','ic','<b>'+fi(e.o[1])+'</b>'+esc(e.n));d.dataset.k=e.n;d.ondblclick=()=>{if(Date.now()-lpT>700)openE(e)};
+  d.onclick=ev=>{ACT=dctx;if(!(ev.ctrlKey||ev.metaKey))dsel.clear();dsel.has(e.n)?dsel.delete(e.n):dsel.add(e.n);paintD()};
+  d.onpointerdown=ev=>{if(ev.pointerType!=='mouse'||ev.button)return;if(!dsel.has(e.n)){if(!ev.ctrlKey)dsel.clear();dsel.add(e.n);paintD()}drag(ev,dctx.S)};
+  lp(d,(x,y)=>{ACT=dctx;if(!dsel.has(e.n)){dsel.clear();dsel.add(e.n);paintD()}fileMenu(x,y,'Desktop',[...dsel])});D.append(d)});paintD()}
+D.addEventListener('click',e=>{if(e.target===D){dsel.clear();paintD();ACT=dctx}});
+lp(D,(x,y,e)=>{if(e.target.closest('.ic,.w'))return;ACT=dctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste('Desktop'),!CB],['Chagua zote',dctx.all],['🔄 Onyesha upya',refresh],['🖼️ Badilisha mandhari',()=>{V.wp=(V.wp+1)%WP.length;persist()}],['💻 Kompyuta Hii',()=>explorer()]])});
+/* ----- Taskbar pins na Start ----- */
+function drawPins(){const P=$('#pins');P.innerHTML='';V.pin.forEach((p,i)=>{let ic,ti,fn;if(p.t==='d'){const d=DI[p.k];if(!d)return;ic=d[0];ti=d[1];fn=d[2]}else{ic=fi(p.o[1]);ti=p.n;fn=()=>openE({n:p.n,o:p.o})}
+ const b=E('button','',ic);b.title=ti;b.onclick=fn;lp(b,(x,y)=>menu(x,y,[['Fungua',fn],['📌 Ondoa kwenye Taskbar',()=>{V.pin.splice(i,1);persist()}]]));P.append(b)})}
+lp($('#tasks'),(x,y,e)=>{const b=e.target.closest&&e.target.closest('button');const w=b&&wins.find(o=>o.tk===b);if(w)menu(x,y,[['Fungua',()=>w.foc()],['✕ Funga dirisha',()=>w.close()]])});
+lp(M,(x,y,e)=>{const s=e.target.closest&&e.target.closest('.pg6 .sa');if(!s)return;const k=[...s.parentNode.children].indexOf(s),d=DI[k];if(!d)return;
+ menu(x,y,[['Fungua',()=>{M.style.display='none';d[2]()}],['📌 Pin kwenye Taskbar',()=>{if(!V.pin.some(p=>p.t==='d'&&p.k===k))V.pin.push({t:'d',k});persist()}],k>=ORIG?['Ondoa kwenye Start',()=>{V.sp=V.sp.filter(p=>p.n!==d[1]);DI.splice(k,1);V.pin=V.pin.filter(p=>p.t!=='d'||p.k<DI.length);persist();buildMenu()}]:null].filter(Boolean))});
+/* ----- Kinanda: Ctrl+C / X / V, Delete, F2, Ctrl+A ----- */
+addEventListener('keydown',e=>{if(!ACT||/INPUT|TEXTAREA/.test(e.target.tagName))return;const c=e.ctrlKey||e.metaKey,k=e.key.toLowerCase();
+ if(c&&k==='c'){cp(ACT.S(),0)}else if(c&&k==='x'){cp(ACT.S(),1)}else if(c&&k==='v'){paste(ACT.folder())}else if(c&&k==='a'){e.preventDefault();ACT.all()}else if(k==='delete'){del(ACT.S())}else if(k==='f2'){const s=ACT.S();if(s.length===1)ren(...s[0])}});
+refresh();
+</script>
+</body></html>
