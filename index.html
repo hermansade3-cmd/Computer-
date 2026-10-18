@@ -85,8 +85,7 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
 .lst .it b{font-size:22px;text-align:center}.lst .it em{font-style:normal;color:#888;font-size:11px;text-align:right}
 .lst .it span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lst .it small{color:#666}
 @media(max-width:760px){.lst .lh,.lst .it{grid-template-columns:26px 28px 1fr 84px}}
-</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0b3d91"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
-<script>addEventListener("beforeinstallprompt",e=>{e.preventDefault();window.INST=e})</script></head><body>
+</style></head><body>
 <!--
   SADE COMPUTER — ORODHA YA MAFAILI (kushuka chini)
   Kila faili linafunguliwa kama  <jina-la-faili>.html  (mf. notes.txt.html)
@@ -466,7 +465,7 @@ const cp=(items,cut)=>{if(items.length){CB={cut,items:items.slice()};refresh()}}
 function newF(){const v=(prompt('Jina la folda mpya:','Folda mpya')||'').trim();if(!v)return;if(V.F[v]){alert('Jina hilo lipo tayari.');return}V.F[v]=[];V.U.push(v);persist()}
 function delF(k){if(V.F[k].length){alert('Folda ina vitu. Vihamishe au vifute kwanza.');return}delete V.F[k];V.U=V.U.filter(x=>x!==k);persist()}
 const pinFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.pin.some(p=>p.t==='f'&&p.n===e.n&&p.o+''===e.o+''))V.pin.push({t:'f',o:e.o,n:e.n})};
-DI.push(['💾','Hifadhi Offline',()=>storageWin()],['⬇️','Install App',()=>installApp()]);const ORIG=DI.length;
+DI.push(['💾','Hifadhi Offline',()=>storageWin()]);const ORIG=DI.length;
 function startAdd(o,n){DI.push([fi(o[1]),n,()=>openE({n,o}),1,o])}
 const startFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.sp.some(p=>p.n===e.n&&p.o+''===e.o+'')){V.sp.push({o:e.o,n:e.n});startAdd(e.o,e.n)}};
 V.sp.forEach(p=>startAdd(p.o,p.n));
@@ -538,7 +537,7 @@ function drawDesk(){document.body.style.background=WP[V.wp%WP.length];D.querySel
   d.onpointerdown=ev=>{if(ev.pointerType!=='mouse'||ev.button)return;if(!dsel.has(e.n)){if(!ev.ctrlKey)dsel.clear();dsel.add(e.n);paintD()}drag(ev,dctx.S)};
   lp(d,(x,y)=>{ACT=dctx;if(!dsel.has(e.n)){dsel.clear();dsel.add(e.n);paintD()}fileMenu(x,y,'Desktop',[...dsel])});D.append(d)});paintD()}
 D.addEventListener('click',e=>{if(e.target===D){dsel.clear();paintD();ACT=dctx}});
-lp(D,(x,y,e)=>{if(e.target.closest('.ic,.w'))return;ACT=dctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste('Desktop'),!CB],['Chagua zote',dctx.all],['📤 Pakia faili kutoka Kompyuta',()=>pickUpload('Desktop')],['⬇️ Install App kwenye Desktop',()=>installApp()],['🔄 Onyesha upya',refresh],['🖼️ Badilisha mandhari',()=>{V.wp=(V.wp+1)%WP.length;persist()}],['⚙️ Settings (Personalize)',()=>settings()],['💻 Kompyuta Hii',()=>explorer()]])});
+lp(D,(x,y,e)=>{if(e.target.closest('.ic,.w'))return;ACT=dctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste('Desktop'),!CB],['Chagua zote',dctx.all],['📤 Pakia faili kutoka Kompyuta',()=>pickUpload('Desktop')],['🔄 Onyesha upya',refresh],['🖼️ Badilisha mandhari',()=>{V.wp=(V.wp+1)%WP.length;persist()}],['⚙️ Settings (Personalize)',()=>settings()],['💻 Kompyuta Hii',()=>explorer()]])});
 /* ----- Taskbar pins na Start ----- */
 function drawPins(){const P=$('#pins');P.innerHTML='';V.pin.forEach((p,i)=>{let ic,ti,fn;if(p.t==='d'){const d=DI[p.k];if(!d)return;ic=d[0];ti=d[1];fn=d[2]}else{ic=fi(p.o[1]);ti=p.n;fn=()=>openE({n:p.n,o:p.o})}
  const b=E('button','',ic);b.title=ti;b.onclick=fn;lp(b,(x,y)=>menu(x,y,[['Fungua',fn],['📌 Ondoa kwenye Taskbar',()=>{V.pin.splice(i,1);persist()}]]));P.append(b)})}
@@ -717,15 +716,6 @@ async function importDir(){if(!window.showDirectoryPicker)return toast('Tumia Ch
  let n=0;const w=async(dh,fo,top)=>{for await(const[nm,eh]of dh.entries()){if(eh.kind==='file'){await importFile(await eh.getFile(),fo);n++}else await w(eh,top?ensureF(nm):fo,0)}};await w(h,'Desktop',1);persist();toast('📥 Mafaili '+n+' yameingizwa')}
 function clearCache(){if(!confirm('Futa mafaili ya mfumo yaliyohifadhiwa offline? (Mafaili yako uliyopakia hayafutwi)'))return Promise.resolve();
  return new Promise(r=>{const q=indexedDB.open('SadeComputerDB',1);q.onsuccess=()=>{const d=q.result,t=d.transaction(['files','meta'],'readwrite');t.objectStore('files').clear();t.objectStore('meta').clear();t.oncomplete=async()=>{d.close();try{await(await OP.dir('sade',false)).removeEntry('files',{recursive:true})}catch(_){}cnt();r()}};q.onerror=()=>r()})}
-/* ---------- INSTALL APP kwenye Desktop (PWA) ---------- */
-const isApp=()=>matchMedia('(display-mode: standalone)').matches||nav.standalone;
-addEventListener('appinstalled',()=>{window.INST=null;toast('✅ Sade Computer imewekwa kwenye Desktop yako')});
-window.installApp=function(){if(isApp())return toast('✅ Tayari unatumia app');const I=window.INST;
- if(I){window.INST=null;I.prompt();return I.userChoice.then(r=>r.outcome==='accepted'&&toast('⏳ Inawekwa kwenye Desktop…'))}
- const b=E('div','s11');b.innerHTML='<h3>⬇️ Weka Sade Computer kwenye Desktop</h3><div class="card" style="display:block"><b>Chrome / Edge (Windows, Mac, Linux)</b><br>Menyu ⋮ → <i>Cast, save and share → Install page as app</i> (Edge: <i>Apps → Install this site as an app</i>). Au bonyeza ikoni ya ⊕ kwenye address bar.<br><br><b>Android</b>: ⋮ → <i>Install app</i><br><b>iPhone/iPad</b>: Share → <i>Add to Home Screen</i></div><div class="card" style="display:block">Kivinjari hakijaruhusu install ya moja kwa moja (inahitaji HTTPS + manifest.webmanifest + sw.js). Njia mbadala ya Windows:<br><br></div>';
- const x=E('button','','🔗 Pakua Shortcut ya Desktop (.url)');x.style.cssText='padding:7px 12px;border:1px solid #8886;border-radius:6px;background:var(--ac);color:#fff;cursor:pointer;font:inherit';
- x.onclick=()=>{const a=E('a');a.href=URL.createObjectURL(new Blob(['[InternetShortcut]\r\nURL='+location.href.split('#')[0]+'\r\nIconIndex=0\r\n'],{type:'application/octet-stream'}));a.download='Sade Computer.url';a.click();toast('Hamisha faili hilo kwenye Desktop yako')};b.lastChild.append(x);win('Install App','⬇️',520,380,b)};
-const ib=E('span','tr','⬇️');ib.title='Weka app kwenye Desktop';ib.onclick=installApp;if(isApp())ib.style.display='none';$('#tray').insertBefore(ib,$('#off'));
 /* ---------- Dirisha la "Hifadhi & Offline" ---------- */
 window.storageWin=function(){const b=E('div','s11');win('Hifadhi & Offline','💾',560,540,b);
  const btn=(t,f)=>{const x=E('button','',t);x.style.cssText='padding:7px 12px;border:1px solid var(--bd);border-radius:6px;background:rgba(127,127,127,.15);color:inherit;cursor:pointer;font:inherit';x.onclick=f;return x},mb=n=>(n/1048576).toFixed(1)+' MB';
@@ -738,7 +728,7 @@ window.storageWin=function(){const b=E('div','s11');win('Hifadhi & Offline','�
   const a=c('');a.style.cssText+=';display:flex;flex-wrap:wrap;gap:8px';
   a.append(btn('🔄 Sync sasa',()=>{if(location.protocol==='file:')return toast('Sync inahitaji HTTPS (GitHub Pages)');toast('🔄 Inapakua mafaili…');sync().then(draw)}),btn('📤 Pakia faili',()=>pickUpload('Desktop')),
    btn('💾 Hifadhi kwenye folda ya kompyuta',()=>exportAll(0).then(draw)),btn('🗂️ Badili folda',()=>exportAll(1).then(draw)),btn('📥 Ingiza kutoka folda',()=>importDir().then(draw)),
-   btn('🛡️ Hifadhi ya kudumu',()=>st&&st.persist?st.persist().then(r=>{toast(r?'✅ Imeruhusiwa':'Kivinjari kimekataa');draw()}):0),btn('⬇️ Install App',installApp),btn('🧹 Futa cache ya mfumo',()=>clearCache().then(draw)))};draw()};
+   btn('🛡️ Hifadhi ya kudumu',()=>st&&st.persist?st.persist().then(r=>{toast(r?'✅ Imeruhusiwa':'Kivinjari kimekataa');draw()}):0),btn('🧹 Futa cache ya mfumo',()=>clearCache().then(draw)))};draw()};
 const off=$('#off');if(off)off.onclick=storageWin;
 })();
 </script>
