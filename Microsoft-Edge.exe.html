@@ -1,204 +1,267 @@
-<!doctype html>
-<html lang="sw">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Microsoft Edge — Browser Demo</title>
+<!DOCTYPE html>
+<html lang="sw" class="edg">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Microsoft Edge</title>
 <style>
-:root{--bg:#f3f6fb;--panel:#fff;--ink:#172033;--muted:#64748b;--line:#dce3ee;--blue:#087cf0;--blue2:#05b7d5}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px "Segoe UI",Arial,sans-serif;height:100vh;display:flex;flex-direction:column}
-.top{height:48px;background:#e9edf5;display:flex;align-items:center;padding:0 12px;gap:9px;border-bottom:1px solid #d4dbe7}
-.dot{width:12px;height:12px;border-radius:50%;background:#c5ccda}
-.brand{font-weight:600;margin-left:7px}
-.tabs{display:flex;gap:5px;align-items:center;flex:1;overflow:hidden}
-.tab{min-width:150px;max-width:230px;height:34px;border-radius:9px 9px 0 0;background:#dce3ee;display:flex;align-items:center;gap:8px;padding:0 12px;color:#475569}
-.tab.active{background:var(--panel);color:var(--ink)}
-.tab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.plus{font-size:22px;color:#526078}
-.toolbar{height:56px;background:var(--panel);display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line)}
-.tool{border:0;background:transparent;color:#475569;font-size:20px;width:32px;height:34px;border-radius:8px;cursor:pointer}
-.tool:hover{background:#edf3fb}
-.address{flex:1;display:flex;align-items:center;background:#f0f4fa;border:1px solid #dce3ee;border-radius:22px;height:38px;padding:0 13px;gap:9px}
-.address input{border:0;outline:0;background:transparent;width:100%;font:14px "Segoe UI",Arial}
-.go{border:0;background:var(--blue);color:white;border-radius:18px;padding:8px 15px;cursor:pointer}
-main{flex:1;overflow:auto;display:flex;justify-content:center;padding:28px 16px}
-.home{width:min(820px,100%);text-align:center;padding-top:7vh}
-.logo{font-size:clamp(36px,7vw,62px);font-weight:650;letter-spacing:-2px;margin-bottom:8px}
-.logo em{font-style:normal;background:linear-gradient(100deg,#087cf0,#04b8d3);background-clip:text;color:transparent}
-.tag{color:var(--muted);margin-bottom:28px}
-.search{display:flex;background:white;border:1px solid #d8e1ee;border-radius:28px;padding:7px;box-shadow:0 8px 30px #1b3a6310}
-.search input{flex:1;min-width:0;border:0;outline:0;padding:10px 15px;font-size:16px}
-.search button{border:0;border-radius:22px;background:linear-gradient(100deg,#087cf0,#05b7d5);color:white;padding:0 22px;font-weight:600;cursor:pointer}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}
-.card{background:white;border:1px solid var(--line);border-radius:14px;padding:17px 10px;text-decoration:none;color:var(--ink);font-weight:600}
-.card b{display:block;font-size:23px;margin-bottom:7px}
-.result{width:min(820px,100%);text-align:left}
-.result h2{font-weight:500}
-.result .note{color:var(--muted)}
-.result-item{padding:17px 0;border-bottom:1px solid var(--line)}
-.result-item a{color:#075fc4;font-size:18px;text-decoration:none}
-.result-item p{line-height:1.5;color:#475569}
-.status{font-size:12px;color:var(--muted);padding:9px 16px;background:#fff;border-top:1px solid var(--line)}
-@media(max-width:600px){
-.tab{min-width:105px}
-.toolbar{gap:4px;padding:6px}
-.cards{grid-template-columns:repeat(2,1fr)}
-.home{padding-top:5vh}
-.brand{display:none}
-}
-</style>
-</head>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--strip);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+#app{display:flex;flex-direction:column;height:100%;padding-top:env(safe-area-inset-top,0px)}
+#strip{display:flex;align-items:flex-end;gap:2px;padding:6px 8px 0;background:var(--strip);height:42px;flex:none}
+#tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;min-width:0}#tabs::-webkit-scrollbar{display:none}
+.tab{display:flex;align-items:center;gap:8px;min-width:110px;max-width:220px;height:34px;padding:0 6px 0 12px;color:var(--dim);cursor:pointer;flex:0 1 200px}
+.tab.on{background:var(--tabon);color:var(--fg)}
+.tab:not(.on):hover{background:var(--hover)}
+.tab .tt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px}
+.tab .x{width:20px;height:20px;border-radius:50%;font-size:15px;line-height:1}.tab .x:hover{background:var(--hover)}
+#plus{width:30px;height:30px;margin:0 0 2px 4px;border-radius:50%;font-size:20px;color:var(--dim);flex:none}#plus:hover{background:var(--hover)}
+#tool{display:flex;align-items:center;gap:4px;padding:6px 8px;background:var(--bar);flex:none}
+.ib{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:18px;flex:none}
+.ib:hover:not(:disabled){background:var(--hover)}.ib:disabled{opacity:.35;cursor:default}
+#urlwrap{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:36px;padding:0 4px 0 14px;background:var(--field);border:1px solid transparent}
+#urlwrap:focus-within{border-color:var(--acc);box-shadow:0 0 0 2px color-mix(in srgb,var(--acc) 30%,transparent)}
+#url{flex:1;min-width:0;background:none;border:0;color:var(--fg);font:inherit;outline:none}
+#star{width:30px;height:30px}#star.on{color:#f9ab00}
+#marks{display:flex;gap:2px;padding:3px 8px;background:var(--bar);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;flex:none;min-height:30px;align-items:center}
+.mk{padding:3px 10px;border-radius:14px;font-size:12.5px;white-space:nowrap;color:var(--fg);text-decoration:none}.mk:hover{background:var(--hover)}
+#row{flex:1;display:flex;min-height:0}
+#views{flex:1;position:relative;min-width:0;background:var(--bg)}
+#side{display:none;flex-direction:column;gap:4px;padding:6px;background:var(--bar);border-left:1px solid var(--line);width:48px}
+.view{position:absolute;inset:0;overflow:auto;display:none}.view.on{display:block}
+.view iframe{width:100%;height:100%;border:0;background:#fff;display:block}
+.pagebar{display:flex;gap:10px;padding:6px 12px;background:var(--ans);font-size:12.5px;height:33px;align-items:center}
+.pagebar a{color:var(--acc);margin-left:auto;white-space:nowrap}.framebox{height:calc(100% - 33px)}
+.nt{min-height:100%;display:flex;flex-direction:column;align-items:center;padding:9vh 20px 40px;background:var(--bg) center/cover no-repeat}
+.logo{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;margin-bottom:14px}.logo i{width:36px;height:36px}
+.ntname{font-size:28px;font-weight:300;margin-bottom:22px}
+.sbox{display:flex;align-items:center;gap:10px;width:min(620px,100%);height:48px;padding:0 18px;background:var(--field);border:1px solid var(--line)}
+.sbox:focus-within{border-color:var(--acc)}
+.sbox input{flex:1;background:none;border:0;outline:0;color:var(--fg);font:inherit;font-size:16px;min-width:0}.sbox button{color:var(--acc);font-size:18px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,96px);justify-content:center;gap:18px 14px;width:min(720px,100%);margin-top:34px}
+.tile{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;text-align:center;color:var(--fg);text-decoration:none}
+.tile b{width:60px;height:60px;display:grid;place-items:center;font-size:24px;font-weight:600;color:#fff}
+.credit{margin-top:auto;padding-top:30px;font-size:11.5px;color:var(--dim)}
+.res{max-width:880px;margin:0 auto;padding:16px 18px 60px}
+.rtabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.rt{padding:9px 16px;color:var(--dim);border-bottom:3px solid transparent;margin-bottom:-1px}.rt.on{color:var(--acc);border-color:var(--acc)}
+.answer{background:var(--ans);border-radius:12px;padding:14px 16px;margin-bottom:18px;line-height:1.55}
+.answer small{display:block;color:var(--acc);margin-bottom:6px;font-size:12px}
+.hit{padding:12px 0;border-bottom:1px solid var(--line)}
+.hit .u{font-size:12px;color:var(--green);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hit a{font-size:18px;color:var(--link);text-decoration:none;display:block;margin-bottom:4px}.hit a:hover{text-decoration:underline}
+.hit p{color:var(--dim);line-height:1.5}
+.grid{columns:3 200px;column-gap:10px}.grid a{display:block;margin-bottom:10px;border-radius:8px;overflow:hidden;background:var(--card)}.grid img{width:100%;display:block}
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.vid{border-radius:10px;overflow:hidden;background:var(--card)}.vid .pl{position:relative;aspect-ratio:16/9;background:#000;cursor:pointer}
+.vid img,.vid iframe{width:100%;height:100%;object-fit:cover;border:0;display:block}
+.vid .pl:after{content:"▶";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:34px;text-shadow:0 2px 8px #000}.vid .pl.go:after{display:none}
+.vid div.c{padding:8px 10px;font-size:12.5px;color:var(--dim)}
+.msg{padding:50px 20px;text-align:center;color:var(--dim);line-height:1.6}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--acc);border-radius:50%;margin:40px auto;animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:2.4s}}
+#menu{position:fixed;right:8px;top:calc(92px + env(safe-area-inset-top,0px));width:250px;background:var(--bar);border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 8px 28px #0004;display:none;z-index:20}
+#menu.on{display:block}#menu button{display:flex;width:100%;gap:12px;padding:9px 10px;border-radius:6px;text-align:left}#menu button:hover{background:var(--hover)}
+#dlg{position:fixed;inset:0;background:#0008;display:none;place-items:center;z-index:30;padding:16px}#dlg.on{display:grid}
+.panel{width:min(520px,100%);max-height:80vh;overflow:auto;background:var(--bar);border:1px solid var(--line);border-radius:12px;padding:18px}
+.panel h2{font-size:18px;margin-bottom:12px}.panel .row{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.panel .row a{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--link);text-decoration:none}
+.panel label{display:block;font-size:12.5px;color:var(--dim);margin:10px 0 4px}
+.panel input{width:100%;height:36px;padding:0 10px;border-radius:6px;border:1px solid var(--line);background:var(--field);color:var(--fg);font:inherit}
+.panel input[type=checkbox]{width:auto;height:auto;margin-right:8px}
+.btn{height:36px;padding:0 16px;border-radius:18px;background:var(--hover);margin-top:14px;margin-right:8px}.btn.pri{background:var(--acc);color:var(--onacc);font-weight:600}
+@media (max-width:640px){.hs{display:none}.tab{min-width:90px}}
+.vid video{width:100%;aspect-ratio:16/9;background:#000;display:block}
+.auds{display:grid;gap:10px}.aud{background:var(--card);border-radius:10px;padding:12px;display:grid;gap:6px}.aud audio{width:100%}.aud span,.aud a{font-size:12.5px;color:var(--dim)}
+.note{font-size:12.5px;color:var(--dim);margin-bottom:10px}.more{text-align:center;padding:12px 0}
+:root{--strip:#d6e6f2;--tabon:#fff;--bar:#fff;--field:#f1f5fa;--hover:#e3ebf4;--fg:#1b1b1b;--dim:#616161;--bg:#f5f7fa;--card:#fff;--line:#dde3ea;--acc:#0f6cbd;--onacc:#fff;--link:#0f6cbd;--green:#107c10;--ans:#e6f2fb}
+html.dk{--strip:#1b1b1b;--tabon:#2b2b2b;--bar:#2b2b2b;--field:#1f1f1f;--hover:#3a3a3a;--fg:#f5f5f5;--dim:#a0a0a0;--bg:#1f1f1f;--card:#2b2b2b;--line:#3d3d3d;--acc:#4cc2ff;--onacc:#0b0b0b;--link:#6cb8ff;--green:#6ccb5f;--ans:#243545}
+#strip{background:linear-gradient(90deg,var(--strip),color-mix(in srgb,var(--strip) 70%,#9fe3c8))}
+.tab{border-radius:8px;margin-bottom:2px;height:32px}.tab.on{box-shadow:0 1px 3px #0003}#urlwrap{border-radius:8px}.ib{border-radius:8px}
+html:not(.ns) #side{display:flex}
+.logo{background:linear-gradient(135deg,#0c59a4,#1ec8b0 60%,#5be37d)}.logo i{background:#ffffffe6;border-radius:60% 40% 60% 40%}
+.nt{color:#fff}.nt .ntname,.nt .credit{text-shadow:0 2px 10px #000a;color:#fff}
+.sbox{border-radius:10px;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(10px)}
+.tile{color:#fff;text-shadow:0 1px 6px #000}.tile b{border-radius:12px;background:#ffffff30!important;backdrop-filter:blur(10px)}
+.nt:not([style*=url]){color:var(--fg)}.nt:not([style*=url]) .ntname,.nt:not([style*=url]) .tile,.nt:not([style*=url]) .credit{color:var(--fg);text-shadow:none}
+</style></head>
 <body>
-<div class="top">
-  <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-  <div class="brand">Edge</div>
-  <div class="tabs"><div class="tab active">🌐 <span>New tab</span></div></div>
-  <div class="plus" title="New tab">＋</div>
-</div>
-
-<div class="toolbar">
-  <button class="tool" title="Back" onclick="history.back()">‹</button>
-  <button class="tool" title="Forward" onclick="history.forward()">›</button>
-  <button class="tool" title="Refresh" onclick="location.reload()">⟳</button>
-  <div class="address">
-    <span>🔒</span>
-    <input id="url" placeholder="Search or enter web address" autocomplete="off">
-    <button class="tool" title="Favorites">☆</button>
-  </div>
-  <button class="go" onclick="navigate()">Go</button>
-</div>
-
-<main id="main">
-  <section class="home">
-    <div class="logo"><em>Microsoft</em> Edge</div>
-    <div class="tag">Browser-style demo • Search the web or enter a website</div>
-    <div class="search">
-      <input id="query" placeholder="Search the web" autocomplete="off">
-      <button onclick="searchWeb()">Search</button>
-    </div>
-    <div class="cards">
-      <a class="card" href="#" onclick="quick('https://www.microsoft.com/edge');return false"><b>🌐</b>Microsoft Edge</a>
-      <a class="card" href="#" onclick="quick('https://www.youtube.com');return false"><b>▶</b>YouTube</a>
-      <a class="card" href="#" onclick="quick('https://www.google.com');return false"><b>🔎</b>Google</a>
-      <a class="card" href="#" onclick="quick('https://www.wikipedia.org');return false"><b>📚</b>Wikipedia</a>
-    </div>
-    <p style="margin-top:32px;color:#64748b">
-      Tavily Search:
-      <span style="border:1px solid #dce3ee;background:white;border-radius:8px;padding:8px 12px">API key imewekwa</span>
-    </p>
-  </section>
-</main>
-
-<div class="status" id="status">Ready • Demo hii si Microsoft Edge halisi; ni ukurasa wa HTML unaoiga mwonekano wake.</div>
-
+<div id="app">
+<div id="strip"><div id="tabs" role="tablist"></div><button id="plus" aria-label="Kichupo kipya">+</button></div>
+<div id="tool"><button class="ib" id="back" aria-label="Rudi nyuma">←</button><button class="ib" id="fwd" aria-label="Songa mbele">→</button><button class="ib" id="reload" aria-label="Pakia upya">⟳</button><button class="ib hs" id="home" aria-label="Nyumbani">⌂</button>
+<div id="urlwrap"><span id="lock">🔍</span><input id="url" type="text" placeholder="Tafuta au andika anwani" autocomplete="off" spellcheck="false" aria-label="Upau wa anwani"><button class="ib" id="star" aria-label="Alamisho">☆</button></div>
+<button class="ib" id="mbtn" aria-label="Menyu">⋮</button></div>
+<div id="marks"></div>
+<div id="row"><div id="views"></div><nav id="side"><button class="ib" data-m="cop" title="Copilot" aria-label="Copilot">✦</button><button class="ib" data-m="hist" title="Historia" aria-label="Historia">🕘</button><button class="ib" data-m="marks" title="Alamisho" aria-label="Alamisho">★</button><button class="ib" data-m="set" title="Mipangilio" aria-label="Mipangilio">⚙</button></nav></div></div>
+<div id="menu"><button data-m="new">＋ Kichupo kipya</button><button data-m="hist">🕘 Historia</button><button data-m="marks">★ Alamisho</button><button data-m="full">⛶ Skrini nzima</button><button data-m="set">⚙ Mipangilio</button></div>
+<div id="dlg"><div class="panel" id="panel"></div></div>
 <script>
-let tavilyKey = "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";
-
-function quick(url){
-  document.getElementById('url').value=url;
-  window.open(url,'_blank');
-}
-
-function navigate(){
-  let v=document.getElementById('url').value.trim();
-  if(!v)return;
-
-  if(/^https?:\/\//i.test(v)){
-    window.open(v,'_blank');
-    return;
+window.THEME={id:'edg',name:'Microsoft Edge',logo:'<div class="logo"><i></i></div>',wall:true,side:true,dark:false,marks:[{t:'Wikipedia',u:'https://sw.wikipedia.org'},{t:'Habari',u:'https://www.bbc.com/swahili'},{t:'GitHub',u:'https://github.com'}]};
+const T=window.THEME;document.title=T.name;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(T.id+'_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(T.id+'_'+k,JSON.stringify(v))}catch(e){}}};
+const CFG={
+  webKeys:['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','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','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','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','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','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'],
+  picKey:'57792634-5e89dd610e4c1c840f815c524',
+  ytKey:'AIzaSyADf6dE8F9z9AVuOpK-foWYkfEDR6-VTw4'
+};
+let marks=store.get('marks',T.marks),hist=store.get('hist',[]);
+async function webSearch(q){
+  const order=[store.get('customKey',''),store.get('goodKey',''),...CFG.webKeys].filter((k,i,a)=>k&&a.indexOf(k)===i);
+  let last;
+  for(const key of order){
+    try{
+      const r=await fetch('https://api.tavily.com/search',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({query:q,max_results:10,include_answer:true,search_depth:'basic'})});
+      if(r.status===401||r.status===403){last=new Error('key');continue}
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      store.set('goodKey',key);return await r.json();
+    }catch(e){last=e;if(e.message!=='key'&&!(e instanceof TypeError))throw e}
   }
-
-  if(v.includes('.')&&!v.includes(' ')){
-    window.open('https://'+v,'_blank');
-    return;
-  }
-
-  document.getElementById('query').value=v;
-  searchWeb();
+  throw last||new Error('Imeshindwa');
 }
-
-function searchWeb(){
-  const q=document.getElementById('query').value.trim();
-  if(!q)return;
-
-  document.getElementById('url').value='Search: '+q;
-
-  if(tavilyKey){
-    tavilySearch(q);
-    return;
-  }
-
-  window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank');
+let pxc=store.get('pxc',{});
+function cget(u){const c=pxc[u];return c&&Date.now()-c.at<864e5?c.j:null}
+function cset(u,j){pxc[u]={at:Date.now(),j};const ks=Object.keys(pxc);if(ks.length>20)delete pxc[ks.sort((a,b)=>pxc[a].at-pxc[b].at)[0]];store.set('pxc',pxc)}
+const SW={mti:'tree',miti:'trees',bahari:'sea',ziwa:'lake',mto:'river',mlima:'mountain',milima:'mountains',simba:'lion',tembo:'elephant',twiga:'giraffe',chui:'leopard',nyani:'monkey',samaki:'fish',ndege:'bird',paka:'cat',mbwa:'dog',gari:'car',nyumba:'house',watoto:'children',mtoto:'child',mwanamke:'woman',mwanamume:'man',mwanaume:'man',chakula:'food',maua:'flowers',ua:'flower',jua:'sun',mwezi:'moon',nyota:'stars',mvua:'rain',maji:'water',moto:'fire',mji:'city',barabara:'road',shamba:'farm',soko:'market',shule:'school',kompyuta:'computer',simu:'phone',pesa:'money',biashara:'business',afya:'health',mpira:'football',muziki:'music',ngoma:'drum',harusi:'wedding',kanisa:'church',msikiti:'mosque',daktari:'doctor',hospitali:'hospital',ndizi:'banana',mahindi:'corn',kahawa:'coffee',chai:'tea',usiku:'night',asubuhi:'morning',jioni:'evening',pwani:'beach',msitu:'forest',jangwa:'desert',theluji:'snow',anga:'sky',mawingu:'clouds',baiskeli:'bicycle',treni:'train',meli:'ship',ndege:'bird',wimbo:'song',nyimbo:'songs'};
+function toEn(q){return q.trim().split(/\s+/).map(w=>SW[w.toLowerCase()]||w).join(' ')}
+async function pxSearch(kind,q,page){
+  q=q.slice(0,100);const k=store.get('customPic','')||CFG.picKey;
+  const u=(kind==='vid'?'https://pixabay.com/api/videos/':'https://pixabay.com/api/')+'?key='+encodeURIComponent(k)+'&q='+encodeURIComponent(q)+'&per_page='+(kind==='vid'?12:24)+'&page='+(page||1)+'&safesearch=true';
+  const ck=u.replace(encodeURIComponent(k),'K');const c=cget(ck);if(c)return c;
+  const r=await fetch(u);
+  if(r.status===429)throw new Error('Pixabay: maombi mengi mno (kikomo ni 100 kwa dakika). Subiri kidogo.');
+  if(r.status===400||r.status===401||r.status===403)throw new Error('Pixabay: ufunguo si sahihi (HTTP '+r.status+')');
+  if(!r.ok)throw new Error('Pixabay HTTP '+r.status);
+  const j=await r.json();cset(ck,j);return j;
 }
-
-async function tavilySearch(q){
-  const main=document.getElementById('main');
-
-  main.innerHTML='<section class="result"><h2>Searching Tavily…</h2><p class="note">Tafadhali subiri.</p></section>';
-
+const picSearch=(q,p)=>pxSearch('img',q,p);
+async function audSearch(q,page){
+  const r=await fetch('https://api.openverse.org/v1/audio/?q='+encodeURIComponent(q)+'&page_size=12&page='+(page||1));
+  if(!r.ok)throw new Error('Openverse HTTP '+r.status);return r.json();
+}
+async function ytSearch(q){
+  const k=store.get('customYT','')||CFG.ytKey;
+  const r=await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=12&q='+encodeURIComponent(q)+'&key='+encodeURIComponent(k));
+  if(!r.ok)throw new Error('HTTP '+r.status);return r.json();
+}
+const tabs=[];let cur=null,uid=0;
+const TILES=[['Wikipedia','https://sw.wikipedia.org','W','#5b6dc8'],['YouTube','https://www.youtube.com','▶','#d93025'],['Habari','https://www.bbc.com/swahili','B','#b80000'],['Ramani','https://www.openstreetmap.org','◉','#2e8b57'],['GitHub','https://github.com','G','#444'],['Hali ya hewa','https://wttr.in','☀','#e08a00']];
+function newTab(e){const t={id:++uid,title:'Kichupo kipya',hist:[],idx:-1,el:document.createElement('div')};t.el.className='view';$('#views').appendChild(t.el);tabs.push(t);cur=t;go(t,e||{t:'new'});activate(t);return t}
+function activate(t){cur=t;tabs.forEach(x=>x.el.classList.toggle('on',x===t));drawTabs();syncBar()}
+function closeTab(t){const i=tabs.indexOf(t);t.el.remove();tabs.splice(i,1);if(!tabs.length){newTab();return}if(cur===t)activate(tabs[Math.min(i,tabs.length-1)]);else drawTabs()}
+function drawTabs(){$('#tabs').innerHTML=tabs.map(t=>`<div class="tab ${t===cur?'on':''}" role="tab" data-id="${t.id}"><span class="tt">${esc(t.title)}</span><button class="x" data-x="${t.id}" aria-label="Funga kichupo">×</button></div>`).join('')}
+$('#tabs').addEventListener('click',e=>{const x=e.target.closest('[data-x]');if(x){e.stopPropagation();closeTab(tabs.find(t=>t.id==x.dataset.x));return}const tb=e.target.closest('.tab');if(tb)activate(tabs.find(t=>t.id==tb.dataset.id))});
+function go(t,e,rep){if(!rep){t.hist=t.hist.slice(0,t.idx+1);t.hist.push(e);t.idx=t.hist.length-1}else t.hist[t.idx]=e;render(t)}
+function looksUrl(s){return /^https?:\/\//i.test(s)||(/^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(s)&&!/\s/.test(s))}
+function submit(x,t=cur){x=x.trim();if(!x)return;if(looksUrl(x))go(t,{t:'p',url:/^https?:\/\//i.test(x)?x:'https://'+x});else go(t,{t:'s',q:x,k:'web'})}
+function refresh(t){drawTabs();if(t===cur)syncBar()}
+function syncBar(){if(!cur)return;const e=cur.hist[cur.idx];$('#url').value=e.t==='s'?e.q:e.t==='p'?e.url:'';$('#lock').textContent=e.t==='p'?(e.url.startsWith('https')?'🔒':'⚠'):'🔍';$('#back').disabled=cur.idx<=0;$('#fwd').disabled=cur.idx>=cur.hist.length-1;const on=e.t==='p'&&marks.some(m=>m.u===e.url);$('#star').textContent=on?'★':'☆';$('#star').classList.toggle('on',on)}
+function pushHist(l,e){hist=[{l,e},...hist.filter(h=>JSON.stringify(h.e)!==JSON.stringify(e))].slice(0,100);store.set('hist',hist)}
+function drawMarks(){$('#marks').innerHTML=marks.length?marks.map(m=>`<a class="mk" href="#" data-u="${esc(m.u)}">${esc(m.t)}</a>`).join(''):'<span class="mk">Hakuna alamisho</span>'}
+$('#back').onclick=()=>{if(cur.idx>0){cur.idx--;render(cur)}};
+$('#fwd').onclick=()=>{if(cur.idx<cur.hist.length-1){cur.idx++;render(cur)}};
+$('#reload').onclick=()=>render(cur);
+$('#home').onclick=()=>go(cur,{t:'new'});
+$('#plus').onclick=()=>{newTab();$('#url').focus()};
+$('#url').addEventListener('keydown',e=>{if(e.key==='Enter'){submit(e.target.value);e.target.blur()}});
+$('#url').addEventListener('focus',e=>e.target.select());
+$('#star').onclick=()=>{const e=cur.hist[cur.idx];if(e.t!=='p')return;const i=marks.findIndex(m=>m.u===e.url);if(i>=0)marks.splice(i,1);else marks.push({t:cur.title,u:e.url});store.set('marks',marks);drawMarks();syncBar()};
+let wall=null;
+async function loadWall(){
+  if(wall)return wall;const c=store.get('wall',null);if(c&&Date.now()-c.at<6*3600e3){wall=c;return c}
+  try{const terms=['mountains landscape','forest sunrise','ocean sunset','savanna africa','night sky'];const j=await picSearch(terms[Math.floor(Math.random()*terms.length)]);const hs=(j.hits||[]).filter(h=>h.imageWidth>h.imageHeight);const h=hs[Math.floor(Math.random()*hs.length)];if(h){wall={url:h.largeImageURL,who:h.user,at:Date.now()};store.set('wall',wall);return wall}}catch(e){}
+  return null;
+}
+async function render(t){
+  const e=t.hist[t.idx];
+  if(e.t==='new'){
+    t.title='Kichupo kipya';refresh(t);
+    t.el.innerHTML=`<div class="nt">${T.logo}<div class="ntname">${T.name}</div><form class="sbox"><span>🔍</span><input type="text" placeholder="Tafuta kwenye mtandao" aria-label="Tafuta" autocomplete="off"><button type="submit" aria-label="Tafuta">→</button></form><div class="tiles">${TILES.map(x=>`<a class="tile" href="#" data-u="${x[1]}"><b style="background:${x[3]}">${x[2]}</b>${x[0]}</a>`).join('')}</div><div class="credit"></div></div>`;
+    t.el.querySelector('form').onsubmit=ev=>{ev.preventDefault();submit(ev.target.querySelector('input').value,t)};
+    if(T.wall){const w=await loadWall();if(w&&t.hist[t.idx]===e){const n=t.el.querySelector('.nt');if(n){n.style.backgroundImage=`url(${w.url})`;n.querySelector('.credit').textContent='Picha na '+w.who}}}
+  }else if(e.t==='s'){
+    t.title=e.q;refresh(t);
+    t.el.innerHTML=`<div class="res"><div class="rtabs">${[['web','Mtandao'],['img','Picha'],['vid','Video'],['aud','Sauti'],['yt','YouTube']].map(k=>`<button class="rt ${e.k===k[0]?'on':''}" data-k="${k[0]}">${k[1]}</button>`).join('')}</div><div class="body"><div class="spin" role="status" aria-label="Inapakia"></div></div></div>`;
+    t.el.querySelectorAll('.rt').forEach(b=>b.onclick=()=>go(t,{t:'s',q:e.q,k:b.dataset.k},true));
+    pushHist(e.q,{t:'s',q:e.q,k:'web'});
+    const body=t.el.querySelector('.body');
+    try{
+      if(e.k==='web'){
+        const j=await webSearch(e.q);if(t.hist[t.idx]!==e)return;const rs=j.results||[];
+        body.innerHTML=(j.answer?`<div class="answer"><small>Jibu la haraka</small>${esc(j.answer)}</div>`:'')+(rs.length?rs.map(r=>`<div class="hit"><div class="u">${esc(r.url)}</div><a href="#" data-u="${esc(r.url)}">${esc(r.title)}</a><p>${esc((r.content||'').slice(0,260))}${(r.content||'').length>260?'…':''}</p></div>`).join(''):`<div class="msg">Hakuna matokeo ya “${esc(e.q)}”.</div>`);
+      }else if(e.k==='yt'){
+        const j=await ytSearch(e.q);if(t.hist[t.idx]!==e)return;const it=j.items||[];
+        body.innerHTML=it.length?`<div class="vids">${it.map(v=>`<div class="vid"><div class="pl" data-v="${esc(v.id.videoId)}"><img loading="lazy" src="${esc(v.snippet.thumbnails.medium.url)}" alt=""></div><div class="c">${esc(v.snippet.title)}</div></div>`).join('')}</div>`:`<div class="msg">Hakuna video.</div>`;
+        body.querySelectorAll('.pl').forEach(p=>p.onclick=()=>{p.classList.add('go');p.innerHTML=`<iframe src="https://www.youtube.com/embed/${encodeURIComponent(p.dataset.v)}?autoplay=1" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe>`});
+      }else{await showMedia(t,e,1)}
+    }catch(err){if(t.hist[t.idx]===e)body.innerHTML=`<div class="msg">Imeshindwa kupakia (${esc(err.message)}).<br>Angalia mtandao au funguo za API kwenye Mipangilio.</div>`}
+  }else{
+    let h=e.url;try{h=new URL(e.url).hostname}catch(x){}
+    t.title=h;refresh(t);pushHist(h,e);
+    t.el.innerHTML=`<div class="pagebar">Tovuti nyingi huzuia kuonyeshwa hapa.<a href="${esc(e.url)}" target="_blank" rel="noopener">Fungua nje ↗</a></div><div class="framebox"><iframe src="${esc(e.url)}" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe></div>`;
+  }
+}
+async function showMedia(t,e,page){
+  const body=t.el.querySelector('.body');if(!body)return;
+  const qq=toEn(e.q),cls={img:'grid',vid:'vids',aud:'auds'}[e.k];
+  if(page===1)body.innerHTML=(qq.toLowerCase()!==e.q.trim().toLowerCase()?`<div class="note">Imetafutwa kwa Kiingereza: “${esc(qq)}”</div>`:'')+`<div class="mbox ${cls}"></div><div class="more"></div>`;
+  const box=body.querySelector('.mbox'),more=body.querySelector('.more');if(!box)return;
+  more.innerHTML='<div class="spin" role="status" aria-label="Inapakia"></div>';
   try{
-    const r=await fetch('https://api.tavily.com/search',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        api_key:tavilyKey,
-        query:q,
-        search_depth:'basic',
-        include_answer:true,
-        max_results:6
-      })
-    });
-
-    const data=await r.json();
-
-    if(!r.ok){
-      throw new Error(data.detail||data.error||'Tavily request failed');
+    let items=[],total=0,per=24;
+    if(e.k==='img'){
+      const j=await pxSearch('img',qq,page);total=j.totalHits||0;
+      items=(j.hits||[]).map(h=>`<a href="#" data-lb="${esc(h.largeImageURL||h.webformatURL)}" data-pg="${esc(h.pageURL)}" data-by="${esc(h.user)}"><img loading="lazy" src="${esc(h.webformatURL||h.previewURL)}" alt="${esc(h.tags)}"></a>`);
+    }else if(e.k==='vid'){
+      per=12;const j=await pxSearch('vid',qq,page);total=j.totalHits||0;
+      items=(j.hits||[]).map(h=>{const v=h.videos||{};const s=[v.medium,v.small,v.large,v.tiny].find(x=>x&&x.url);if(!s)return '';
+        const poster=s.thumbnail||(h.picture_id?`https://i.vimeocdn.com/video/${h.picture_id}_640x360.jpg`:'');
+        return `<div class="vid"><video controls playsinline preload="${poster?'none':'metadata'}" ${poster?`poster="${esc(poster)}"`:''} src="${esc(s.url)}"></video><div class="c">${esc(h.tags)} · ${esc(h.user)} · ${+h.duration||0}s · <a href="${esc(h.pageURL)}" target="_blank" rel="noopener">Pixabay ↗</a></div></div>`}).filter(Boolean);
+    }else{
+      per=12;const j=await audSearch(qq,page);total=j.result_count||0;
+      items=(j.results||[]).filter(a=>a.url).map(a=>`<div class="aud"><b>${esc(a.title||'Sauti')}</b><span>${esc(a.creator||'')} · ${esc((a.license||'').toUpperCase())}${a.duration?' · '+Math.round(a.duration/1000)+'s':''}</span><audio controls preload="none" src="${esc(a.url)}"></audio><a href="${esc(a.foreign_landing_url||a.url)}" target="_blank" rel="noopener">Chanzo ↗</a></div>`);
     }
-
-    let out='<section class="result"><h2>Matokeo ya Tavily</h2>';
-
-    if(data.answer){
-      out+='<p>'+esc(data.answer)+'</p>';
-    }
-
-    (data.results||[]).forEach(x=>{
-      out+='<div class="result-item"><a target="_blank" rel="noopener" href="'+esc(x.url)+'">'+esc(x.title||x.url)+'</a><p>'+esc(x.content||'')+'</p><small>'+esc(x.url)+'</small></div>';
-    });
-
-    out+='</section>';
-
-    main.innerHTML=out;
-    document.getElementById('status').textContent='Tavily Search • '+(data.results||[]).length+' results';
-
-  }catch(e){
-    main.innerHTML='<section class="result"><h2>Search haikufanikiwa</h2><p>'+esc(e.message)+'</p><p class="note">Huenda API key si sahihi au browser imezuia ombi (CORS). Fungua Google Search badala yake.</p><button onclick="searchGoogleFallback()">Search Google</button></section>';
-    document.getElementById('status').textContent='Search error';
-  }
+    if(t.hist[t.idx]!==e)return;
+    box.insertAdjacentHTML('beforeend',items.join(''));
+    if(page===1&&!items.length)body.innerHTML=`<div class="msg">Hakuna matokeo ya “${esc(e.q)}”.</div>`;
+    else more.innerHTML=page*per<total?`<button class="btn pri" data-more="${page+1}">Ona zaidi</button>`:'';
+  }catch(err){more.innerHTML=`<div class="msg">${esc(err.message)}</div>`}
 }
-
-function searchGoogleFallback(){
-  let q=document.getElementById('query').value;
-  window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank');
+async function testKeys(){
+  const o=$('#tr');o.textContent='Inajaribu…';const R=[];
+  const tests=[['Tavily (mtandao)',()=>webSearch('test')],['Pixabay picha',()=>pxSearch('img','tree',1)],['Pixabay video',()=>pxSearch('vid','tree',1)],['Openverse sauti',()=>audSearch('rain',1)],['YouTube',()=>ytSearch('test')]];
+  for(const [n,f] of tests){try{await f();R.push('✅ '+n)}catch(x){R.push('❌ '+n+' — '+x.message)}}
+  o.innerHTML=R.map(esc).join('<br>');
 }
-
-function esc(s){
-  return String(s).replace(/[&<>"']/g,c=>({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#39;'
-  }[c]));
+function openDlg(h){$('#panel').innerHTML=h;$('#dlg').classList.add('on')}
+function closeDlg(){$('#dlg').classList.remove('on')}
+$('#dlg').onclick=e=>{if(e.target.id==='dlg')closeDlg()};
+function showHist(){openDlg(`<h2>Historia</h2>${hist.length?hist.map((h,i)=>`<div class="row"><a href="#" data-h="${i}">${esc(h.l)}</a></div>`).join(''):'<div class="msg">Historia ni tupu.</div>'}`)}
+function showMarks(){openDlg(`<h2>Alamisho</h2>${marks.length?marks.map((m,i)=>`<div class="row"><a href="#" data-u="${esc(m.u)}">${esc(m.t)}</a><button data-d="${i}" aria-label="Futa">🗑</button></div>`).join(''):'<div class="msg">Hakuna alamisho.</div>'}`)}
+function showSet(){
+  openDlg(`<h2>${esc(T.name)} · Mipangilio</h2><label>Tavily API key (utafutaji wa mtandao)</label><input id="s1" value="${esc(store.get('customKey',''))}" placeholder="Ya msingi imewekwa"><label>Pixabay API key (picha)</label><input id="s2" value="${esc(store.get('customPic',''))}" placeholder="Ya msingi imewekwa"><label>YouTube Data API key (video)</label><input id="s3" value="${esc(store.get('customYT',''))}" placeholder="Ya msingi imewekwa"><label><input type="checkbox" id="s4" ${store.get('dark',!!T.dark)?'checked':''}>Mandhari meusi</label>${T.side?`<label><input type="checkbox" id="s5" ${store.get('side',true)?'checked':''}>Onyesha upau wa pembeni</label>`:''}<button class="btn pri" id="sv">Hifadhi</button><button class="btn" id="cl">Futa historia</button><button class="btn" id="tk">Jaribu funguo</button><div id="tr" style="margin-top:12px;line-height:1.7"></div>`);$('#tk').onclick=testKeys;
+  $('#sv').onclick=()=>{store.set('customKey',$('#s1').value.trim());store.set('customPic',$('#s2').value.trim());store.set('customYT',$('#s3').value.trim());store.set('dark',$('#s4').checked);if(T.side)store.set('side',$('#s5').checked);applyPrefs();closeDlg()};
+  $('#cl').onclick=()=>{hist=[];store.set('hist',hist);closeDlg()};
 }
-
-document.getElementById('url').addEventListener('keydown',e=>{
-  if(e.key==='Enter')navigate();
+function showCop(){
+  openDlg(`<h2>✦ Copilot</h2><label>Uliza chochote</label><input id="cq" placeholder="Andika swali..."><button class="btn pri" id="ca">Uliza</button><div id="co" style="margin-top:12px"></div>`);
+  const ask=async()=>{const q=$('#cq').value.trim();if(!q)return;$('#co').innerHTML='<div class="spin"></div>';try{const j=await webSearch(q);$('#co').innerHTML=`<div class="answer">${esc(j.answer||'Hakuna jibu la moja kwa moja.')}</div>`+(j.results||[]).slice(0,4).map(r=>`<div class="row"><a href="#" data-u="${esc(r.url)}">${esc(r.title)}</a></div>`).join('')}catch(x){$('#co').textContent='Imeshindwa: '+x.message}};
+  $('#ca').onclick=ask;$('#cq').onkeydown=e=>{if(e.key==='Enter')ask()};$('#cq').focus();
+}
+const M={new(){newTab();$('#url').focus()},hist:showHist,marks:showMarks,set:showSet,cop:showCop,full(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}};
+$('#mbtn').onclick=e=>{e.stopPropagation();$('#menu').classList.toggle('on')};
+document.addEventListener('click',e=>{
+  const m=e.target.closest('[data-m]');if(m){$('#menu').classList.remove('on');M[m.dataset.m]();return}
+  const lb=e.target.closest('[data-lb]');if(lb){e.preventDefault();openDlg(`<img src="${esc(lb.dataset.lb)}" alt="" style="width:100%;border-radius:8px"><p style="margin-top:10px;color:var(--dim)">Picha na ${esc(lb.dataset.by)} · <a style="color:var(--link)" href="${esc(lb.dataset.pg)}" target="_blank" rel="noopener">Pixabay ↗</a> · <a style="color:var(--link)" href="${esc(lb.dataset.lb)}" target="_blank" rel="noopener" download>Pakua</a></p>`);return}
+  const mo=e.target.closest('[data-more]');if(mo){showMedia(cur,cur.hist[cur.idx],+mo.dataset.more);return}
+  const a=e.target.closest('[data-u]');if(a){e.preventDefault();closeDlg();$('#menu').classList.remove('on');go(cur,{t:'p',url:a.dataset.u});return}
+  const h=e.target.closest('[data-h]');if(h){e.preventDefault();closeDlg();go(cur,hist[h.dataset.h].e);return}
+  const d=e.target.closest('[data-d]');if(d){marks.splice(+d.dataset.d,1);store.set('marks',marks);drawMarks();showMarks();syncBar();return}
+  if(!e.target.closest('#menu'))$('#menu').classList.remove('on');
+  if(e.target.closest('.tile'))e.preventDefault();
 });
-
-document.getElementById('query').addEventListener('keydown',e=>{
-  if(e.key==='Enter')searchWeb();
-});
+function applyPrefs(){document.documentElement.classList.toggle('dk',!!store.get('dark',!!T.dark));document.documentElement.classList.toggle('ns',T.side&&!store.get('side',true))}
+applyPrefs();drawMarks();newTab();
+document.addEventListener('error',e=>{const el=e.target;if(el&&(el.tagName==='AUDIO'||el.tagName==='VIDEO')&&!el.dataset.err){el.dataset.err=1;el.insertAdjacentHTML('afterend','<div class="msg" style="padding:8px">Haichezeki hapa. Tumia kiungo cha chanzo.</div>')}},true);
 </script>
-</body>
-</html>
+</body></html>
