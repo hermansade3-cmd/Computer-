@@ -1,0 +1,14 @@
+<!DOCTYPE html><html lang="sw"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Habari</title><style>:root{--bg:#f4f6fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--ac:#2563eb;--ac2:#7c3aed;--bd:#e3e7f0;--hv:#e8efff}
+@media(prefers-color-scheme:dark){:root{--bg:#10131c;--card:#1a1f2d;--tx:#e8ecf5;--mut:#9aa3b8;--bd:#2a3145;--hv:#26304a}}
+*{box-sizing:border-box;margin:0}body{font:14px 'Segoe UI Variable','Segoe UI',system-ui,sans-serif;background:var(--bg);height:100vh;display:flex;flex-direction:column;color:var(--tx)}
+.t{display:flex;gap:8px;padding:10px 12px;background:color-mix(in srgb,var(--card) 80%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);align-items:center;flex-wrap:wrap}.t b{flex:1;min-width:90px;font-size:15px;font-weight:600}
+button,label.b{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;font:inherit;font-weight:500;box-shadow:0 2px 8px #2563eb40;transition:.15s}button:hover,label.b:hover{transform:translateY(-1px);filter:brightness(1.08)}button:active{transform:scale(.97)}
+input,select,textarea{padding:8px 12px;border:1px solid var(--bd);border-radius:10px;font:inherit;background:var(--card);color:var(--tx);outline:0}input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px #2563eb30}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:16px}#l{flex:1;overflow:auto;padding:8px}#l a{display:block;background:var(--card);border-radius:16px;padding:16px;margin-bottom:8px;color:var(--tx);text-decoration:none;border:1px solid var(--bd);box-shadow:0 2px 10px #0001;transition:.15s}#l a:hover{background:var(--hv);transform:translateY(-2px)}#l small{color:var(--mut)}</style>
+<div class=t><b>📰 Habari (BBC Swahili)</b><button id=r>🔄 Onyesha upya</button></div><div id=l>Inapakia…</div>
+<script>
+const $=s=>document.querySelector(s);
+async function go(){$('#l').textContent='Inapakia…';try{const j=await(await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://feeds.bbci.co.uk/swahili/rss.xml'))).json();
+$('#l').innerHTML=j.items.map(i=>'<a href="'+i.link+'" target="_blank" rel="noopener"><b>'+i.title+'</b><br><small>'+new Date(i.pubDate.replace(' ','T')+'Z').toLocaleString('sw-TZ')+'</small></a>').join('')||'Hakuna habari.'}catch(e){$('#l').textContent='Imeshindwa — angalia mtandao.'}}
+$('#r').onclick=go;go();
+</script>

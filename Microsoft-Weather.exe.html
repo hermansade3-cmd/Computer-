@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="sw"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hali ya Hewa</title><style>:root{--bg:#f4f6fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--ac:#2563eb;--ac2:#7c3aed;--bd:#e3e7f0;--hv:#e8efff}
+@media(prefers-color-scheme:dark){:root{--bg:#10131c;--card:#1a1f2d;--tx:#e8ecf5;--mut:#9aa3b8;--bd:#2a3145;--hv:#26304a}}
+*{box-sizing:border-box;margin:0}body{font:14px 'Segoe UI Variable','Segoe UI',system-ui,sans-serif;background:var(--bg);height:100vh;display:flex;flex-direction:column;color:var(--tx)}
+.t{display:flex;gap:8px;padding:10px 12px;background:color-mix(in srgb,var(--card) 80%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);align-items:center;flex-wrap:wrap}.t b{flex:1;min-width:90px;font-size:15px;font-weight:600}
+button,label.b{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;font:inherit;font-weight:500;box-shadow:0 2px 8px #2563eb40;transition:.15s}button:hover,label.b:hover{transform:translateY(-1px);filter:brightness(1.08)}button:active{transform:scale(.97)}
+input,select,textarea{padding:8px 12px;border:1px solid var(--bd);border-radius:10px;font:inherit;background:var(--card);color:var(--tx);outline:0}input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px #2563eb30}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:16px}
+body{background:linear-gradient(160deg,#1565e8,#5ec8ff);color:#fff}.t{background:#0003;border:0}#o{flex:1;overflow:auto;padding:16px;text-align:center}#o h1{font-size:84px;font-weight:300}#o .e{font-size:72px}
+#d{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-top:16px}#d div{background:var(--card)3;border-radius:16px;padding:8px}</style>
+<div class=t><b>☀️ Hali ya Hewa</b><input id=q placeholder="Mji (mf. Mwanza)" value="Dar es Salaam"><button id=s>Tafuta</button></div><div id=o>Inapakia…</div>
+<script>
+const $=s=>document.querySelector(s),w=c=>c==0?['☀️','Jua']:c<4?['⛅','Mawingu']:c<50?['🌫️','Ukungu']:c<60?['🌦️','Manyunyu']:c<70?['🌧️','Mvua']:c<80?['❄️','Theluji']:c<90?['🌧️','Mvua kubwa']:['⛈️','Radi'];
+async function go(){const o=$('#o');o.textContent='Inapakia…';try{
+ const g=(await(await fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&language=sw&name='+encodeURIComponent($('#q').value))).json()).results;if(!g)return o.textContent='Mji haujapatikana';
+ const r=await(await fetch('https://api.open-meteo.com/v1/forecast?latitude='+g[0].latitude+'&longitude='+g[0].longitude+'&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto')).json(),c=r.current,x=w(c.weather_code);
+ o.innerHTML='<h3>'+g[0].name+', '+(g[0].country||'')+'</h3><div class=e>'+x[0]+'</div><h1>'+Math.round(c.temperature_2m)+'°C</h1><p>'+x[1]+' · Unyevu '+c.relative_humidity_2m+'% · Upepo '+c.wind_speed_10m+' km/h</p><div id=d>'+r.daily.time.map((t,i)=>'<div>'+new Date(t).toLocaleDateString('sw-TZ',{weekday:'short'})+'<br><span style="font-size:28px">'+w(r.daily.weather_code[i])[0]+'</span><br>'+Math.round(r.daily.temperature_2m_max[i])+'° / '+Math.round(r.daily.temperature_2m_min[i])+'°</div>').join('')+'</div>'}catch(e){o.textContent='Imeshindwa — angalia mtandao.'}}
+$('#s').onclick=go;$('#q').onkeydown=e=>e.key=='Enter'&&go();go();
+</script>

@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="sw"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Saa</title><style>:root{--bg:#f4f6fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--ac:#2563eb;--ac2:#7c3aed;--bd:#e3e7f0;--hv:#e8efff}
+@media(prefers-color-scheme:dark){:root{--bg:#10131c;--card:#1a1f2d;--tx:#e8ecf5;--mut:#9aa3b8;--bd:#2a3145;--hv:#26304a}}
+*{box-sizing:border-box;margin:0}body{font:14px 'Segoe UI Variable','Segoe UI',system-ui,sans-serif;background:var(--bg);height:100vh;display:flex;flex-direction:column;color:var(--tx)}
+.t{display:flex;gap:8px;padding:10px 12px;background:color-mix(in srgb,var(--card) 80%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);align-items:center;flex-wrap:wrap}.t b{flex:1;min-width:90px;font-size:15px;font-weight:600}
+button,label.b{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;font:inherit;font-weight:500;box-shadow:0 2px 8px #2563eb40;transition:.15s}button:hover,label.b:hover{transform:translateY(-1px);filter:brightness(1.08)}button:active{transform:scale(.97)}
+input,select,textarea{padding:8px 12px;border:1px solid var(--bd);border-radius:10px;font:inherit;background:var(--card);color:var(--tx);outline:0}input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px #2563eb30}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:16px}
+#w div{display:flex;justify-content:space-between;padding:18px;background:var(--card);margin:6px 12px;box-shadow:0 2px 10px #0001;border:1px solid var(--bd);border-radius:14px}#w span{font-size:26px;font-weight:300;font-variant-numeric:tabular-nums}.p{padding:16px;text-align:center}.p h1{font-size:72px;font-weight:200;margin:16px;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;color:transparent}</style>
+<div class=t><button onclick=T(0)>🌍 Saa za Dunia</button><button onclick=T(1)>⏱️ Stopwatch</button><button onclick=T(2)>⏳ Timer</button></div>
+<div id=w></div><div class=p id=s hidden><h1 id=sd>00:00.0</h1><button id=a>Anza</button> <button id=z>Weka upya</button></div>
+<div class=p id=m hidden><input id=mn type=number value=1 min=1 style="width:70px"> dakika <button id=ms>Anza</button><h1 id=md>--:--</h1></div>
+<script>
+const $=s=>document.querySelector(s),Z=[['Dar es Salaam','Africa/Dar_es_Salaam'],['London','Europe/London'],['New York','America/New_York'],['Dubai','Asia/Dubai'],['Beijing','Asia/Shanghai']];
+function T(i){$('#w').hidden=i!=0;$('#s').hidden=i!=1;$('#m').hidden=i!=2}T(0);
+setInterval(()=>$('#w').innerHTML=Z.map(([n,z])=>'<div><b>'+n+'</b><span>'+new Date().toLocaleTimeString('sw-TZ',{timeZone:z})+'</span></div>').join(''),500);
+let t0=0,sv=0,si;const f=ms=>String(Math.floor(ms/6e4)).padStart(2,0)+':'+String(Math.floor(ms/1e3)%60).padStart(2,0)+'.'+Math.floor(ms/100)%10;
+$('#a').onclick=()=>{if(si){clearInterval(si);si=0;sv+=Date.now()-t0;$('#a').textContent='Endelea'}else{t0=Date.now();si=setInterval(()=>$('#sd').textContent=f(sv+Date.now()-t0),100);$('#a').textContent='Simamisha'}};
+$('#z').onclick=()=>{clearInterval(si);si=0;sv=0;$('#sd').textContent='00:00.0';$('#a').textContent='Anza'};
+let mi;$('#ms').onclick=()=>{clearInterval(mi);const e=Date.now()+$('#mn').value*6e4;mi=setInterval(()=>{const r=e-Date.now();if(r<=0){clearInterval(mi);$('#md').textContent='⏰ Muda umeisha!';try{const c=new AudioContext,o=c.createOscillator();o.connect(c.destination);o.start();setTimeout(()=>o.stop(),1200)}catch(_){}}else $('#md').textContent=f(r).slice(0,5)},250)};
+</script>

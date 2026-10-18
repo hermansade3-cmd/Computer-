@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="sw"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mkalimani</title><style>:root{--bg:#f4f6fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--ac:#2563eb;--ac2:#7c3aed;--bd:#e3e7f0;--hv:#e8efff}
+@media(prefers-color-scheme:dark){:root{--bg:#10131c;--card:#1a1f2d;--tx:#e8ecf5;--mut:#9aa3b8;--bd:#2a3145;--hv:#26304a}}
+*{box-sizing:border-box;margin:0}body{font:14px 'Segoe UI Variable','Segoe UI',system-ui,sans-serif;background:var(--bg);height:100vh;display:flex;flex-direction:column;color:var(--tx)}
+.t{display:flex;gap:8px;padding:10px 12px;background:color-mix(in srgb,var(--card) 80%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);align-items:center;flex-wrap:wrap}.t b{flex:1;min-width:90px;font-size:15px;font-weight:600}
+button,label.b{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;font:inherit;font-weight:500;box-shadow:0 2px 8px #2563eb40;transition:.15s}button:hover,label.b:hover{transform:translateY(-1px);filter:brightness(1.08)}button:active{transform:scale(.97)}
+input,select,textarea{padding:8px 12px;border:1px solid var(--bd);border-radius:10px;font:inherit;background:var(--card);color:var(--tx);outline:0}input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px #2563eb30}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:16px}
+.r{display:flex;gap:12px;padding:12px;flex:1;min-height:0}.r>div{flex:1;display:flex;flex-direction:column;gap:6px}textarea{flex:1;resize:none;font-size:16px;padding:14px;border-radius:16px;box-shadow:0 2px 10px #0001}@media(max-width:560px){.r{flex-direction:column}}</style>
+<div class=t><b>🌐 Mkalimani (Translator)</b><select id=a></select><button id=w>⇄</button><select id=b></select><button id=g>Tafsiri</button></div>
+<div class=r><div><textarea id=i placeholder="Andika maandishi hapa…"></textarea></div><div><textarea id=o readonly placeholder="Tafsiri itaonekana hapa"></textarea><div style="display:flex;gap:6px"><button id=c>📋 Nakili</button><button id=v>🔊 Sikiliza</button></div></div></div>
+<script>
+const $=s=>document.querySelector(s),Ls={sw:'Kiswahili',en:'Kiingereza',fr:'Kifaransa',ar:'Kiarabu',es:'Kihispania',de:'Kijerumani',pt:'Kireno',hi:'Kihindi'};
+for(const k in Ls)['#a','#b'].forEach(s=>$(s).add(new Option(Ls[k],k)));$('#a').value='en';$('#b').value='sw';
+$('#w').onclick=()=>{[$('#a').value,$('#b').value]=[$('#b').value,$('#a').value];$('#i').value=$('#o').value;$('#o').value=''};
+$('#g').onclick=async()=>{const q=$('#i').value.trim();if(!q)return;$('#o').value='…';try{const r=await(await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair='+$('#a').value+'|'+$('#b').value)).json();$('#o').value=r.responseData.translatedText}catch(e){$('#o').value='Imeshindwa — angalia mtandao.'}};
+$('#c').onclick=()=>navigator.clipboard&&navigator.clipboard.writeText($('#o').value);
+$('#v').onclick=()=>{const u=new SpeechSynthesisUtterance($('#o').value);u.lang=$('#b').value;speechSynthesis.speak(u)};
+</script>

@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="sw"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Media Player</title><style>:root{--bg:#f4f6fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--ac:#2563eb;--ac2:#7c3aed;--bd:#e3e7f0;--hv:#e8efff}
+@media(prefers-color-scheme:dark){:root{--bg:#10131c;--card:#1a1f2d;--tx:#e8ecf5;--mut:#9aa3b8;--bd:#2a3145;--hv:#26304a}}
+*{box-sizing:border-box;margin:0}body{font:14px 'Segoe UI Variable','Segoe UI',system-ui,sans-serif;background:var(--bg);height:100vh;display:flex;flex-direction:column;color:var(--tx)}
+.t{display:flex;gap:8px;padding:10px 12px;background:color-mix(in srgb,var(--card) 80%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);align-items:center;flex-wrap:wrap}.t b{flex:1;min-width:90px;font-size:15px;font-weight:600}
+button,label.b{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;font:inherit;font-weight:500;box-shadow:0 2px 8px #2563eb40;transition:.15s}button:hover,label.b:hover{transform:translateY(-1px);filter:brightness(1.08)}button:active{transform:scale(.97)}
+input,select,textarea{padding:8px 12px;border:1px solid var(--bd);border-radius:10px;font:inherit;background:var(--card);color:var(--tx);outline:0}input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px #2563eb30}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:16px}
+video{width:100%;max-height:50%;background:#000;box-shadow:0 8px 24px #0004}#l{flex:1;overflow:auto}#l div{padding:12px 14px;margin:4px 8px;border-radius:12px;border:1px solid var(--bd);cursor:pointer;background:var(--card)}#l div:hover,#l .on{background:var(--hv)}#l .on{border-color:var(--ac);font-weight:600}</style>
+<div class=t><b>🎵 Media Player</b><label class=b>📂 Fungua<input id=f type=file accept="audio/*,video/*" multiple hidden></label><input id=q placeholder="Tafuta redio (mf. Clouds)" style="width:150px"><button id=r>📻 Redio</button></div>
+<video id=a controls></video><div id=l></div>
+<script>
+const $=s=>document.querySelector(s),a=$('#a');let Q=[],k=0;
+function list(){$('#l').innerHTML='';Q.forEach((x,j)=>{const d=document.createElement('div');d.textContent=(j+1)+'. '+x.n;d.className=j==k?'on':'';d.onclick=()=>play(j);$('#l').append(d)})}
+function play(j){k=j;a.src=Q[j].u;a.play().catch(()=>{});list()}
+a.onended=()=>Q[k+1]&&play(k+1);
+$('#f').onchange=e=>{Q=[...e.target.files].map(f=>({n:f.name,u:URL.createObjectURL(f)}));if(Q.length)play(0)};
+$('#r').onclick=async()=>{const q=$('#q').value.trim();$('#l').textContent='Inatafuta redio…';
+ try{const u='https://de1.api.radio-browser.info/json/stations/'+(q?'byname/'+encodeURIComponent(q):'bycountrycodeexact/TZ')+'?limit=40&hidebroken=true&order=clickcount&reverse=true';
+ const r=await(await fetch(u)).json();Q=r.map(s=>({n:'📻 '+s.name.trim(),u:s.url_resolved}));Q.length?list():$('#l').textContent='Hakuna redio iliyopatikana.'}catch(e){$('#l').textContent='Imeshindwa — angalia mtandao.'}};
+</script>
