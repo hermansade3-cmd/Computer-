@@ -85,7 +85,8 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
 .lst .it b{font-size:22px;text-align:center}.lst .it em{font-style:normal;color:#888;font-size:11px;text-align:right}
 .lst .it span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lst .it small{color:#666}
 @media(max-width:760px){.lst .lh,.lst .it{grid-template-columns:26px 28px 1fr 84px}}
-</style></head><body>
+</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0b3d91"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<script>addEventListener("beforeinstallprompt",e=>{e.preventDefault();window.INST=e})</script></head><body>
 <!--
   SADE COMPUTER — ORODHA YA MAFAILI (kushuka chini)
   Kila faili linafunguliwa kama  <jina-la-faili>.html  (mf. notes.txt.html)
@@ -430,7 +431,7 @@ function buildMenu(){M.innerHTML='';const q=E('input');q.placeholder='Tafuta pro
   sc.append(E('h4','','Zinazopendekezwa'));const r=E('div','rg');REC.forEach(([fo,n])=>{const d=E('div','rc','<b>'+fi(n)+'</b><span>'+n+'<br><small style="color:#666">'+fo.split(' ')[0]+'</small></span>');d.onclick=()=>{close();openF(fo,n)};r.append(d)});sc.append(r)};
  q.oninput=()=>{const t=q.value.toLowerCase();if(!t)return home();sc.innerHTML='<h4>Matokeo</h4>';const L=[];DI.forEach(x=>x[1].toLowerCase().includes(t)&&L.push([x[0],x[1],x[2]]));Object.keys(FOLD).forEach(k=>FOLD[k].split(',').forEach(n=>n.toLowerCase().includes(t)&&L.push([fi(n),n,()=>openF(k,n)])));
   L.slice(0,9).forEach(([i,n,f])=>{const d=E('div','rc','<b>'+i+'</b><span>'+n+'</span>');d.onclick=()=>{close();f()};sc.append(d)});if(!L.length)sc.append('Hakuna kilichopatikana')};
- const ft=E('div','ft','<span>🧑‍💻 Lightness</span>');const pw=E('span','','⏻ Funga');pw.onclick=()=>{close();lock()};const rs=E('span','','🧹 Reset');rs.onclick=()=>{localStorage.removeItem('sadepc');localStorage.removeItem('sadevfs2');location.reload()};const r2=E('div');r2.append(rs,pw);ft.append(r2);
+ const ft=E('div','ft','<span>🧑‍💻 Lightness</span>');const pw=E('span','','⏻ Funga');pw.onclick=()=>{close();lock()};const rs=E('span','','🧹 Reset');rs.onclick=()=>{localStorage.removeItem('sadepc');localStorage.removeItem('sadevfs2');(window.resetV?resetV():Promise.resolve()).then(()=>location.reload())};const r2=E('div');r2.append(rs,pw);ft.append(r2);
  home();M.append(q,sc,ft);if(!TAP)setTimeout(()=>q.focus(),50)}
 const toggle=e=>{e.stopPropagation();if(M.style.display==='flex')M.style.display='none';else{buildMenu();M.style.display='flex'}};
 $('#st').onclick=toggle;$('#sr').onclick=toggle;M.onclick=e=>e.stopPropagation();document.addEventListener('click',()=>M.style.display='none');
@@ -452,7 +453,7 @@ V.pin=V.pin||[0,5,6,7,8].map(k=>({t:'d',k}));
 Object.keys(FOLD).forEach(k=>{V.F[k]=V.F[k]||[];FOLD[k].split(',').forEach(n=>{const id=k+'/'+n;if(!V.seen[id]){V.seen[id]=1;V.F[k].push({n,o:[k,n]})}})});
 V.F.Desktop=V.F.Desktop||[];V.F[BIN]=V.F[BIN]||[];
 const keys=()=>[...Object.keys(FOLD),'Desktop',...V.U,BIN],get=(fo,n)=>(V.F[fo]||[]).find(x=>x.n===n);
-const persist=()=>{try{localStorage.setItem(VK,JSON.stringify(V))}catch(_){}refresh()};
+const persist=()=>{try{localStorage.setItem(VK,JSON.stringify(V))}catch(_){}window.saveV&&saveV();refresh()};
 const refresh=()=>{EXP.forEach(f=>f());drawDesk();drawPins()};
 const uniq=(fo,n)=>{const L=V.F[fo].map(x=>x.n);if(!L.includes(n))return n;const i=n.lastIndexOf('.'),b=i>0?n.slice(0,i):n,x=i>0?n.slice(i):'';let k=1,m;do{m=b+' - Copy'+(k>1?' ('+k+')':'')+x;k++}while(L.includes(m));return m};
 function xfer(items,dest,cut){items.forEach(([fo,n])=>{const e=get(fo,n);if(!e||(cut&&fo===dest))return;V.F[dest].push({n:uniq(dest,n),o:e.o});if(cut)V.F[fo]=V.F[fo].filter(x=>x!==e)})}
@@ -465,7 +466,7 @@ const cp=(items,cut)=>{if(items.length){CB={cut,items:items.slice()};refresh()}}
 function newF(){const v=(prompt('Jina la folda mpya:','Folda mpya')||'').trim();if(!v)return;if(V.F[v]){alert('Jina hilo lipo tayari.');return}V.F[v]=[];V.U.push(v);persist()}
 function delF(k){if(V.F[k].length){alert('Folda ina vitu. Vihamishe au vifute kwanza.');return}delete V.F[k];V.U=V.U.filter(x=>x!==k);persist()}
 const pinFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.pin.some(p=>p.t==='f'&&p.n===e.n&&p.o+''===e.o+''))V.pin.push({t:'f',o:e.o,n:e.n})};
-const ORIG=DI.length;
+DI.push(['💾','Hifadhi Offline',()=>storageWin()],['⬇️','Install App',()=>installApp()]);const ORIG=DI.length;
 function startAdd(o,n){DI.push([fi(o[1]),n,()=>openE({n,o}),1,o])}
 const startFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.sp.some(p=>p.n===e.n&&p.o+''===e.o+'')){V.sp.push({o:e.o,n:e.n});startAdd(e.o,e.n)}};
 V.sp.forEach(p=>startAdd(p.o,p.n));
@@ -481,7 +482,7 @@ function lp(el,fn){el.addEventListener('contextmenu',e=>{e.preventDefault();e.st
 function fileMenu(x,y,fo,names){const it=names.map(n=>[fo,n]),one=names.length===1,bin=fo===BIN,M=[];
  if(!bin)M.push(['Fungua',()=>names.forEach(n=>openE(get(fo,n)))],null);
  if(bin)M.push(['Rejesha (Restore)',()=>restore(it)],null);
- M.push(['✂️ Kata (Cut)',()=>cp(it,1)],['⧉ Nakili (Copy)',()=>cp(it,0),bin],['✏️ Badili jina',()=>ren(...it[0]),!one||bin],['🗑️ Futa',()=>del(it)]);
+ M.push(['⬇️ Hifadhi kwenye Kompyuta',()=>saveOut(it)],['✂️ Kata (Cut)',()=>cp(it,1)],['⧉ Nakili (Copy)',()=>cp(it,0),bin],['✏️ Badili jina',()=>ren(...it[0]),!one||bin],['🗑️ Futa',()=>del(it)]);
  if(!bin){M.push(null,['🖥️ Tuma Desktop',()=>{xfer(it,'Desktop',0);persist()},fo==='Desktop'],['📌 Pin kwenye Taskbar',()=>{it.forEach(a=>pinFile(...a));persist()}],['🔲 Pin kwenye Start',()=>{it.forEach(a=>startFile(...a));persist()}]);
   if(fo==='Desktop')M.push(['↩️ Rudisha kwenye folda asili',()=>{it.forEach(a=>xfer([a],get(...a).o[0],1));persist()}])}
  menu(x,y,M)}
@@ -503,7 +504,7 @@ function explorer(f){
  const S=()=>cur?[...sel].map(x=>[cur,x]):[],ctx={folder:()=>cur,S,all:()=>{if(cur){V.F[cur].forEach(e=>sel.add(e.n));paint()}}};
  const B=(t,ti,fn)=>{const b=E('button','',t);b.title=ti;b.onclick=()=>{ACT=ctx;fn()};tbr.append(b);return b};
  B('✂️','Kata (Cut)',()=>cp(S(),1));B('⧉','Nakili (Copy)',()=>cp(S(),0));B('📋','Bandika (Paste)',()=>paste(cur));B('✏️','Badili jina',()=>{const s=S();if(s.length===1)ren(...s[0])});B('🗑️','Futa',()=>del(S()));
- B('🖥️','Tuma Desktop',()=>{xfer(S(),'Desktop',0);persist()});B('📌','Pin Taskbar',()=>{S().forEach(a=>pinFile(...a));persist()});B('➕','Folda mpya',()=>cur?alert('Fungua "Kompyuta Hii" kutengeneza folda mpya.'):newF());
+ B('🖥️','Tuma Desktop',()=>{xfer(S(),'Desktop',0);persist()});B('⬇️','Hifadhi kwenye Kompyuta (Download)',()=>saveOut(S()));B('📤','Pakia faili kutoka Kompyuta',()=>pickUpload(cur&&cur!==BIN?cur:'Desktop'));B('📌','Pin Taskbar',()=>{S().forEach(a=>pinFile(...a));persist()});B('➕','Folda mpya',()=>cur?alert('Fungua "Kompyuta Hii" kutengeneza folda mpya.'):newF());
  const mb=B('☑','Chagua vingi (multi-select)',()=>{multi=!multi;mb.style.background=multi?'#cce4f7':''});
  const row=E('div');row.style.cssText='display:flex;flex:1;min-height:0';row.append(side,body);body.style.flex=1;body.style.overflow='auto';
  const status=()=>{stt.textContent=n+' vitu'+(sel.size?'  ·  '+sel.size+' vimechaguliwa':'')+(CB?'  ·  📋 '+CB.items.length+(CB.cut?' vimekatwa':' vimenakiliwa'):'')};
@@ -537,7 +538,7 @@ function drawDesk(){document.body.style.background=WP[V.wp%WP.length];D.querySel
   d.onpointerdown=ev=>{if(ev.pointerType!=='mouse'||ev.button)return;if(!dsel.has(e.n)){if(!ev.ctrlKey)dsel.clear();dsel.add(e.n);paintD()}drag(ev,dctx.S)};
   lp(d,(x,y)=>{ACT=dctx;if(!dsel.has(e.n)){dsel.clear();dsel.add(e.n);paintD()}fileMenu(x,y,'Desktop',[...dsel])});D.append(d)});paintD()}
 D.addEventListener('click',e=>{if(e.target===D){dsel.clear();paintD();ACT=dctx}});
-lp(D,(x,y,e)=>{if(e.target.closest('.ic,.w'))return;ACT=dctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste('Desktop'),!CB],['Chagua zote',dctx.all],['🔄 Onyesha upya',refresh],['🖼️ Badilisha mandhari',()=>{V.wp=(V.wp+1)%WP.length;persist()}],['⚙️ Settings (Personalize)',()=>settings()],['💻 Kompyuta Hii',()=>explorer()]])});
+lp(D,(x,y,e)=>{if(e.target.closest('.ic,.w'))return;ACT=dctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste('Desktop'),!CB],['Chagua zote',dctx.all],['📤 Pakia faili kutoka Kompyuta',()=>pickUpload('Desktop')],['⬇️ Install App kwenye Desktop',()=>installApp()],['🔄 Onyesha upya',refresh],['🖼️ Badilisha mandhari',()=>{V.wp=(V.wp+1)%WP.length;persist()}],['⚙️ Settings (Personalize)',()=>settings()],['💻 Kompyuta Hii',()=>explorer()]])});
 /* ----- Taskbar pins na Start ----- */
 function drawPins(){const P=$('#pins');P.innerHTML='';V.pin.forEach((p,i)=>{let ic,ti,fn;if(p.t==='d'){const d=DI[p.k];if(!d)return;ic=d[0];ti=d[1];fn=d[2]}else{ic=fi(p.o[1]);ti=p.n;fn=()=>openE({n:p.n,o:p.o})}
  const b=E('button','',ic);b.title=ti;b.onclick=fn;lp(b,(x,y)=>menu(x,y,[['Fungua',fn],['📌 Ondoa kwenye Taskbar',()=>{V.pin.splice(i,1);persist()}]]));P.append(b)})}
@@ -588,7 +589,7 @@ body.dark .lst .it{border-color:#333;background:#272727!important}body.dark .lst
 </style>
 <script>
 /* ===== WINDOWS 11 LAYER: Settings, Action Center, Power, Snap, Dark mode ===== */
-V.set=Object.assign({dark:0,acc:'#0067c0',wifi:1,bt:1,air:0,nl:0,bs:0,vol:60,br:100},V.set||{});const Sx=V.set,sv=()=>{try{localStorage.setItem(VK,JSON.stringify(V))}catch(_){}};
+V.set=Object.assign({dark:0,acc:'#0067c0',wifi:1,bt:1,air:0,nl:0,bs:0,vol:60,br:100},V.set||{});const Sx=V.set,sv=()=>{try{localStorage.setItem(VK,JSON.stringify(V))}catch(_){}window.saveV&&saveV();};
 WP.length=0;WP.push(
  'radial-gradient(55% 75% at 30% 65%,#59b4ff,transparent 62%),radial-gradient(50% 70% at 72% 38%,#0b4fd6,transparent 66%),radial-gradient(35% 45% at 55% 55%,#a5dcff,transparent 60%),linear-gradient(135deg,#041a4d,#0a3fb8)',
  'radial-gradient(55% 75% at 30% 65%,#7b4dff,transparent 62%),radial-gradient(50% 70% at 72% 38%,#c2185b,transparent 66%),linear-gradient(135deg,#0b0b1e,#25124d)',
@@ -635,5 +636,110 @@ function settings(){const box=wrap(),row=E('div'),side=E('div','sd'),main=E('div
  function draw(){side.innerHTML='';Object.keys(pg).forEach(k=>{const d=E('div',k===cur?'on':'',k);d.onclick=()=>{cur=k;draw()};side.append(d)});pg[cur]()}
  draw();win('Settings','⚙️',640,440,box)}
 applyS();
+</script>
+<script>
+/* ===== ADD-ON: Drag kwenda Desktop, Install App, IndexedDB + File System (OPFS) offline ===== */
+(()=>{
+const safe=s=>String(s).replace(/[<>:"\/\\|?*\x00-\x1f]/g,'_').trim()||'_';
+const MT={txt:'text/plain',csv:'text/csv',json:'application/json',md:'text/plain',html:'text/html',pdf:'application/pdf',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',svg:'image/svg+xml',mp4:'video/mp4',webm:'video/webm',mp3:'audio/mpeg',wav:'audio/wav',ogg:'audio/ogg',m4a:'audio/mp4'};
+const nav=navigator,st=nav.storage;
+function toast(m){const t=E('div','',m);t.style.cssText='position:fixed;left:50%;bottom:64px;transform:translateX(-50%);background:#1f2a44;color:#fff;padding:9px 16px;border-radius:20px;z-index:400000;box-shadow:0 4px 16px #0006;font:13px Segoe UI,system-ui,sans-serif;max-width:90vw;text-align:center';document.body.append(t);setTimeout(()=>t.remove(),3000)}
+/* ---------- IndexedDB #2: blobs (mafaili ya mtumiaji) + kv (VFS, handle ya folda) ---------- */
+const BD=(()=>{let p;const open=()=>p||(p=new Promise((res,rej)=>{if(!window.indexedDB)return rej();const q=indexedDB.open('SadeFilesDB',1);q.onupgradeneeded=()=>{q.result.createObjectStore('blobs');q.result.createObjectStore('kv')};q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)}));
+ const tx=(s,m,f)=>open().then(d=>new Promise((res,rej)=>{const t=d.transaction(s,m),r=f(t.objectStore(s));t.oncomplete=()=>res(r&&r.result);t.onerror=t.onabort=()=>rej(t.error)})).catch(()=>null);
+ return{get:(s,k)=>tx(s,'readonly',o=>o.get(k)),put:(s,k,v)=>tx(s,'readwrite',o=>o.put(v,k)),keys:s=>tx(s,'readonly',o=>o.getAllKeys()),all:s=>tx(s,'readonly',o=>o.getAll()),clear:s=>tx(s,'readwrite',o=>o.clear())}})();
+/* ---------- File System: Origin Private File System (OPFS) ---------- */
+const OP={root:()=>st&&st.getDirectory?st.getDirectory():Promise.reject(),
+ async dir(p,c){let d=await OP.root();for(const s of p.split('/').filter(Boolean))d=await d.getDirectoryHandle(s,{create:c});return d},
+ async put(p,data){try{const i=p.lastIndexOf('/'),d=await OP.dir('sade/'+p.slice(0,i),true),h=await d.getFileHandle(p.slice(i+1),{create:true}),w=await h.createWritable();await w.write(data);await w.close();return 1}catch(_){return 0}},
+ async get(p){try{const i=p.lastIndexOf('/'),d=await OP.dir('sade/'+p.slice(0,i),false);return await(await d.getFileHandle(p.slice(i+1))).getFile()}catch(_){return null}}};
+/* Kila faili la mfumo linalohifadhiwa kwenye IndexedDB sasa linaandikwa pia OPFS; kusoma kuna fallback */
+const _p=DB.put,_g=DB.get;
+DB.put=(k,v)=>{if(v&&v.html!=null)OP.put('files/'+k+'.html',v.html);return _p(k,v)};
+DB.get=async k=>{const r=await _g(k);if(r)return r;const f=await OP.get('files/'+k+'.html');return f?{html:await f.text(),t:0}:r};
+/* ---------- Hali ya Desktop (VFS) -> IndexedDB + OPFS ---------- */
+let svT;window.saveV=()=>{clearTimeout(svT);svT=setTimeout(()=>{try{const s=JSON.stringify(V);BD.put('kv','vfs',{v:s,t:Date.now()});OP.put('state/vfs.json',s)}catch(_){}},400)};
+window.resetV=async()=>{await BD.put('kv','vfs',null);await BD.clear('blobs');try{await(await OP.dir('sade',false)).removeEntry('imported',{recursive:true})}catch(_){}};
+(async()=>{try{if(!localStorage.getItem(VK)&&!sessionStorage.getItem('vr')){const r=await BD.get('kv','vfs');if(r&&r.v){sessionStorage.setItem('vr',1);localStorage.setItem(VK,r.v);location.reload()}}}catch(_){}})();
+addEventListener('load',()=>{if(localStorage.getItem(VK))setTimeout(saveV,2000)});
+/* ---------- Kuingiza mafaili (kutoka Kompyuta) ---------- */
+const ensureF=n=>{if(!V.F[n]){V.F[n]=[];V.U.push(n)}return n};
+async function importFile(f,fo){const x=f.name.includes('.')?ext(f.name):'dat',key='imp-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)+'.'+x;
+ await BD.put('blobs',key,{blob:f,name:f.name,type:f.type||MT[x]||''});OP.put('imported/'+key,f);
+ const d=V.F[fo]&&fo!==BIN?fo:'Desktop';V.F[d].push({n:uniq(d,f.name),o:['@imp',key]})}
+window.pickUpload=fo=>{const i=E('input');i.type='file';i.multiple=true;i.onchange=async()=>{for(const f of i.files)await importFile(f,fo);persist();toast('📤 Mafaili '+i.files.length+' yamepakiwa → '+fo)};i.click()};
+async function openImp(key){const fr=E('iframe');fr.style.cssText='flex:1;border:0;width:100%;background:#fff';win(key,fi(key),640,430,fr);
+ const r=await BD.get('blobs',key);if(!r){fr.srcdoc='<p style="font:14px sans-serif;padding:20px">⚠ Faili halipo kwenye hifadhi.</p>';return}
+ const t=r.type||'';if(/^(image|video|audio|text)\/|pdf|html|json|xml/.test(t))fr.src=URL.createObjectURL(new Blob([r.blob],{type:t+(/^text\//.test(t)?';charset=utf-8':'')}));
+ else fr.srcdoc='<body style="font:14px sans-serif;padding:20px"><h3>'+esc(r.name)+'</h3><p>'+(r.blob.size/1024).toFixed(1)+' KB</p><p>Aina hii haiwezi kuonyeshwa hapa. Tumia "⬇️ Hifadhi kwenye Kompyuta".</p>'}
+const _openF=openF;openF=function(f,n){return f==='@imp'?openImp(n):_openF(f,n)};
+/* ---------- Kupata maudhui ya faili (blob) kwa ajili ya drag-out / download ---------- */
+async function blobOf(fo,n){const e=get(fo,n);if(!e)return null;
+ if(e.o[0]==='@imp'){const r=await BD.get('blobs',e.o[1]);return r?{blob:new Blob([r.blob],{type:r.type||'application/octet-stream'}),name:e.n}:null}
+ const s=e.o[0].split(' ')[0],c=await DB.get(s+'/'+e.o[1]);let h=c&&c.html;if(h==null){const r=await fetchF(s,e.o[1]);h=r&&r.txt}
+ if(h==null)h='<!DOCTYPE html><meta charset="utf-8"><body style="font:14px sans-serif;padding:20px"><h3>'+esc(e.o[1])+'</h3><p>Faili halijahifadhiwa bado — fungua Sade Computer ukiwa online mara moja.</p>';
+ return{blob:new Blob([h],{type:'text/html;charset=utf-8'}),name:e.n+'.html'}}
+async function fsWrite(d,p,b){p=[].concat(p).map(safe);const f=p.pop();for(const s of p)d=await d.getDirectoryHandle(s,{create:true});const h=await d.getFileHandle(f,{create:true}),w=await h.createWritable();await w.write(b);await w.close()}
+window.saveOut=async items=>{const L=(await Promise.all(items.map(a=>blobOf(...a)))).filter(Boolean);if(!L.length)return;
+ if(L.length>1&&window.showDirectoryPicker){try{const d=await showDirectoryPicker({mode:'readwrite'});for(const x of L)await fsWrite(d,x.name,x.blob);toast('✅ Mafaili '+L.length+' yamehifadhiwa');return}catch(e){if(e.name==='AbortError')return}}
+ for(const x of L){const a=E('a');a.href=URL.createObjectURL(x.blob);a.download=x.name;document.body.append(a);a.click();a.remove();await new Promise(r=>setTimeout(r,300))}toast('⬇️ Imepakuliwa: '+L.length)};
+/* ---------- DRAG: toa nje kwenda Desktop halisi (Chrome/Edge) + ndani ya app (nakili kwenda Desktop) ---------- */
+const READY={};drag=function(){};
+document.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button)return;const el=e.target.closest&&e.target.closest('.it[data-k],.ic[data-k]');if(!el||el.dataset.fold||el.dataset.k[0]==='#')return;
+ let fo='Desktop';if(el.classList.contains('it')){const b=el.closest('.grid');fo=b&&b.dataset.fold;if(!fo)return}
+ el.draggable=true;const k=fo+'\0'+el.dataset.k;
+ blobOf(fo,el.dataset.k).then(r=>{if(r){if(READY[k])URL.revokeObjectURL(READY[k].url);READY[k]={url:URL.createObjectURL(r.blob),name:r.name,type:r.blob.type||'application/octet-stream'}}})},true);
+document.addEventListener('dragstart',e=>{const el=e.target.closest&&e.target.closest('.it[data-k],.ic[data-k]');if(!el||!el.draggable)return;let fo='Desktop',names;
+ if(el.classList.contains('ic'))names=[...D.querySelectorAll(':scope>.ic.s')].map(x=>x.dataset.k).filter(k=>k&&k[0]!=='#');
+ else{const b=el.closest('.grid');fo=b.dataset.fold;names=[...b.querySelectorAll('.it.sel')].map(x=>x.dataset.k)}
+ if(!names.includes(el.dataset.k))names=[el.dataset.k];const items=names.map(n=>[fo,n]),r=READY[fo+'\0'+names[0]];
+ e.dataTransfer.effectAllowed='copyMove';e.dataTransfer.setData('application/x-sade',JSON.stringify(items));
+ if(items.length===1&&r)e.dataTransfer.setData('DownloadURL',r.type+':'+r.name.replace(/:/g,'_')+':'+r.url)});
+drop=function(ev,items,copy){const el=document.elementFromPoint(ev.clientX,ev.clientY);if(!el||!items.length)return;
+ if(el.closest('#tb')){items.forEach(a=>pinFile(...a));persist();return}
+ const t=el.closest('[data-fold]');if(!t||!t.dataset.fold||(t.id==='desk'&&el.closest('.w')))return;const d=t.dataset.fold;if(items[0][0]===d)return;
+ if(d===BIN){del(items);return}const mv=d==='Desktop'?ev.shiftKey:!copy;xfer(items,d,mv);persist();toast((mv?'✂️ Yamehamishwa':'⧉ Yamenakiliwa')+' → '+d+' ('+items.length+')')};
+addEventListener('dragover',e=>{const t=[...(e.dataTransfer.types||[])];if(t.includes('application/x-sade')||t.includes('Files')){e.preventDefault();e.dataTransfer.dropEffect='copy'}});
+const rd=en=>new Promise(r=>{const o=[],q=en.createReader(),f=()=>q.readEntries(a=>a.length?(o.push(...a),f()):r(o),()=>r(o));f()});
+async function walk(en,fo,top){if(en.isFile){const f=await new Promise(r=>en.file(r,()=>r(null)));if(f)await importFile(f,fo)}else{const t=top?ensureF(en.name):fo;for(const c of await rd(en))await walk(c,t,0)}}
+addEventListener('drop',async e=>{const dt=e.dataTransfer;e.preventDefault();const raw=dt.getData('application/x-sade');
+ if(raw){try{drop(e,JSON.parse(raw),e.ctrlKey)}catch(_){}return}
+ if(!(dt.files&&dt.files.length))return;const el=document.elementFromPoint(e.clientX,e.clientY),t=el&&el.closest('[data-fold]');let fo=t&&t.dataset.fold;if(!fo||fo===BIN||!V.F[fo])fo='Desktop';
+ const ens=[...dt.items].map(i=>i.webkitGetAsEntry&&i.webkitGetAsEntry()).filter(Boolean),fl=[...dt.files];
+ if(ens.length)for(const en of ens)await walk(en,fo,1);else for(const f of fl)await importFile(f,fo);persist();toast('📥 Imeingizwa kwenye '+fo)});
+/* ---------- Folda halisi ya Kompyuta (File System Access API) ---------- */
+async function exportAll(pick){if(!window.showDirectoryPicker)return toast('Tumia Chrome/Edge kuchagua folda ya kompyuta');let h=pick?null:await BD.get('kv','dir');
+ try{if(h&&(await h.requestPermission({mode:'readwrite'}))!=='granted')h=null;if(!h){h=await showDirectoryPicker({mode:'readwrite',id:'sadepc'});await BD.put('kv','dir',h)}}catch(_){return}
+ let n=0;for(const k of(await DB.keys())||[]){const r=await DB.get(k);if(r&&r.html!=null){const[s,nm]=k.split('/');await fsWrite(h,[s,nm+'.html'],new Blob([r.html],{type:'text/html'}));n++}}
+ for(const fo of Object.keys(V.F))for(const e of V.F[fo])if(e.o[0]==='@imp'){const r=await BD.get('blobs',e.o[1]);if(r){await fsWrite(h,[fo,e.n],r.blob);n++}}
+ toast('✅ Mafaili '+n+' yamehifadhiwa kwenye folda: '+h.name)}
+async function importDir(){if(!window.showDirectoryPicker)return toast('Tumia Chrome/Edge kuchagua folda ya kompyuta');let h;try{h=await showDirectoryPicker({id:'sadepc'})}catch(_){return}
+ let n=0;const w=async(dh,fo,top)=>{for await(const[nm,eh]of dh.entries()){if(eh.kind==='file'){await importFile(await eh.getFile(),fo);n++}else await w(eh,top?ensureF(nm):fo,0)}};await w(h,'Desktop',1);persist();toast('📥 Mafaili '+n+' yameingizwa')}
+function clearCache(){if(!confirm('Futa mafaili ya mfumo yaliyohifadhiwa offline? (Mafaili yako uliyopakia hayafutwi)'))return Promise.resolve();
+ return new Promise(r=>{const q=indexedDB.open('SadeComputerDB',1);q.onsuccess=()=>{const d=q.result,t=d.transaction(['files','meta'],'readwrite');t.objectStore('files').clear();t.objectStore('meta').clear();t.oncomplete=async()=>{d.close();try{await(await OP.dir('sade',false)).removeEntry('files',{recursive:true})}catch(_){}cnt();r()}};q.onerror=()=>r()})}
+/* ---------- INSTALL APP kwenye Desktop (PWA) ---------- */
+const isApp=()=>matchMedia('(display-mode: standalone)').matches||nav.standalone;
+addEventListener('appinstalled',()=>{window.INST=null;toast('✅ Sade Computer imewekwa kwenye Desktop yako')});
+window.installApp=function(){if(isApp())return toast('✅ Tayari unatumia app');const I=window.INST;
+ if(I){window.INST=null;I.prompt();return I.userChoice.then(r=>r.outcome==='accepted'&&toast('⏳ Inawekwa kwenye Desktop…'))}
+ const b=E('div','s11');b.innerHTML='<h3>⬇️ Weka Sade Computer kwenye Desktop</h3><div class="card" style="display:block"><b>Chrome / Edge (Windows, Mac, Linux)</b><br>Menyu ⋮ → <i>Cast, save and share → Install page as app</i> (Edge: <i>Apps → Install this site as an app</i>). Au bonyeza ikoni ya ⊕ kwenye address bar.<br><br><b>Android</b>: ⋮ → <i>Install app</i><br><b>iPhone/iPad</b>: Share → <i>Add to Home Screen</i></div><div class="card" style="display:block">Kivinjari hakijaruhusu install ya moja kwa moja (inahitaji HTTPS + manifest.webmanifest + sw.js). Njia mbadala ya Windows:<br><br></div>';
+ const x=E('button','','🔗 Pakua Shortcut ya Desktop (.url)');x.style.cssText='padding:7px 12px;border:1px solid #8886;border-radius:6px;background:var(--ac);color:#fff;cursor:pointer;font:inherit';
+ x.onclick=()=>{const a=E('a');a.href=URL.createObjectURL(new Blob(['[InternetShortcut]\r\nURL='+location.href.split('#')[0]+'\r\nIconIndex=0\r\n'],{type:'application/octet-stream'}));a.download='Sade Computer.url';a.click();toast('Hamisha faili hilo kwenye Desktop yako')};b.lastChild.append(x);win('Install App','⬇️',520,380,b)};
+const ib=E('span','tr','⬇️');ib.title='Weka app kwenye Desktop';ib.onclick=installApp;if(isApp())ib.style.display='none';$('#tray').insertBefore(ib,$('#off'));
+/* ---------- Dirisha la "Hifadhi & Offline" ---------- */
+window.storageWin=function(){const b=E('div','s11');win('Hifadhi & Offline','💾',560,540,b);
+ const btn=(t,f)=>{const x=E('button','',t);x.style.cssText='padding:7px 12px;border:1px solid var(--bd);border-radius:6px;background:rgba(127,127,127,.15);color:inherit;cursor:pointer;font:inherit';x.onclick=f;return x},mb=n=>(n/1048576).toFixed(1)+' MB';
+ const draw=async()=>{const[k,bl,est,per,dh]=await Promise.all([DB.keys(),BD.all('blobs'),st&&st.estimate?st.estimate():null,st&&st.persisted?st.persisted():null,BD.get('kv','dir')]);
+  const tot=Object.values(FOLD).reduce((a,s)=>a+s.split(',').length,0),sz=(bl||[]).reduce((a,r)=>a+(r&&r.blob?r.blob.size:0),0);b.innerHTML='<h3>💾 Hifadhi & Offline</h3>';
+  const c=h=>{const d=E('div','card',h);d.style.display='block';b.append(d);return d};
+  c('<b>IndexedDB</b> — mafaili ya mfumo: '+(k?k.length:0)+' / '+tot+' yamehifadhiwa<br>Mafaili uliyopakia: '+(bl?bl.length:0)+' ('+mb(sz)+')');
+  c('<b>File System (OPFS)</b> — '+(st&&st.getDirectory?'✅ inatumika (nakala ya kila faili)':'❌ haipo kwenye kivinjari hiki')+'<br><b>Folda ya kompyuta</b> — '+(dh?'📂 '+esc(dh.name):'haijachaguliwa'));
+  c('<b>Nafasi</b> — '+(est?mb(est.usage)+' / '+mb(est.quota):'?')+'<br>Hifadhi ya kudumu: '+(per?'✅ ndiyo':'⚠ bado (kivinjari kinaweza kufuta)')+' · '+(nav.onLine?'🟢 Online':'🔴 Offline'));
+  const a=c('');a.style.cssText+=';display:flex;flex-wrap:wrap;gap:8px';
+  a.append(btn('🔄 Sync sasa',()=>{if(location.protocol==='file:')return toast('Sync inahitaji HTTPS (GitHub Pages)');toast('🔄 Inapakua mafaili…');sync().then(draw)}),btn('📤 Pakia faili',()=>pickUpload('Desktop')),
+   btn('💾 Hifadhi kwenye folda ya kompyuta',()=>exportAll(0).then(draw)),btn('🗂️ Badili folda',()=>exportAll(1).then(draw)),btn('📥 Ingiza kutoka folda',()=>importDir().then(draw)),
+   btn('🛡️ Hifadhi ya kudumu',()=>st&&st.persist?st.persist().then(r=>{toast(r?'✅ Imeruhusiwa':'Kivinjari kimekataa');draw()}):0),btn('⬇️ Install App',installApp),btn('🧹 Futa cache ya mfumo',()=>clearCache().then(draw)))};draw()};
+const off=$('#off');if(off)off.onclick=storageWin;
+})();
 </script>
 </body></html>
