@@ -1,7 +1,9 @@
-/* Sade Computer — Service Worker (huhifadhi index.html ili ifunguke offline).
-   Mafaili ya ndani huhifadhiwa na index.html kwenye IndexedDB. */
-const C='sade-computer-shell-v1';
-self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./','./index.html'])).catch(()=>{}));self.skipWaiting()});
+/* Sade Computer — Service Worker (offline kamili) */
+const C='sade-pc-v1',CORE=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.allSettled(CORE.map(u=>c.add(u)))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET'||new URL(r.url).origin!==location.origin)return;
- e.respondWith(fetch(r).then(res=>{if(res.ok){const cp=res.clone();caches.open(C).then(c=>c.put(r,cp))}return res}).catch(()=>caches.match(r,{ignoreSearch:true}).then(m=>m||(r.mode==='navigate'?caches.match('./index.html'):Response.error()))))});
+ e.respondWith(caches.open(C).then(async c=>{const hit=await c.match(r,{ignoreSearch:true});
+  const net=fetch(r).then(res=>{if(res&&res.ok)c.put(r,res.clone());return res}).catch(()=>null);
+  if(hit){net.catch(()=>0);return hit}
+  const res=await net;return res||(r.mode==='navigate'?c.match('index.html'):new Response('Offline',{status:503}))}))});
