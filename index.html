@@ -244,7 +244,7 @@ const FOLD={
   "ogg-sauti.ogg",             // 05
   "app-sauti.m4a",             // 06
 ]),
-/* 05. Programu (Programs) — mafaili 22 */
+/* 05. Programu (Programs) — mafaili 32 */
 "Programu (Programs)":_j([
   "cmd.exe",                   // 01
   "calc.exe",                  // 02
@@ -268,6 +268,16 @@ const FOLD={
   "Mozilla-Firefox.exe",       // 20
   "Google-Chrome.exe",         // 21
   "Microsoft-Games.exe",        // 22
+  "Microsoft-Photos.exe",  // 23
+  "Microsoft-MediaPlayer.exe",  // 24
+  "Microsoft-Maps.exe",  // 25
+  "Microsoft-Weather.exe",  // 26
+  "Microsoft-Translator.exe",  // 27
+  "Microsoft-Calendar.exe",  // 28
+  "Microsoft-Clock.exe",  // 29
+  "Microsoft-Camera.exe",  // 30
+  "Microsoft-Money.exe",  // 31
+  "Microsoft-News.exe",  // 32
 ]),
 /* 06. Code (Dev) — mafaili 12 */
 "Code (Dev)":_j([
@@ -325,7 +335,7 @@ const FOLD={
 ]),
 };
 const ico={"txt": "📄", "doc": "📘", "docx": "📘", "pdf": "📕", "rtf": "📝", "odt": "📃", "ppt": "📙", "pptx": "📙", "xls": "📗", "xlsx": "📗", "csv": "📊", "jpg": "🖼️", "jpeg": "🖼️", "png": "🖼️", "gif": "🎞️", "bmp": "🖼️", "webp": "🖼️", "svg": "🎨", "ico": "⭐", "mp4": "🎬", "Music": "🎵", "exe": "⚙️", "msi": "📦", "dll": "🧩", "sys": "🛠️", "bat": "📟", "cmd": "📟", "ps1": "📟", "lnk": "🔗", "html": "🌐", "css": "🎨", "js": "🟨", "json": "🧾", "xml": "🧾", "py": "🐍", "java": "☕", "cpp": "➕", "php": "🐘", "sql": "🗃️", "ts": "🟦", "md": "📝", "zip": "🗜️", "rar": "🗜️", "7z": "🗜️", "tar": "🗜️", "gz": "🗜️", "db": "🗄️", "sqlite": "🗄️", "sqlite3": "🗄️", "mdb": "🗄️", "accdb": "🗄️", "bak": "💾", "log": "📜", "tmp": "🕑", "ini": "⚙️", "cfg": "⚙️", "dat": "🔢", "reg": "🧬", "cab": "📦", "vbs": "📜", "dmp": "💥", "iso": "💿", "img": "💿", "vhd": "💽", "vhdx": "💽", "vmdk": "💽", "ova": "🖥️", "ovf": "🖥️"};
-const ICN={"Microsoft-Edge.exe":"🌐","Microsoft-Copilot.exe":"✨","Microsoft-Office.exe":"🏢","Microsoft-Word.exe":"📘","Microsoft-Excel.exe":"📗","Microsoft-PowerPoint.exe":"📙","Microsoft-Outlook.exe":"📧","Microsoft-OneNote.exe":"📓","Mozilla-Firefox.exe":"🦊","Google-Chrome.exe":"🌍","Microsoft-Games.exe":"🎮"};
+const ICN={"Microsoft-Edge.exe":"🌐","Microsoft-Copilot.exe":"✨","Microsoft-Office.exe":"🏢","Microsoft-Word.exe":"📘","Microsoft-Excel.exe":"📗","Microsoft-PowerPoint.exe":"📙","Microsoft-Outlook.exe":"📧","Microsoft-OneNote.exe":"📓","Mozilla-Firefox.exe":"🦊","Google-Chrome.exe":"🌍","Microsoft-Games.exe":"🎮","Microsoft-Photos.exe":"🖼️","Microsoft-MediaPlayer.exe":"🎵","Microsoft-Maps.exe":"🗺️","Microsoft-Weather.exe":"☀️","Microsoft-Translator.exe":"🌐","Microsoft-Calendar.exe":"📅","Microsoft-Clock.exe":"⏰","Microsoft-Camera.exe":"📷","Microsoft-Money.exe":"💱","Microsoft-News.exe":"📰"};
 const fi=n=>ICN[n]||ico[n.split(".").pop().toLowerCase()]||"📄";
 </script>
 <script>const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
@@ -391,7 +401,7 @@ addEventListener('load',()=>{setTimeout(cnt,300);setTimeout(sync,1500)});addEven
 if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 /* ===== OPEN FILE ===== */
 async function openF(f,n){const s=f.split(' ')[0],P=paths(s,n).slice(0,5),key=s+'/'+n;
- const fr=E('iframe');fr.style.cssText='flex:1;border:0;width:100%;background:#fff';fr.onload=()=>{if(TAP)try{fr.contentDocument.activeElement.blur()}catch(_){}};win(n,fi(n),640,430,fr);
+ const fr=E('iframe');fr.allow='camera;microphone;geolocation;clipboard-write;autoplay;fullscreen';fr.style.cssText='flex:1;border:0;width:100%;background:#fff';fr.onload=()=>{if(TAP)try{fr.contentDocument.activeElement.blur()}catch(_){}};win(n,fi(n),640,430,fr);
  const r=await fetchF(s,n);
  if(r&&r.txt!=null)DB.put(key,{html:r.txt,t:Date.now()}).then(cnt);
  if(r)fr.src=r.p;
@@ -401,7 +411,7 @@ addEventListener('message',e=>{if(e.data&&e.data.close)wins.slice().forEach(w=>{
 const TAP=matchMedia('(pointer:coarse)').matches;
 document.addEventListener('click',e=>{if(!TAP)return;const t=e.target.closest('.it,.ic');if(t&&t.ondblclick)t.ondblclick(e)});
 /* ===== DESKTOP / START ===== */
-const DI=[['💻','Kompyuta Hii',()=>explorer()],['📁','Nyaraka',()=>explorer('Nyaraka (Documents)')],['🖼️','Picha',()=>explorer('Picha (Pictures)')],['⬛','Terminal',()=>openF('Programu (Programs)','cmd.exe')],['🧮','Calculator',()=>openF('Programu (Programs)','calc.exe')],['🎨','Paint',()=>openF('Programu (Programs)','paint.exe')],['📝','Notepad',()=>openF('Programu (Programs)','notepad.exe')],['🌐','Microsoft Edge',()=>openF('Programu (Programs)','Microsoft-Edge.exe'),1],['✨','Microsoft Copilot',()=>openF('Programu (Programs)','Microsoft-Copilot.exe'),1],['🏢','Microsoft Office',()=>openF('Programu (Programs)','Microsoft-Office.exe'),1],['📘','Microsoft Word',()=>openF('Programu (Programs)','Microsoft-Word.exe'),1],['📗','Microsoft Excel',()=>openF('Programu (Programs)','Microsoft-Excel.exe'),1],['📙','Microsoft PowerPoint',()=>openF('Programu (Programs)','Microsoft-PowerPoint.exe'),1],['📧','Microsoft Outlook',()=>openF('Programu (Programs)','Microsoft-Outlook.exe'),1],['📓','Microsoft OneNote',()=>openF('Programu (Programs)','Microsoft-OneNote.exe'),1],['🦊','Mozilla Firefox',()=>openF('Programu (Programs)','Mozilla-Firefox.exe'),1],['🌍','Google Chrome',()=>openF('Programu (Programs)','Google-Chrome.exe'),1],['🎮','Microsoft Games',()=>openF('Programu (Programs)','Microsoft-Games.exe'),1],['🗑️','Recycle Bin',()=>alert('Recycle Bin ni tupu')],['⚙️','Settings',()=>settings(),1]];
+const DI=[['💻','Kompyuta Hii',()=>explorer()],['📁','Nyaraka',()=>explorer('Nyaraka (Documents)')],['🖼️','Picha',()=>explorer('Picha (Pictures)')],['⬛','Terminal',()=>openF('Programu (Programs)','cmd.exe')],['🧮','Calculator',()=>openF('Programu (Programs)','calc.exe')],['🎨','Paint',()=>openF('Programu (Programs)','paint.exe')],['📝','Notepad',()=>openF('Programu (Programs)','notepad.exe')],['🌐','Microsoft Edge',()=>openF('Programu (Programs)','Microsoft-Edge.exe'),1],['✨','Microsoft Copilot',()=>openF('Programu (Programs)','Microsoft-Copilot.exe'),1],['🏢','Microsoft Office',()=>openF('Programu (Programs)','Microsoft-Office.exe'),1],['📘','Microsoft Word',()=>openF('Programu (Programs)','Microsoft-Word.exe'),1],['📗','Microsoft Excel',()=>openF('Programu (Programs)','Microsoft-Excel.exe'),1],['📙','Microsoft PowerPoint',()=>openF('Programu (Programs)','Microsoft-PowerPoint.exe'),1],['📧','Microsoft Outlook',()=>openF('Programu (Programs)','Microsoft-Outlook.exe'),1],['📓','Microsoft OneNote',()=>openF('Programu (Programs)','Microsoft-OneNote.exe'),1],['🦊','Mozilla Firefox',()=>openF('Programu (Programs)','Mozilla-Firefox.exe'),1],['🌍','Google Chrome',()=>openF('Programu (Programs)','Google-Chrome.exe'),1],['🎮','Microsoft Games',()=>openF('Programu (Programs)','Microsoft-Games.exe'),1],['🖼️','Microsoft Photos',()=>openF('Programu (Programs)','Microsoft-Photos.exe'),1],['🎵','Media Player',()=>openF('Programu (Programs)','Microsoft-MediaPlayer.exe'),1],['🗺️','Microsoft Maps',()=>openF('Programu (Programs)','Microsoft-Maps.exe'),1],['☀️','Microsoft Weather',()=>openF('Programu (Programs)','Microsoft-Weather.exe'),1],['🌐','Microsoft Translator',()=>openF('Programu (Programs)','Microsoft-Translator.exe'),1],['📅','Microsoft Calendar',()=>openF('Programu (Programs)','Microsoft-Calendar.exe'),1],['⏰','Microsoft Clock',()=>openF('Programu (Programs)','Microsoft-Clock.exe'),1],['📷','Microsoft Camera',()=>openF('Programu (Programs)','Microsoft-Camera.exe'),1],['💱','Microsoft Money',()=>openF('Programu (Programs)','Microsoft-Money.exe'),1],['📰','Microsoft News',()=>openF('Programu (Programs)','Microsoft-News.exe'),1],['🗑️','Recycle Bin',()=>alert('Recycle Bin ni tupu')],['⚙️','Settings',()=>settings(),1]];
 DI.filter(x=>!x[3]).forEach(([i,n,f])=>{const d=E('div','ic','<b>'+i+'</b>'+n);d.ondblclick=f;d.onclick=()=>{document.querySelectorAll('.ic').forEach(x=>x.classList.remove('s'));d.classList.add('s')};$('#desk').append(d)});
 [0,5,6,7,8].forEach(k=>{const b=E('button','',DI[k][0]);b.title=DI[k][1];b.onclick=DI[k][2];$('#pins').append(b)});
 const M=$('#menu'),REC=[['Nyaraka (Documents)','notes.txt'],['Nyaraka (Documents)','budget.xlsx'],['Nyaraka (Documents)','presentation.pptx'],['Picha (Pictures)','picha1.jpg'],['Muziki (Music)','Music'],['Code (Dev)','index.html']];
