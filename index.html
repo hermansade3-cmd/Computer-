@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0b1220">
 <title>Sade Computer</title>
 <style>
 *{box-sizing:border-box;margin:0}body{font:13px Segoe UI,system-ui,sans-serif;height:100vh;overflow:hidden;background:linear-gradient(135deg,#0b3d91,#1e88e5 55%,#5ec8ff);user-select:none}
@@ -124,7 +124,7 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
         04. flac-sauti.flac
         05. ogg-sauti.ogg
         06. app-sauti.m4a
-  05. 📁 Programu (Programs)  (52)
+  05. 📁 Programu (Programs)  (58)
         01. cmd.exe
         02. calc.exe
         03. notepad.exe
@@ -227,7 +227,7 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
 <div id="menu"></div>
 <div id="tb"><div id="wd"><span style="font-size:26px">☀️</span><span>27°C<br>Jua</span></div>
 <div id="ctr"><button id="st" title="Start"><i></i><i></i><i></i><i></i></button><button id="sr" title="Tafuta">🔍</button><span id="pins"></span><div id="tasks"></div></div>
-<div id="tray"><span class="tr">⌃</span><span class="tr">📶 🔊 🔋</span><div id="clk"></div></div></div>
+<div id="tray"><span class="tr">⌃</span><span class="tr">📶 🔊 🔋</span><button id="fsb" title="Skrini nzima">⛶</button><div id="clk"></div></div></div>
 <div id="lock"><h1 id="lt"></h1><p id="ld"></p><small>Bonyeza popote kufungua</small></div>
 <script>/* ================= MAFAILI YOTE (kila faili mstari wake) ================= */
 const _j=a=>a.join(',');
@@ -275,7 +275,7 @@ const FOLD={
   "ogg-sauti.ogg",             // 05
   "app-sauti.m4a",             // 06
 ]),
-/* 05. Programu (Programs) — mafaili 52 */
+/* 05. Programu (Programs) — mafaili 58 */
 "Programu (Programs)":_j([
   "cmd.exe",                   // 01
   "calc.exe",                  // 02
@@ -329,6 +329,12 @@ const FOLD={
   "Microsoft-TextToSpeech.exe",  // 50
   "Microsoft-Network.exe",  // 51
   "Microsoft-Accessibility.exe",  // 52
+  "Visual-Studio-Code.exe",  // 53
+  "Python-IDE.exe",  // 54
+  "HTML-CSS-JS-Editor.exe",  // 55
+  "Scientific-Calculator.exe",  // 56
+  "Circuit-Designer.exe",  // 57
+  "Music-DJ-Mix.exe",  // 58
 ]),
 /* 06. Code (Dev) — mafaili 12 */
 "Code (Dev)":_j([
@@ -386,7 +392,7 @@ const FOLD={
 ]),
 };
 const ico={"txt": "📄", "doc": "📘", "docx": "📘", "pdf": "📕", "rtf": "📝", "odt": "📃", "ppt": "📙", "pptx": "📙", "xls": "📗", "xlsx": "📗", "csv": "📊", "jpg": "🖼️", "jpeg": "🖼️", "png": "🖼️", "gif": "🎞️", "bmp": "🖼️", "webp": "🖼️", "svg": "🎨", "ico": "⭐", "mp4": "🎬", "Music": "🎵", "exe": "⚙️", "msi": "📦", "dll": "🧩", "sys": "🛠️", "bat": "📟", "cmd": "📟", "ps1": "📟", "lnk": "🔗", "html": "🌐", "css": "🎨", "js": "🟨", "json": "🧾", "xml": "🧾", "py": "🐍", "java": "☕", "cpp": "➕", "php": "🐘", "sql": "🗃️", "ts": "🟦", "md": "📝", "zip": "🗜️", "rar": "🗜️", "7z": "🗜️", "tar": "🗜️", "gz": "🗜️", "db": "🗄️", "sqlite": "🗄️", "sqlite3": "🗄️", "mdb": "🗄️", "accdb": "🗄️", "bak": "💾", "log": "📜", "tmp": "🕑", "ini": "⚙️", "cfg": "⚙️", "dat": "🔢", "reg": "🧬", "cab": "📦", "vbs": "📜", "dmp": "💥", "iso": "💿", "img": "💿", "vhd": "💽", "vhdx": "💽", "vmdk": "💽", "ova": "🖥️", "ovf": "🖥️"};
-const ICN={"Microsoft-Edge.exe":"🌐","Microsoft-Copilot.exe":"✨","Microsoft-Office.exe":"🏢","Microsoft-Word.exe":"📘","Microsoft-Excel.exe":"📗","Microsoft-PowerPoint.exe":"📙","Microsoft-Outlook.exe":"📧","Microsoft-OneNote.exe":"📓","Mozilla-Firefox.exe":"🦊","Google-Chrome.exe":"🌍","Microsoft-Games.exe":"🎮","Microsoft-Photos.exe":"🖼️","Microsoft-MediaPlayer.exe":"🎵","Microsoft-Maps.exe":"🗺️","Microsoft-Weather.exe":"☀️","Microsoft-Translator.exe":"🌐","Microsoft-Calendar.exe":"📅","Microsoft-Clock.exe":"⏰","Microsoft-Camera.exe":"📷","Microsoft-Money.exe":"💱","Microsoft-News.exe":"📰","Microsoft-TaskManager.exe":"📊","Microsoft-Dictionary.exe":"📖","Microsoft-Encyclopedia.exe":"📚","Microsoft-Todo.exe":"✅","Microsoft-StickyNotes.exe":"🗒️","Microsoft-Recorder.exe":"🎙️","Microsoft-QRCode.exe":"🔳","Microsoft-Converter.exe":"📐","Microsoft-Passwords.exe":"🔐","Microsoft-Crypto.exe":"🪙","Microsoft-DeviceManager.exe":"🖥️","Microsoft-Backup.exe":"🛡️","Microsoft-DiskCleanup.exe":"🧹","Microsoft-PDFReader.exe":"📕","Microsoft-ScreenRecorder.exe":"🎥","Microsoft-Contacts.exe":"👥","Microsoft-Clipboard.exe":"📋","Microsoft-TextToSpeech.exe":"🗣️","Microsoft-Network.exe":"📡","Microsoft-Accessibility.exe":"♿"};
+const ICN={"Microsoft-Edge.exe":"🌐","Microsoft-Copilot.exe":"✨","Microsoft-Office.exe":"🏢","Microsoft-Word.exe":"📘","Microsoft-Excel.exe":"📗","Microsoft-PowerPoint.exe":"📙","Microsoft-Outlook.exe":"📧","Microsoft-OneNote.exe":"📓","Mozilla-Firefox.exe":"🦊","Google-Chrome.exe":"🌍","Microsoft-Games.exe":"🎮","Microsoft-Photos.exe":"🖼️","Microsoft-MediaPlayer.exe":"🎵","Microsoft-Maps.exe":"🗺️","Microsoft-Weather.exe":"☀️","Microsoft-Translator.exe":"🌐","Microsoft-Calendar.exe":"📅","Microsoft-Clock.exe":"⏰","Microsoft-Camera.exe":"📷","Microsoft-Money.exe":"💱","Microsoft-News.exe":"📰","Microsoft-TaskManager.exe":"📊","Microsoft-Dictionary.exe":"📖","Microsoft-Encyclopedia.exe":"📚","Microsoft-Todo.exe":"✅","Microsoft-StickyNotes.exe":"🗒️","Microsoft-Recorder.exe":"🎙️","Microsoft-QRCode.exe":"🔳","Microsoft-Converter.exe":"📐","Microsoft-Passwords.exe":"🔐","Microsoft-Crypto.exe":"🪙","Microsoft-DeviceManager.exe":"🖥️","Microsoft-Backup.exe":"🛡️","Microsoft-DiskCleanup.exe":"🧹","Microsoft-PDFReader.exe":"📕","Microsoft-ScreenRecorder.exe":"🎥","Microsoft-Contacts.exe":"👥","Microsoft-Clipboard.exe":"📋","Microsoft-TextToSpeech.exe":"🗣️","Microsoft-Network.exe":"📡","Microsoft-Accessibility.exe":"♿","Visual-Studio-Code.exe":"💻","Python-IDE.exe":"🐍","HTML-CSS-JS-Editor.exe":"🌐","Scientific-Calculator.exe":"🔬","Circuit-Designer.exe":"🔌","Music-DJ-Mix.exe":"🎧"};
 const fi=n=>ICN[n]||ico[n.split(".").pop().toLowerCase()]||"📄";
 </script>
 <script>const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
@@ -506,8 +512,13 @@ const cp=(items,cut)=>{if(items.length){CB={cut,items:items.slice()};refresh()}}
 function newF(){const v=(prompt('Jina la folda mpya:','Folda mpya')||'').trim();if(!v)return;if(V.F[v]){alert('Jina hilo lipo tayari.');return}V.F[v]=[];V.U.push(v);persist()}
 function delF(k){if(V.F[k].length){alert('Folda ina vitu. Vihamishe au vifute kwanza.');return}delete V.F[k];V.U=V.U.filter(x=>x!==k);persist()}
 const pinFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.pin.some(p=>p.t==='f'&&p.n===e.n&&p.o+''===e.o+''))V.pin.push({t:'f',o:e.o,n:e.n})};
+V.fr=V.fr||[];V.sort=V.sort||'az';
+const FK=(fo,n)=>fo+'/'+n,isFr=k=>V.fr.includes(k),setFr=(ks,on)=>{ks.forEach(k=>{const i=V.fr.indexOf(k);if(on&&i<0)V.fr.push(k);if(!on&&i>=0)V.fr.splice(i,1)});persist()},
+cmpN=(a,b)=>(V.sort==='za'?-1:1)*String(a).localeCompare(String(b),undefined,{sensitivity:'base',numeric:true}),
+cmpF=(ka,na,kb,nb)=>{const fa=V.fr.indexOf(ka),fb=V.fr.indexOf(kb);if(fa>=0||fb>=0)return fa<0?1:fb<0?-1:fa-fb;return cmpN(na,nb)},
+togSort=()=>{V.sort=V.sort==='az'?'za':'az';persist()};
 DI.push(['💾','Hifadhi Offline',()=>storageWin()]);
-DI.push(['🖥️','Device Manager',()=>openF('Programu (Programs)','Microsoft-DeviceManager.exe'),1]);DI.push(['🛡️','Backup & Restore',()=>openF('Programu (Programs)','Microsoft-Backup.exe'),1]);DI.push(['🧹','Storage Sense',()=>openF('Programu (Programs)','Microsoft-DiskCleanup.exe'),1]);DI.push(['📕','PDF Reader',()=>openF('Programu (Programs)','Microsoft-PDFReader.exe'),1]);DI.push(['🎥','Screen Recorder',()=>openF('Programu (Programs)','Microsoft-ScreenRecorder.exe'),1]);DI.push(['👥','Contacts',()=>openF('Programu (Programs)','Microsoft-Contacts.exe'),1]);DI.push(['📋','Clipboard History',()=>openF('Programu (Programs)','Microsoft-Clipboard.exe'),1]);DI.push(['🗣️','Text to Speech',()=>openF('Programu (Programs)','Microsoft-TextToSpeech.exe'),1]);DI.push(['📡','Network Status',()=>openF('Programu (Programs)','Microsoft-Network.exe'),1]);DI.push(['♿','Accessibility',()=>openF('Programu (Programs)','Microsoft-Accessibility.exe'),1]);
+DI.push(['🖥️','Device Manager',()=>openF('Programu (Programs)','Microsoft-DeviceManager.exe'),1]);DI.push(['🛡️','Backup & Restore',()=>openF('Programu (Programs)','Microsoft-Backup.exe'),1]);DI.push(['🧹','Storage Sense',()=>openF('Programu (Programs)','Microsoft-DiskCleanup.exe'),1]);DI.push(['📕','PDF Reader',()=>openF('Programu (Programs)','Microsoft-PDFReader.exe'),1]);DI.push(['🎥','Screen Recorder',()=>openF('Programu (Programs)','Microsoft-ScreenRecorder.exe'),1]);DI.push(['👥','Contacts',()=>openF('Programu (Programs)','Microsoft-Contacts.exe'),1]);DI.push(['📋','Clipboard History',()=>openF('Programu (Programs)','Microsoft-Clipboard.exe'),1]);DI.push(['🗣️','Text to Speech',()=>openF('Programu (Programs)','Microsoft-TextToSpeech.exe'),1]);DI.push(['📡','Network Status',()=>openF('Programu (Programs)','Microsoft-Network.exe'),1]);DI.push(['♿','Accessibility',()=>openF('Programu (Programs)','Microsoft-Accessibility.exe'),1]);DI.push(['💻','Visual Studio Code',()=>openF('Programu (Programs)','Visual-Studio-Code.exe'),1]);DI.push(['🐍','Python IDE',()=>openF('Programu (Programs)','Python-IDE.exe'),1]);DI.push(['🌐','HTML/CSS/JS Editor',()=>openF('Programu (Programs)','HTML-CSS-JS-Editor.exe'),1]);DI.push(['🔬','Scientific Calculator',()=>openF('Programu (Programs)','Scientific-Calculator.exe'),1]);DI.push(['🔌','Circuit Designer — KiCad Simulator',()=>openF('Programu (Programs)','Circuit-Designer.exe'),1]);DI.push(['🎧','Music DJ Mix',()=>openF('Programu (Programs)','Music-DJ-Mix.exe'),1]);
 const ORIG=DI.length;
 function startAdd(o,n){DI.push([fi(o[1]),n,()=>openE({n,o}),1,o])}
 const startFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.sp.some(p=>p.n===e.n&&p.o+''===e.o+'')){V.sp.push({o:e.o,n:e.n});startAdd(e.o,e.n)}};
@@ -525,7 +536,7 @@ function fileMenu(x,y,fo,names){const it=names.map(n=>[fo,n]),one=names.length==
  if(!bin)M.push(['Fungua',()=>names.forEach(n=>openE(get(fo,n)))],null);
  if(bin)M.push(['Rejesha (Restore)',()=>restore(it)],null);
  M.push(['⬇️ Hifadhi kwenye Kompyuta',()=>saveOut(it)],['✂️ Kata (Cut)',()=>cp(it,1)],['⧉ Nakili (Copy)',()=>cp(it,0),bin],['✏️ Badili jina',()=>ren(...it[0]),!one||bin],['🗑️ Futa',()=>del(it)]);
- if(!bin){M.push(null,['🖥️ Tuma Desktop',()=>{xfer(it,'Desktop',0);persist()},fo==='Desktop'],['📌 Pin kwenye Taskbar',()=>{it.forEach(a=>pinFile(...a));persist()}],['🔲 Pin kwenye Start',()=>{it.forEach(a=>startFile(...a));persist()}]);
+ if(!bin){M.push(null,['⬆️ Weka mbele',()=>setFr(it.map(a=>FK(...a)),1)],['↧ Toa mbele',()=>setFr(it.map(a=>FK(...a)),0)],['🖥️ Tuma Desktop',()=>{xfer(it,'Desktop',0);persist()},fo==='Desktop'],['📌 Pin kwenye Taskbar',()=>{it.forEach(a=>pinFile(...a));persist()}],['🔲 Pin kwenye Start',()=>{it.forEach(a=>startFile(...a));persist()}]);
   if(fo==='Desktop')M.push(['↩️ Rudisha kwenye folda asili',()=>{it.forEach(a=>xfer([a],get(...a).o[0],1));persist()}])}
  menu(x,y,M)}
 /* ----- kuburuta (drag & drop) kwa kipanya ----- */
@@ -546,7 +557,7 @@ function explorer(f){
  const S=()=>cur?[...sel].map(x=>[cur,x]):[],ctx={folder:()=>cur,S,all:()=>{if(cur){V.F[cur].forEach(e=>sel.add(e.n));paint()}}};
  const B=(t,ti,fn)=>{const b=E('button','',t);b.title=ti;b.onclick=()=>{ACT=ctx;fn()};tbr.append(b);return b};
  B('✂️','Kata (Cut)',()=>cp(S(),1));B('⧉','Nakili (Copy)',()=>cp(S(),0));B('📋','Bandika (Paste)',()=>paste(cur));B('✏️','Badili jina',()=>{const s=S();if(s.length===1)ren(...s[0])});B('🗑️','Futa',()=>del(S()));
- B('🖥️','Tuma Desktop',()=>{xfer(S(),'Desktop',0);persist()});B('⬇️','Hifadhi kwenye Kompyuta (Download)',()=>saveOut(S()));B('📤','Pakia faili kutoka Kompyuta',()=>pickUpload(cur&&cur!==BIN?cur:'Desktop'));B('📌','Pin Taskbar',()=>{S().forEach(a=>pinFile(...a));persist()});B('➕','Folda mpya',()=>cur?alert('Fungua "Kompyuta Hii" kutengeneza folda mpya.'):newF());
+ B('🖥️','Tuma Desktop',()=>{xfer(S(),'Desktop',0);persist()});B('⬇️','Hifadhi kwenye Kompyuta (Download)',()=>saveOut(S()));B('📤','Pakia faili kutoka Kompyuta',()=>pickUpload(cur&&cur!==BIN?cur:'Desktop'));B('📌','Pin Taskbar',()=>{S().forEach(a=>pinFile(...a));persist()});B('⬆️','Weka mbele (kwanza kwenye orodha)',()=>setFr(S().map(a=>FK(...a)),1));B('↧','Toa mbele',()=>setFr(S().map(a=>FK(...a)),0));B('🔤','Panga A→Z / Z→A',togSort);B('➕','Folda mpya',()=>cur?alert('Fungua "Kompyuta Hii" kutengeneza folda mpya.'):newF());
  const mb=B('☑','Chagua vingi (multi-select)',()=>{multi=!multi;mb.style.background=multi?'#cce4f7':''});
  const row=E('div');row.style.cssText='display:flex;flex:1;min-height:0';row.append(side,body);body.style.flex=1;body.style.overflow='auto';
  const status=()=>{stt.textContent=n+' vitu'+(sel.size?'  ·  '+sel.size+' vimechaguliwa':'')+(CB?'  ·  📋 '+CB.items.length+(CB.cut?' vimekatwa':' vimenakiliwa'):'')};
@@ -558,12 +569,12 @@ function explorer(f){
   body.innerHTML='';body.classList.add('lst');body.dataset.fold=cur||'';order=[];n=0;const t=q.value.toLowerCase();
   body.append(E('div','lh','<span>#</span><span></span><span>Jina</span><span>Aina</span>'));
   const mk=(ic,name,ty,fn,key)=>{n++;order.push(key);const cut=CB&&CB.cut&&cur&&CB.items.some(x=>x[0]===cur&&x[1]===key);
-   const i=E('div','it'+(sel.has(key)?' sel':'')+(cut?' cut':''),'<em>'+String(n).padStart(2,'0')+'</em><b>'+ic+'</b><span>'+esc(name)+'</span><small>'+ty+'</small>');i.dataset.k=key;if(!cur)i.dataset.fold=key;
+   const i=E('div','it'+(sel.has(key)?' sel':'')+(cut?' cut':''),'<em>'+String(n).padStart(2,'0')+'</em><b>'+ic+'</b><span>'+(isFr(cur?FK(cur,key):'k:'+key)?'📌 ':'')+esc(name)+'</span><small>'+ty+'</small>');i.dataset.k=key;if(!cur)i.dataset.fold=key;
    i.ondblclick=()=>{if(!multi&&Date.now()-lpT>700)fn()};i.onclick=e=>{ACT=ctx;pick(key,e)};
    i.onpointerdown=e=>{if(!cur||e.pointerType!=='mouse'||e.button)return;if(!sel.has(key)&&!e.ctrlKey){sel.clear();sel.add(key);paint()}drag(e,S)};
-   lp(i,(x,y)=>{ACT=ctx;if(!cur)return menu(x,y,[['Fungua',()=>go(key)],['Futa folda',()=>delF(key),!V.U.includes(key)]]);if(!sel.has(key)){sel.clear();sel.add(key);paint()}fileMenu(x,y,cur,[...sel])});body.append(i)};
-  if(!cur)keys().filter(k=>k.toLowerCase().includes(t)).forEach(k=>mk(k===BIN?'🗑️':k==='Desktop'?'🖥️':'📁',k,'Folda · '+V.F[k].length+' vitu',()=>go(k),k));
-  else V.F[cur].filter(e=>e.n.toLowerCase().includes(t)).sort((x,y)=>x.n.localeCompare(y.n,undefined,{sensitivity:'base'})).forEach(e=>mk(fi(e.o[1]),e.n,ext(e.n).toUpperCase()+' · Faili',()=>cur===BIN?alert('Rejesha faili kwanza ili kulifungua.'):openE(e),e.n));
+   lp(i,(x,y)=>{ACT=ctx;if(!cur)return menu(x,y,[['Fungua',()=>go(key)],[isFr('k:'+key)?'⬇️ Toa mbele':'⬆️ Weka mbele',()=>setFr(['k:'+key],!isFr('k:'+key))],['Futa folda',()=>delF(key),!V.U.includes(key)]]);if(!sel.has(key)){sel.clear();sel.add(key);paint()}fileMenu(x,y,cur,[...sel])});body.append(i)};
+  if(!cur)keys().filter(k=>k.toLowerCase().includes(t)).sort((a,b)=>cmpF('k:'+a,a,'k:'+b,b)).forEach(k=>mk(k===BIN?'🗑️':k==='Desktop'?'🖥️':'📁',k,'Folda · '+V.F[k].length+' vitu',()=>go(k),k));
+  else V.F[cur].filter(e=>e.n.toLowerCase().includes(t)).sort((x,y)=>cmpF(FK(cur,x.n),x.n,FK(cur,y.n),y.n)).forEach(e=>mk(fi(e.o[1]),e.n,ext(e.n).toUpperCase()+' · Faili',()=>cur===BIN?alert('Rejesha faili kwanza ili kulifungua.'):openE(e),e.n));
   status()}
  lp(body,(x,y,e)=>{if(e.target.closest('.it'))return;ACT=ctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste(cur),!CB||!cur],['Chagua zote',ctx.all,!cur],['➕ Folda mpya',newF,!!cur],['🔄 Onyesha upya',draw],cur===BIN?['🧹 Mwaga Recycle Bin',()=>del(V.F[BIN].map(a=>[BIN,a.n])),!V.F[BIN].length]:null].filter(Boolean))});
  q.oninput=draw;EXP.add(draw);draw();box.append(nav,tbr,row,stt);win('Explorer','📁',680,420,box,()=>{EXP.delete(draw);if(ACT===ctx)ACT=dctx})}
@@ -572,15 +583,15 @@ const D=$('#desk');D.dataset.fold='Desktop';
 const dctx={folder:()=>'Desktop',S:()=>[...dsel].map(x=>['Desktop',x]),all:()=>{V.F.Desktop.forEach(e=>dsel.add(e.n));paintD()}};ACT=dctx;
 const paintD=()=>D.querySelectorAll(':scope>.ic').forEach(r=>r.classList.toggle('s',dsel.has(r.dataset.k)));
 const WP=['linear-gradient(135deg,#0b3d91,#1e88e5 55%,#5ec8ff)','linear-gradient(135deg,#1b5e20,#43a047 55%,#a5d6a7)','linear-gradient(135deg,#4a148c,#8e24aa 55%,#f48fb1)','linear-gradient(135deg,#111,#37474f 60%,#78909c)'];
-function drawDesk(){document.body.style.background=WP[V.wp%WP.length];D.querySelectorAll(':scope>.ic').forEach(x=>x.remove());
- DI.forEach(([i,name,fn,fl],k)=>{if(fl)return;const d=E('div','ic','<b>'+i+'</b>'+name);d.dataset.k='#'+k;d.ondblclick=()=>{if(Date.now()-lpT>700)fn()};d.onclick=()=>{dsel.clear();paintD();d.classList.add('s');ACT=dctx};
-  lp(d,(x,y)=>menu(x,y,[['Fungua',fn],['📌 Pin kwenye Taskbar',()=>{if(!V.pin.some(p=>p.t==='d'&&p.k===k))V.pin.push({t:'d',k});persist()}]]));D.append(d)});
- V.F.Desktop.forEach(e=>{const d=E('div','ic','<b>'+fi(e.o[1])+'</b>'+esc(e.n));d.dataset.k=e.n;d.ondblclick=()=>{if(Date.now()-lpT>700)openE(e)};
+function drawDesk(){const LL=[];document.body.style.background=WP[V.wp%WP.length];D.querySelectorAll(':scope>.ic').forEach(x=>x.remove());
+ DI.forEach(([i,name,fn,fl],k)=>{if(fl)return;const d=E('div','ic','<b>'+i+'</b>'+(isFr('d:'+name)?'📌 ':'')+name);d.dataset.k='#'+k;d.ondblclick=()=>{if(Date.now()-lpT>700)fn()};d.onclick=()=>{dsel.clear();paintD();d.classList.add('s');ACT=dctx};
+  lp(d,(x,y)=>menu(x,y,[['Fungua',fn],[isFr('d:'+name)?'↧ Toa mbele':'⬆️ Weka mbele',()=>setFr(['d:'+name],!isFr('d:'+name))],['📌 Pin kwenye Taskbar',()=>{if(!V.pin.some(p=>p.t==='d'&&p.k===k))V.pin.push({t:'d',k});persist()}]]));LL.push(['d:'+name,name,d])});
+ V.F.Desktop.forEach(e=>{const d=E('div','ic','<b>'+fi(e.o[1])+'</b>'+(isFr(FK('Desktop',e.n))?'📌 ':'')+esc(e.n));d.dataset.k=e.n;d.ondblclick=()=>{if(Date.now()-lpT>700)openE(e)};
   d.onclick=ev=>{ACT=dctx;if(!(ev.ctrlKey||ev.metaKey))dsel.clear();dsel.has(e.n)?dsel.delete(e.n):dsel.add(e.n);paintD()};
   d.onpointerdown=ev=>{if(ev.pointerType!=='mouse'||ev.button)return;if(!dsel.has(e.n)){if(!ev.ctrlKey)dsel.clear();dsel.add(e.n);paintD()}drag(ev,dctx.S)};
-  lp(d,(x,y)=>{ACT=dctx;if(!dsel.has(e.n)){dsel.clear();dsel.add(e.n);paintD()}fileMenu(x,y,'Desktop',[...dsel])});D.append(d)});paintD()}
+  lp(d,(x,y)=>{ACT=dctx;if(!dsel.has(e.n)){dsel.clear();dsel.add(e.n);paintD()}fileMenu(x,y,'Desktop',[...dsel])});LL.push([FK('Desktop',e.n),e.n,d])});LL.sort((a,b)=>cmpF(a[0],a[1],b[0],b[1])).forEach(x=>D.append(x[2]));paintD()}
 D.addEventListener('click',e=>{if(e.target===D){dsel.clear();paintD();ACT=dctx}});
-lp(D,(x,y,e)=>{if(e.target.closest('.ic,.w'))return;ACT=dctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste('Desktop'),!CB],['Chagua zote',dctx.all],['📤 Pakia faili kutoka Kompyuta',()=>pickUpload('Desktop')],['🔄 Onyesha upya',refresh],['🖼️ Badilisha mandhari',()=>{V.wp=(V.wp+1)%WP.length;persist()}],['⚙️ Settings (Personalize)',()=>settings()],['💻 Kompyuta Hii',()=>explorer()]])});
+lp(D,(x,y,e)=>{if(e.target.closest('.ic,.w'))return;ACT=dctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste('Desktop'),!CB],['Chagua zote',dctx.all],['📤 Pakia faili kutoka Kompyuta',()=>pickUpload('Desktop')],['🔄 Onyesha upya',refresh],[V.sort==='az'?'🔤 Panga: Z→A':'🔤 Panga: A→Z',togSort],['⛶ Skrini nzima (F11)',toggleFS],['🖼️ Badilisha mandhari',()=>{V.wp=(V.wp+1)%WP.length;persist()}],['⚙️ Settings (Personalize)',()=>settings()],['💻 Kompyuta Hii',()=>explorer()]])});
 /* ----- Taskbar pins na Start ----- */
 function drawPins(){const P=$('#pins');P.innerHTML='';V.pin.forEach((p,i)=>{let ic,ti,fn;if(p.t==='d'){const d=DI[p.k];if(!d)return;ic=d[0];ti=d[1];fn=d[2]}else{ic=fi(p.o[1]);ti=p.n;fn=()=>openE({n:p.n,o:p.o})}
  const b=E('button','',ic);b.title=ti;b.onclick=fn;lp(b,(x,y)=>menu(x,y,[['Fungua',fn],['📌 Ondoa kwenye Taskbar',()=>{V.pin.splice(i,1);persist()}]]));P.append(b)})}
@@ -590,8 +601,17 @@ lp(M,(x,y,e)=>{const s=e.target.closest&&e.target.closest('.pg6 .sa');if(!s)retu
 /* ----- Kinanda: Ctrl+C / X / V, Delete, F2, Ctrl+A ----- */
 addEventListener('keydown',e=>{if(!ACT||/INPUT|TEXTAREA/.test(e.target.tagName))return;const c=e.ctrlKey||e.metaKey,k=e.key.toLowerCase();
  if(c&&k==='c'){cp(ACT.S(),0)}else if(c&&k==='x'){cp(ACT.S(),1)}else if(c&&k==='v'){paste(ACT.folder())}else if(c&&k==='a'){e.preventDefault();ACT.all()}else if(k==='delete'){del(ACT.S())}else if(k==='f2'){const s=ACT.S();if(s.length===1)ren(...s[0])}});
+/* ----- SKRINI NZIMA ----- */
+const fsOn=()=>document.fullscreenElement||document.webkitFullscreenElement;
+function toggleFS(){const d=document.documentElement;try{if(fsOn()){localStorage.setItem('sade_fs','0');(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{localStorage.setItem('sade_fs','1');const p=(d.requestFullscreen||d.webkitRequestFullscreen).call(d);p&&p.catch&&p.catch(()=>{})}}catch(e){}}
+$('#fsb').onclick=e=>{e.stopPropagation();toggleFS()};
+const fsUp=()=>{$('#fsb').textContent=fsOn()?'🗗':'⛶';$('#fsb').title=fsOn()?'Toka skrini nzima':'Skrini nzima'};
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,fsUp));
+const fsAuto=()=>{removeEventListener('pointerdown',fsAuto,true);removeEventListener('keydown',fsAuto,true);if(localStorage.getItem('sade_fs')!=='0'&&!fsOn()){try{const d=document.documentElement,p=(d.requestFullscreen||d.webkitRequestFullscreen).call(d);p&&p.catch&&p.catch(()=>{})}catch(e){}}};
+addEventListener('pointerdown',fsAuto,true);addEventListener('keydown',fsAuto,true);
 refresh();
 </script>
+<style>html,body{height:100dvh;width:100vw}#fsb{background:none;border:0;font-size:16px;width:34px;height:34px;border-radius:6px;cursor:pointer;color:inherit}#fsb:hover{background:rgba(127,127,127,.25)}</style>
 <style id="w11">
 :root{--ac:#0067c0;--mica:rgba(243,243,243,.82);--fg:#1a1a1a;--bd:rgba(0,0,0,.12)}
 body.dark{--mica:rgba(32,32,32,.86);--fg:#fff;--bd:rgba(255,255,255,.14)}
@@ -869,15 +889,4 @@ settings=function(){
   const a=card('Accent color');['#0067c0','#107c10','#c42b1c','#8764b8','#ca5010','#00b7c3','#e3008c','#767676'].forEach(c=>{const d=E('div','ac1'+(Sx.acc===c?' on':''));d.style.background=c;d.onclick=()=>{Sx.acc=c;sv();applyS();draw()};a.append(d)});
   tog(card('<span style="flex:1">🌓 Dark mode</span>'),'dark')},
  '🖥️ System':()=>{main.innerHTML='<h3>System</h3>';let c=card('<span>☀️ Brightness</span>');rng(c,'br',20);tog(card('<span style="flex:1">🌙 Night light</span>'),'nl');c=card('<span>🔊 Volume</span>');rng(c,'vol',0);tog(card('<span style="flex:1">🌿 Battery saver</span>'),'bs')},
- '📡 Mtandao':()=>{main.innerHTML='<h3>Mtandao</h3>';card('<span style="flex:1">'+(navigator.onLine?'🟢 Uko online':'🔴 Uko offline')+'</span>');sw('📶 Wi-Fi','wifi');sw('🔵 Bluetooth','bt');sw('✈️ Airplane mode','air');const c=card('');btn(c,'📡 Fungua Network Status',()=>openF('Programu (Programs)','Microsoft-Network.exe'))},
- '♿ Accessibility':()=>{main.innerHTML='<h3>Accessibility</h3>';const c=card('<span>🔎 Ukubwa wa icons</span>');const i=rng(c,'isz',70,170);i.step=10;sw('🌗 Utofautishaji wa juu','hc');sw('⚫ Rangi za kijivu','gs');sw('🔄 Geuza rangi (invert)','inv');sw('🐢 Punguza mwendo','ra')},
- '💾 Hifadhi':()=>{main.innerHTML='<h3>Hifadhi</h3>';card('<div>Mafaili: <b>'+Object.values(V.F).reduce((a,b)=>a+b.length,0)+'</b> · Recycle Bin: <b>'+V.F[BIN].length+'</b> · Offline (cache): <b>'+OFFN+'</b></div>');const c=card('');btn(c,'💾 Hifadhi & Offline',()=>storageWin());btn(c,'🧹 Storage Sense',()=>openF('Programu (Programs)','Microsoft-DiskCleanup.exe'));btn(c,'🛡️ Backup & Restore',()=>openF('Programu (Programs)','Microsoft-Backup.exe'))},
- '🧰 Zana za Mfumo':()=>{main.innerHTML='<h3>Zana za Mfumo</h3>';NEWAPPS.forEach(a=>{const c=card('<div class="apr"><b>'+a[1]+'</b><div>'+a[2]+'<small>'+a[3]+'</small></div></div>');btn(c,'Fungua',()=>openF('Programu (Programs)',a[0]))})},
- 'ℹ️ About':()=>{main.innerHTML='<h3>About</h3>';card('<div><b>SADE-PC</b><br>Windows 11 Pro · Sade Computer<br>Version 23H2 · OS build 22631<br>Mafaili: '+Object.values(V.F).reduce((a,b)=>a+b.length,0)+' · Recycle Bin: '+V.F[BIN].length+'<br>Picha ya Desktop: '+wpName()+'</div>')}};
- function draw(){side.innerHTML='';tabs.innerHTML='';Object.keys(PG).forEach(k=>{const d=E('div',k===cur?'on':'',k);d.onclick=()=>{cur=k;draw()};side.append(d);const b=E('button','',k.split(' ')[0]);b.title=k;b.style.background=k===cur?'rgba(127,127,127,.25)':'';b.onclick=d.onclick;tabs.append(b)});const y=main.scrollTop;PG[cur]();main.scrollTop=y}
- SETD=draw;draw();win('Settings','⚙️',720,520,box,()=>{if(SETD===draw)SETD=null})};
-applyWP();applyA();
-})();
-</script>
-
-</body></html>
+ '📡 M
