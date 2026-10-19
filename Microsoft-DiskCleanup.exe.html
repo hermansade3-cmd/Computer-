@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Storage Sense</title>
+<style>html{color-scheme:light}body{margin:0;padding:14px;font:14px 'Segoe UI',system-ui,sans-serif;background:#fafafa;color:#1a1a1a}
+.dk body{background:#272727;color:#eee}.dk input,.dk textarea,.dk select{background:#333;color:#fff;border-color:#555}
+h2{margin:0 0 10px;font-size:18px}button{padding:7px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;color:#1a1a1a;cursor:pointer;font:inherit}button:hover{background:#e8f1fb}button:disabled{opacity:.5;cursor:default}
+.dk button{background:#3a3a3a;color:#fff;border-color:#555}.dk button:hover{background:#4a4a4a}
+button.p,button.on{background:#0067c0;color:#fff;border-color:#0067c0}
+input,textarea,select{padding:7px 9px;border:1px solid #bbb;border-radius:6px;font:inherit;max-width:100%;box-sizing:border-box}
+.c{background:rgba(127,127,127,.12);border-radius:8px;padding:12px;margin:0 0 10px}.r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse}td{border-bottom:1px solid rgba(127,127,127,.25);padding:6px 4px;vertical-align:top;word-break:break-word}td:first-child{width:38%;opacity:.75}
+.bar2{height:12px;border-radius:6px;background:rgba(127,127,127,.3);overflow:hidden;margin-top:8px}.bar2 i{display:block;height:100%;background:#0067c0}.m{opacity:.75;font-size:12px}a{color:inherit;text-decoration:none}</style></head><body>
+<h2>🧹 Storage Sense</h2><div class="c"><b>Nafasi iliyotumika</b><div id="u"></div></div><div class="c"><div id="l"></div><div id="b"></div><div id="o"></div></div><div class="r"><button class="p" id="eb">🗑️ Futa Recycle Bin</button><button id="cc">🧹 Futa cache ya mfumo</button><button id="pr">🛡️ Hifadhi ya kudumu</button><button id="st">💾 Hifadhi &amp; Offline</button></div><p id="m"></p>
+<script>
+const P=(()=>{try{if(parent!==window&&parent.document)return parent}catch(e){}return window})();try{if(P.document.body.classList.contains("dark"))document.documentElement.classList.add("dk")}catch(e){}
+(function(){
+ const $=s=>document.querySelector(s),LS=P.localStorage,S=P.SADE,BK='Recycle Bin',mb=n=>(n/1048576).toFixed(1)+' MB',msg=t=>{$('#m').textContent=t};
+ const getV=()=>{if(S)return S.V();try{return JSON.parse(LS.getItem('sadevfs2')||'{}')}catch(e){return {}}};
+ const binN=()=>{const v=getV();return v.F&&v.F[BK]?v.F[BK].length:0};
+ const idb=fn=>new Promise(r=>{try{const q=P.indexedDB.open('SadeComputerDB',1);q.onupgradeneeded=()=>{q.result.createObjectStore('files');q.result.createObjectStore('meta')};q.onsuccess=()=>{const d=q.result;try{fn(d,x=>{d.close();r(x)})}catch(e){d.close();r(0)}};q.onerror=()=>r(0)}catch(e){r(0)}});
+ const keysN=()=>idb((d,done)=>{const t=d.transaction('files','readonly').objectStore('files').getAllKeys();t.onsuccess=()=>done(t.result.length);t.onerror=()=>done(0)});
+ const clearC=async()=>{if(S){await S.clearSys();return}await idb((d,done)=>{const t=d.transaction(['files','meta'],'readwrite');t.objectStore('files').clear();t.objectStore('meta').clear();t.oncomplete=()=>done(1);t.onerror=()=>done(0)});try{const d=await(await navigator.storage.getDirectory()).getDirectoryHandle('sade');await d.removeEntry('files',{recursive:true})}catch(e){}};
+ async function draw(){
+  const est=navigator.storage&&navigator.storage.estimate?await navigator.storage.estimate():null;let ls=0;for(let i=0;i<LS.length;i++){const k=LS.key(i);ls+=k.length+(LS.getItem(k)||'').length}
+  $('#u').innerHTML=est?'<b>'+mb(est.usage)+'</b> kati ya '+mb(est.quota)+'<div class="bar2"><i style="width:'+Math.min(100,est.usage/est.quota*100).toFixed(1)+'%"></i></div>':'Taarifa ya nafasi haipatikani';
+  $('#l').textContent='• '+(ls/1024).toFixed(1)+' KB — mipangilio na orodha ya mafaili';
+  $('#b').textContent='• '+binN()+' vitu kwenye Recycle Bin';
+  $('#o').textContent='• '+(await keysN())+' mafaili ya mfumo yamehifadhiwa offline (cache)'}
+ $('#eb').onclick=()=>{if(!binN()){msg('Recycle Bin ni tupu');return}if(!confirm('Futa kabisa vitu vyote kwenye Recycle Bin?'))return;
+  if(S){S.V().F[BK]=[];S.persist()}else{const v=getV();v.F=v.F||{};v.F[BK]=[];LS.setItem('sadevfs2',JSON.stringify(v))}draw();msg('✅ Recycle Bin imefutwa')};
+ $('#cc').onclick=async()=>{if(!confirm('Futa mafaili ya mfumo yaliyohifadhiwa offline? (Mafaili uliyopakia hayafutwi; yatapakuliwa tena ukiwa online.)'))return;await clearC();draw();msg('✅ Cache ya mfumo imefutwa')};
+ $('#pr').onclick=async()=>{const r=navigator.storage&&navigator.storage.persist?await navigator.storage.persist():false;msg(r?'✅ Hifadhi ya kudumu imeruhusiwa':'Kivinjari kimekataa (jaribu baada ya kuweka app kwenye skrini ya nyumbani)')};
+ $('#st').onclick=()=>{if(S)S.storageWin();else msg('Dirisha la Hifadhi & Offline linapatikana ndani ya Sade Computer')};
+ draw();
+})();
+</script></body></html>

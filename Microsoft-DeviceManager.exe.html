@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Device Manager</title>
+<style>html{color-scheme:light}body{margin:0;padding:14px;font:14px 'Segoe UI',system-ui,sans-serif;background:#fafafa;color:#1a1a1a}
+.dk body{background:#272727;color:#eee}.dk input,.dk textarea,.dk select{background:#333;color:#fff;border-color:#555}
+h2{margin:0 0 10px;font-size:18px}button{padding:7px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;color:#1a1a1a;cursor:pointer;font:inherit}button:hover{background:#e8f1fb}button:disabled{opacity:.5;cursor:default}
+.dk button{background:#3a3a3a;color:#fff;border-color:#555}.dk button:hover{background:#4a4a4a}
+button.p,button.on{background:#0067c0;color:#fff;border-color:#0067c0}
+input,textarea,select{padding:7px 9px;border:1px solid #bbb;border-radius:6px;font:inherit;max-width:100%;box-sizing:border-box}
+.c{background:rgba(127,127,127,.12);border-radius:8px;padding:12px;margin:0 0 10px}.r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse}td{border-bottom:1px solid rgba(127,127,127,.25);padding:6px 4px;vertical-align:top;word-break:break-word}td:first-child{width:38%;opacity:.75}
+.bar2{height:12px;border-radius:6px;background:rgba(127,127,127,.3);overflow:hidden;margin-top:8px}.bar2 i{display:block;height:100%;background:#0067c0}.m{opacity:.75;font-size:12px}a{color:inherit;text-decoration:none}</style></head><body>
+<h2>🖥️ Taarifa za Mfumo</h2><div class="r" style="margin-bottom:10px"><button class="p" id="rf">🔄 Onyesha upya</button><button id="cp">📋 Nakili taarifa</button></div><div id="o"></div>
+<script>
+const P=(()=>{try{if(parent!==window&&parent.document)return parent}catch(e){}return window})();try{if(P.document.body.classList.contains("dark"))document.documentElement.classList.add("dk")}catch(e){}
+(function(){
+ const $=s=>document.querySelector(s),n=navigator;let txt='';
+ const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+ const gpu=()=>{try{const c=document.createElement('canvas').getContext('webgl'),e=c&&c.getExtension('WEBGL_debug_renderer_info');return e?c.getParameter(e.UNMASKED_RENDERER_WEBGL):(c?'WebGL ipo':'Haipatikani')}catch(e){return 'Haipatikani'}};
+ const yn=b=>b?'✅ Ndiyo':'❌ Hapana';
+ async function draw(){
+  let bat=null,est=null;try{bat=n.getBattery?await n.getBattery():null}catch(e){}try{est=n.storage&&n.storage.estimate?await n.storage.estimate():null}catch(e){}
+  const c=n.connection,mb=x=>(x/1048576).toFixed(0)+' MB';let tz='?';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}
+  const G=[
+   ['💻 Kompyuta',[['Jina','SADE-PC'],['Mfumo (platform)',n.platform||'?'],['Lugha',n.language],['Saa za eneo',tz],['Kivinjari',n.userAgent]]],
+   ['⚙️ Processor & Kumbukumbu',[['Cores za CPU',n.hardwareConcurrency||'?'],['RAM (takriban)',n.deviceMemory?'≥ '+n.deviceMemory+' GB':'?'],['GPU',gpu()]]],
+   ['🖥️ Skrini',[['Azimio la skrini',screen.width+' × '+screen.height],['Dirisha',P.innerWidth+' × '+P.innerHeight],['Pixel ratio',P.devicePixelRatio],['Color depth',screen.colorDepth+' bit']]],
+   ['🖱️ Pembejeo',[['Touch points',n.maxTouchPoints||0],['Skrini ya kugusa',yn(P.matchMedia('(pointer:coarse)').matches)]]],
+   ['🔋 Betri',bat?[['Kiwango',Math.round(bat.level*100)+'%'],['Inachaji',yn(bat.charging)]]:[['Betri','Haipatikani kwenye kivinjari hiki']]],
+   ['📡 Mtandao',[['Hali',n.onLine?'🟢 Online':'🔴 Offline']].concat(c?[['Aina',c.effectiveType||'?'],['Downlink',c.downlink!=null?c.downlink+' Mbps':'?']]:[])],
+   ['💾 Hifadhi',est?[['Imetumika',mb(est.usage)],['Kiasi kinachoruhusiwa',mb(est.quota)]]:[['Hifadhi','Haipatikani']]],
+   ['🧩 Vipengele',[['IndexedDB',yn(!!P.indexedDB)],['File System (OPFS)',yn(!!(n.storage&&n.storage.getDirectory))],['Service Worker',yn('serviceWorker' in n)],['WebGPU',yn(!!n.gpu)],['Bluetooth',yn(!!n.bluetooth)],['Geolocation',yn('geolocation' in n)],['Kamera/Maikrofoni',yn(!!(n.mediaDevices&&n.mediaDevices.getUserMedia))],['Kurekodi skrini',yn(!!(n.mediaDevices&&n.mediaDevices.getDisplayMedia))],['Kusoma kwa sauti (TTS)',yn('speechSynthesis' in P)],['Clipboard',yn(!!n.clipboard)],['Vibration',yn('vibrate' in n)]]]
+  ];
+  txt='SADE-PC — Taarifa za Mfumo\n';
+  $('#o').innerHTML=G.map(g=>{txt+='\n'+g[0]+'\n'+g[1].map(x=>'  '+x[0]+': '+x[1]).join('\n')+'\n';return '<div class="c"><b>'+g[0]+'</b><table>'+g[1].map(x=>'<tr><td>'+esc(x[0])+'</td><td>'+esc(x[1])+'</td></tr>').join('')+'</table></div>'}).join('');
+ }
+ $('#rf').onclick=draw;
+ $('#cp').onclick=async()=>{try{await n.clipboard.writeText(txt)}catch(e){const t=document.createElement('textarea');t.value=txt;document.body.append(t);t.select();document.execCommand('copy');t.remove()}$('#cp').textContent='✅ Imenakiliwa'};
+ draw();
+})();
+</script></body></html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contacts</title>
+<style>html{color-scheme:light}body{margin:0;padding:14px;font:14px 'Segoe UI',system-ui,sans-serif;background:#fafafa;color:#1a1a1a}
+.dk body{background:#272727;color:#eee}.dk input,.dk textarea,.dk select{background:#333;color:#fff;border-color:#555}
+h2{margin:0 0 10px;font-size:18px}button{padding:7px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;color:#1a1a1a;cursor:pointer;font:inherit}button:hover{background:#e8f1fb}button:disabled{opacity:.5;cursor:default}
+.dk button{background:#3a3a3a;color:#fff;border-color:#555}.dk button:hover{background:#4a4a4a}
+button.p,button.on{background:#0067c0;color:#fff;border-color:#0067c0}
+input,textarea,select{padding:7px 9px;border:1px solid #bbb;border-radius:6px;font:inherit;max-width:100%;box-sizing:border-box}
+.c{background:rgba(127,127,127,.12);border-radius:8px;padding:12px;margin:0 0 10px}.r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse}td{border-bottom:1px solid rgba(127,127,127,.25);padding:6px 4px;vertical-align:top;word-break:break-word}td:first-child{width:38%;opacity:.75}
+.bar2{height:12px;border-radius:6px;background:rgba(127,127,127,.3);overflow:hidden;margin-top:8px}.bar2 i{display:block;height:100%;background:#0067c0}.m{opacity:.75;font-size:12px}a{color:inherit;text-decoration:none}</style></head><body>
+<h2>👥 Contacts</h2><div class="c"><div class="r"><input id="fn" placeholder="Jina" style="flex:1;min-width:120px"><input id="fp" placeholder="Namba ya simu" inputmode="tel" style="flex:1;min-width:120px"><input id="fe" placeholder="Barua pepe (hiari)" style="flex:1;min-width:140px"></div><div class="r" style="margin-top:8px"><button class="p" id="sv">💾 Hifadhi</button><button id="cn" style="display:none">Ghairi</button></div></div><div class="r" style="margin-bottom:8px"><input id="q" placeholder="🔍 Tafuta" style="flex:1"><button id="vc">⬇️ vCard</button><button id="cs">⬇️ CSV</button><span class="m" id="n"></span></div><div id="l"></div>
+<script>
+const P=(()=>{try{if(parent!==window&&parent.document)return parent}catch(e){}return window})();try{if(P.document.body.classList.contains("dark"))document.documentElement.classList.add("dk")}catch(e){}
+(function(){
+ const $=s=>document.querySelector(s),LS=P.localStorage,K='sade_contacts';let L=[],ed=-1;try{L=JSON.parse(LS.getItem(K)||'[]')}catch(e){}
+ const save=()=>{try{LS.setItem(K,JSON.stringify(L))}catch(e){alert('Hifadhi imejaa')}};
+ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ function draw(){const q=$('#q').value.toLowerCase();
+  const arr=L.map((c,i)=>[c,i]).filter(x=>(x[0].n+' '+x[0].p+' '+x[0].e).toLowerCase().includes(q)).sort((a,b)=>a[0].n.localeCompare(b[0].n));
+  $('#l').innerHTML=arr.map(x=>{const c=x[0],i=x[1];return '<div class="c"><b>'+esc(c.n)+'</b><br><span class="m">'+esc(c.p)+(c.e?' · '+esc(c.e):'')+'</span><div class="r" style="margin-top:6px">'+(c.p?'<a target="_top" href="tel:'+esc(c.p)+'"><button>📞 Piga</button></a><a target="_top" href="sms:'+esc(c.p)+'"><button>💬 SMS</button></a>':'')+'<button data-e="'+i+'">✏️ Badili</button><button data-d="'+i+'">🗑️ Futa</button></div></div>'}).join('')||'<p class="m">Hakuna mawasiliano.</p>';
+  $('#n').textContent=L.length+' mawasiliano'}
+ const clr=()=>{ed=-1;$('#fn').value=$('#fp').value=$('#fe').value='';$('#cn').style.display='none';$('#sv').textContent='💾 Hifadhi'};
+ $('#sv').onclick=()=>{const n=$('#fn').value.trim(),p=$('#fp').value.trim(),e=$('#fe').value.trim();if(!n&&!p){$('#fn').focus();return}const c={n:n||p,p,e};if(ed>=0)L[ed]=c;else L.push(c);save();clr();draw()};
+ $('#cn').onclick=clr;$('#q').oninput=draw;
+ $('#l').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.d!=null){if(confirm('Futa mawasiliano haya?')){L.splice(+b.dataset.d,1);save();draw()}}else if(b.dataset.e!=null){ed=+b.dataset.e;const c=L[ed];$('#fn').value=c.n;$('#fp').value=c.p;$('#fe').value=c.e||'';$('#cn').style.display='';$('#sv').textContent='💾 Sasisha';scrollTo(0,0)}};
+ const out=(t,n,m)=>{const u=URL.createObjectURL(new Blob([t],{type:m})),a=document.createElement('a');a.href=u;a.download=n;document.body.append(a);a.click();a.remove()};
+ $('#vc').onclick=()=>out(L.map(c=>'BEGIN:VCARD\nVERSION:3.0\nFN:'+c.n+'\n'+(c.p?'TEL:'+c.p+'\n':'')+(c.e?'EMAIL:'+c.e+'\n':'')+'END:VCARD').join('\n'),'contacts.vcf','text/vcard');
+ $('#cs').onclick=()=>out('Jina,Simu,Barua pepe\n'+L.map(c=>[c.n,c.p,c.e||''].map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n'),'contacts.csv','text/csv');
+ draw();
+})();
+</script></body></html>

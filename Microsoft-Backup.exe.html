@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Backup & Restore</title>
+<style>html{color-scheme:light}body{margin:0;padding:14px;font:14px 'Segoe UI',system-ui,sans-serif;background:#fafafa;color:#1a1a1a}
+.dk body{background:#272727;color:#eee}.dk input,.dk textarea,.dk select{background:#333;color:#fff;border-color:#555}
+h2{margin:0 0 10px;font-size:18px}button{padding:7px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;color:#1a1a1a;cursor:pointer;font:inherit}button:hover{background:#e8f1fb}button:disabled{opacity:.5;cursor:default}
+.dk button{background:#3a3a3a;color:#fff;border-color:#555}.dk button:hover{background:#4a4a4a}
+button.p,button.on{background:#0067c0;color:#fff;border-color:#0067c0}
+input,textarea,select{padding:7px 9px;border:1px solid #bbb;border-radius:6px;font:inherit;max-width:100%;box-sizing:border-box}
+.c{background:rgba(127,127,127,.12);border-radius:8px;padding:12px;margin:0 0 10px}.r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse}td{border-bottom:1px solid rgba(127,127,127,.25);padding:6px 4px;vertical-align:top;word-break:break-word}td:first-child{width:38%;opacity:.75}
+.bar2{height:12px;border-radius:6px;background:rgba(127,127,127,.3);overflow:hidden;margin-top:8px}.bar2 i{display:block;height:100%;background:#0067c0}.m{opacity:.75;font-size:12px}a{color:inherit;text-decoration:none}</style></head><body>
+<h2>🛡️ Backup & Restore</h2><div class="c"><b>Nakala ya mfumo</b><p class="m" id="i"></p><p class="m">Nakala inajumuisha mipangilio, Desktop, folda zako, picha ya Desktop uliyopakia, na data ya programu (Contacts, Clipboard n.k.). Mafaili uliyopakia kutoka kompyuta (IndexedDB) hayamo — yahifadhi kupitia <b>Hifadhi &amp; Offline → folda ya kompyuta</b>.</p><div class="r"><button class="p" id="bk">⬇️ Hifadhi nakala (Backup)</button><button id="rb">⬆️ Rejesha nakala (Restore)</button></div><input type="file" id="rs" accept=".json,application/json" style="display:none"></div><p id="m"></p>
+<script>
+const P=(()=>{try{if(parent!==window&&parent.document)return parent}catch(e){}return window})();try{if(P.document.body.classList.contains("dark"))document.documentElement.classList.add("dk")}catch(e){}
+(function(){
+ const $=s=>document.querySelector(s),LS=P.localStorage;
+ const info=()=>{let b=0;for(let i=0;i<LS.length;i++){const k=LS.key(i);b+=k.length+(LS.getItem(k)||'').length}$('#i').textContent='Vipengele '+LS.length+' · '+(b/1024).toFixed(1)+' KB vitahifadhiwa'};
+ $('#bk').onclick=()=>{const o={app:'SadeComputer',v:1,t:new Date().toISOString(),ls:{}};for(let i=0;i<LS.length;i++){const k=LS.key(i);o.ls[k]=LS.getItem(k)}
+  const u=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download='SadeComputer-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();$('#m').textContent='✅ Nakala imehifadhiwa ('+Object.keys(o.ls).length+' vipengele)'};
+ $('#rb').onclick=()=>$('#rs').click();
+ $('#rs').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{let o;try{o=JSON.parse(r.result);if(o.app!=='SadeComputer'||!o.ls)throw 0}catch(x){$('#m').textContent='❌ Faili hili si nakala sahihi ya Sade Computer';return}
+  if(!confirm('Rejesha nakala hii? Mipangilio na orodha ya mafaili ya sasa vitabadilishwa.'))return;Object.keys(o.ls).forEach(k=>LS.setItem(k,o.ls[k]));try{P.sessionStorage.setItem('vr',1)}catch(x){}P.location.reload()};r.readAsText(f)};
+ info();
+})();
+</script></body></html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Screen Recorder</title>
+<style>html{color-scheme:light}body{margin:0;padding:14px;font:14px 'Segoe UI',system-ui,sans-serif;background:#fafafa;color:#1a1a1a}
+.dk body{background:#272727;color:#eee}.dk input,.dk textarea,.dk select{background:#333;color:#fff;border-color:#555}
+h2{margin:0 0 10px;font-size:18px}button{padding:7px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;color:#1a1a1a;cursor:pointer;font:inherit}button:hover{background:#e8f1fb}button:disabled{opacity:.5;cursor:default}
+.dk button{background:#3a3a3a;color:#fff;border-color:#555}.dk button:hover{background:#4a4a4a}
+button.p,button.on{background:#0067c0;color:#fff;border-color:#0067c0}
+input,textarea,select{padding:7px 9px;border:1px solid #bbb;border-radius:6px;font:inherit;max-width:100%;box-sizing:border-box}
+.c{background:rgba(127,127,127,.12);border-radius:8px;padding:12px;margin:0 0 10px}.r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse}td{border-bottom:1px solid rgba(127,127,127,.25);padding:6px 4px;vertical-align:top;word-break:break-word}td:first-child{width:38%;opacity:.75}
+.bar2{height:12px;border-radius:6px;background:rgba(127,127,127,.3);overflow:hidden;margin-top:8px}.bar2 i{display:block;height:100%;background:#0067c0}.m{opacity:.75;font-size:12px}a{color:inherit;text-decoration:none}</style></head><body>
+<h2>🎥 Screen Recorder</h2><div id="w" class="c" style="display:none">⚠ Kivinjari hiki hakiruhusu kurekodi skrini (mara nyingi Android WebView). Kwenye Chrome/Edge ya kompyuta kinafanya kazi.</div><div class="r"><button class="p" id="sh">📸 Picha ya skrini</button><button id="go">⏺ Anza kurekodi</button><label><input type="checkbox" id="au"> Sauti ya mfumo</label><label><input type="checkbox" id="mc"> Maikrofoni</label></div><p id="m" class="m"></p><div id="pv"></div>
+<script>
+const P=(()=>{try{if(parent!==window&&parent.document)return parent}catch(e){}return window})();try{if(P.document.body.classList.contains("dark"))document.documentElement.classList.add("dk")}catch(e){}
+(function(){
+ const $=s=>document.querySelector(s),md=navigator.mediaDevices;let rec=null,t0=0,tm=0;
+ if(!(md&&md.getDisplayMedia))$('#w').style.display='block';
+ const stamp=()=>new Date().toISOString().replace(/[:.]/g,'-').slice(0,19),msg=t=>{$('#m').textContent=t};
+ const dl=(u,n)=>{const a=document.createElement('a');a.href=u;a.download=n;document.body.append(a);a.click();a.remove()};
+ $('#sh').onclick=async()=>{try{const s=await md.getDisplayMedia({video:true}),v=document.createElement('video');v.srcObject=s;v.muted=true;await v.play();await new Promise(r=>setTimeout(r,350));const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);s.getTracks().forEach(t=>t.stop());c.toBlob(b=>{const u=URL.createObjectURL(b);$('#pv').innerHTML='<img style="max-width:100%;border-radius:8px" src="'+u+'">';dl(u,'skrini-'+stamp()+'.png');msg('✅ Picha ya skrini imehifadhiwa')},'image/png')}catch(e){msg('❌ '+(e&&e.message?e.message:'Imeghairiwa'))}};
+ $('#go').onclick=async()=>{
+  if(rec){rec.stop();return}
+  try{
+   const ds=await md.getDisplayMedia({video:true,audio:$('#au').checked});let tr=ds.getTracks().slice();
+   if($('#mc').checked){try{const ms=await md.getUserMedia({audio:true});tr=tr.concat(ms.getAudioTracks())}catch(e){msg('Maikrofoni imekataliwa — inaendelea bila hiyo')}}
+   const st=new MediaStream(tr),ch=[],mt=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(x=>window.MediaRecorder&&MediaRecorder.isTypeSupported(x));
+   rec=mt?new MediaRecorder(st,{mimeType:mt}):new MediaRecorder(st);
+   rec.ondataavailable=e=>{if(e.data.size)ch.push(e.data)};
+   rec.onstop=()=>{clearInterval(tm);tr.forEach(t=>t.stop());const b=new Blob(ch,{type:'video/webm'}),u=URL.createObjectURL(b);$('#pv').innerHTML='<video controls style="max-width:100%;border-radius:8px" src="'+u+'"></video><div class="r" style="margin-top:8px"><button class="p" id="sv">⬇️ Hifadhi video</button></div>';$('#sv').onclick=()=>dl(u,'rekodi-'+stamp()+'.webm');rec=null;$('#go').textContent='⏺ Anza kurekodi';msg('✅ Rekodi imekamilika ('+(b.size/1048576).toFixed(1)+' MB)')};
+   ds.getVideoTracks()[0].onended=()=>{if(rec&&rec.state!=='inactive')rec.stop()};
+   rec.start(1000);t0=Date.now();$('#go').textContent='⏹ Simamisha';tm=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);msg('🔴 Inarekodi… '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'))},500)
+  }catch(e){msg('❌ '+(e&&e.message?e.message:'Imeghairiwa'));rec=null}
+ };
+})();
+</script></body></html>

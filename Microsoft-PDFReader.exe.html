@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PDF Reader</title>
+<style>html{color-scheme:light}body{margin:0;padding:14px;font:14px 'Segoe UI',system-ui,sans-serif;background:#fafafa;color:#1a1a1a}
+.dk body{background:#272727;color:#eee}.dk input,.dk textarea,.dk select{background:#333;color:#fff;border-color:#555}
+h2{margin:0 0 10px;font-size:18px}button{padding:7px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;color:#1a1a1a;cursor:pointer;font:inherit}button:hover{background:#e8f1fb}button:disabled{opacity:.5;cursor:default}
+.dk button{background:#3a3a3a;color:#fff;border-color:#555}.dk button:hover{background:#4a4a4a}
+button.p,button.on{background:#0067c0;color:#fff;border-color:#0067c0}
+input,textarea,select{padding:7px 9px;border:1px solid #bbb;border-radius:6px;font:inherit;max-width:100%;box-sizing:border-box}
+.c{background:rgba(127,127,127,.12);border-radius:8px;padding:12px;margin:0 0 10px}.r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse}td{border-bottom:1px solid rgba(127,127,127,.25);padding:6px 4px;vertical-align:top;word-break:break-word}td:first-child{width:38%;opacity:.75}
+.bar2{height:12px;border-radius:6px;background:rgba(127,127,127,.3);overflow:hidden;margin-top:8px}.bar2 i{display:block;height:100%;background:#0067c0}.m{opacity:.75;font-size:12px}a{color:inherit;text-decoration:none}</style></head><body>
+<h2>📕 PDF Reader</h2><div class="r"><button class="p" id="op">📂 Fungua PDF</button><button id="dl" disabled>⬇️ Fungua nje / Pakua</button><span class="m" id="nm"></span></div><div id="w" class="c" style="display:none;margin-top:10px">⚠ Kivinjari hiki (mfano Android WebView) hakina kionyeshi cha PDF cha ndani. Bonyeza "Fungua nje / Pakua" kisha uifungue kwa programu ya PDF ya simu.</div><div id="li" style="margin-top:10px"></div><iframe id="v" style="width:100%;height:60vh;border:1px solid #8886;border-radius:8px;margin-top:10px;display:none;background:#fff"></iframe>
+<script>
+const P=(()=>{try{if(parent!==window&&parent.document)return parent}catch(e){}return window})();try{if(P.document.body.classList.contains("dark"))document.documentElement.classList.add("dk")}catch(e){}
+(function(){
+ const $=s=>document.querySelector(s),S=P.SADE;let cur=null;const can=navigator.pdfViewerEnabled!==false;
+ if(!can)$('#w').style.display='block';
+ const show=(blob,name)=>{if(cur)URL.revokeObjectURL(cur.u);cur={u:URL.createObjectURL(new Blob([blob],{type:'application/pdf'})),name};$('#nm').textContent=name;$('#dl').disabled=false;if(can){const v=$('#v');v.style.display='block';v.src=cur.u}};
+ $('#op').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='application/pdf,.pdf';i.onchange=()=>{const f=i.files[0];if(f)show(f,f.name)};i.click()};
+ $('#dl').onclick=()=>{if(!cur)return;const a=document.createElement('a');a.href=cur.u;a.download=cur.name;document.body.append(a);a.click();a.remove()};
+ const L=[];if(S){const V=S.V();Object.keys(V.F).forEach(fo=>V.F[fo].forEach(e=>{if(e.o[0]==='@imp'&&/\.pdf$/i.test(e.n))L.push([fo,e.n])}))}
+ $('#li').innerHTML=L.length?'<div class="c"><b>PDF ulizopakia kwenye kompyuta</b><div id="ll"></div></div>':'<p class="m">'+(S?'PDF utakazopakia kwenye Explorer (📤) zitaonekana hapa.':'Bonyeza "Fungua PDF" kuchagua faili.')+'</p>';
+ L.forEach(x=>{const b=document.createElement('button');b.style.cssText='display:block;margin:4px 0;width:100%;text-align:left';b.textContent='📕 '+x[1]+'  ('+x[0].split(' ')[0]+')';b.onclick=async()=>{const r=await S.blob(x[0],x[1]);if(r)show(r.blob,r.name)};$('#ll').append(b)});
+})();
+</script></body></html>

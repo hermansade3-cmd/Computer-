@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network Status</title>
+<style>html{color-scheme:light}body{margin:0;padding:14px;font:14px 'Segoe UI',system-ui,sans-serif;background:#fafafa;color:#1a1a1a}
+.dk body{background:#272727;color:#eee}.dk input,.dk textarea,.dk select{background:#333;color:#fff;border-color:#555}
+h2{margin:0 0 10px;font-size:18px}button{padding:7px 12px;border:1px solid #bbb;border-radius:6px;background:#fff;color:#1a1a1a;cursor:pointer;font:inherit}button:hover{background:#e8f1fb}button:disabled{opacity:.5;cursor:default}
+.dk button{background:#3a3a3a;color:#fff;border-color:#555}.dk button:hover{background:#4a4a4a}
+button.p,button.on{background:#0067c0;color:#fff;border-color:#0067c0}
+input,textarea,select{padding:7px 9px;border:1px solid #bbb;border-radius:6px;font:inherit;max-width:100%;box-sizing:border-box}
+.c{background:rgba(127,127,127,.12);border-radius:8px;padding:12px;margin:0 0 10px}.r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse}td{border-bottom:1px solid rgba(127,127,127,.25);padding:6px 4px;vertical-align:top;word-break:break-word}td:first-child{width:38%;opacity:.75}
+.bar2{height:12px;border-radius:6px;background:rgba(127,127,127,.3);overflow:hidden;margin-top:8px}.bar2 i{display:block;height:100%;background:#0067c0}.m{opacity:.75;font-size:12px}a{color:inherit;text-decoration:none}</style></head><body>
+<h2>📡 Network Status</h2><div class="c" id="s" style="font-size:16px"></div><div class="c"><table id="t"></table></div><div class="r"><button class="p" id="pg">⚡ Jaribu muunganisho</button><span id="pr" class="m"></span></div><h3 style="margin:14px 0 6px;font-size:14px">Historia</h3><pre id="lg" class="c" style="white-space:pre-wrap;font:12px Consolas,monospace;margin:0"></pre>
+<script>
+const P=(()=>{try{if(parent!==window&&parent.document)return parent}catch(e){}return window})();try{if(P.document.body.classList.contains("dark"))document.documentElement.classList.add("dk")}catch(e){}
+(function(){
+ const $=s=>document.querySelector(s),n=navigator,c=n.connection||n.mozConnection||n.webkitConnection,LG=[];
+ const log=t=>{LG.unshift(new Date().toLocaleTimeString()+' — '+t);LG.length=Math.min(LG.length,30);$('#lg').textContent=LG.join('\n')};
+ function draw(){const on=n.onLine;$('#s').innerHTML=on?'🟢 <b>Uko Online</b>':'🔴 <b>Uko Offline</b>';let u='?';try{u=P.location.href.slice(0,80)}catch(e){}
+  const r=[['Hali',on?'Online':'Offline']];
+  if(c)r.push(['Aina ya mtandao',c.type||'haijulikani'],['Kasi (effective)',c.effectiveType||'?'],['Downlink',c.downlink!=null?c.downlink+' Mbps':'?'],['RTT',c.rtt!=null?c.rtt+' ms':'?'],['Data saver',c.saveData?'Imewashwa':'Imezimwa']);else r.push(['Muunganisho','Taarifa hazipatikani kwenye kivinjari hiki']);
+  r.push(['Anwani ya mfumo',u]);$('#t').innerHTML=r.map(x=>'<tr><td>'+x[0]+'</td><td>'+x[1]+'</td></tr>').join('')}
+ addEventListener('online',()=>{draw();log('🟢 Imeunganishwa')});addEventListener('offline',()=>{draw();log('🔴 Muunganisho umekatika')});
+ if(c&&c.addEventListener)c.addEventListener('change',()=>{draw();log('Muunganisho umebadilika: '+(c.effectiveType||'?'))});
+ $('#pg').onclick=async()=>{$('#pr').textContent='Inajaribu…';let best=null;for(const u of['https://www.gstatic.com/generate_204','https://www.google.com/generate_204']){const t=performance.now();try{const ac=new AbortController(),to=setTimeout(()=>ac.abort(),6000);await fetch(u+'?t='+Date.now(),{mode:'no-cors',cache:'no-store',signal:ac.signal});clearTimeout(to);best=Math.round(performance.now()-t);break}catch(e){}}
+  const m=best!=null?'✅ Intaneti inafanya kazi · '+best+' ms':'❌ Imeshindwa kufikia intaneti';$('#pr').textContent=m;log(m)};
+ draw();log(n.onLine?'Hali ya kuanza: Online':'Hali ya kuanza: Offline');
+})();
+</script></body></html>
