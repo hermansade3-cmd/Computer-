@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Python IDE</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#1b1e2b;color:#d7dae0;font:13px Segoe UI,system-ui,sans-serif;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100%}#bar{display:flex;gap:6px;padding:6px;background:#252a3a;align-items:center;flex-wrap:wrap}
+button,select{background:#3776ab;color:#fff;border:0;padding:5px 12px;border-radius:4px;cursor:pointer;font:inherit}button.g{background:#3a4156}button.r{background:#c0392b}button:disabled{opacity:.5}
+#main{flex:1;display:flex;min-height:0}#side{width:170px;background:#20243a;overflow:auto}#side div{padding:5px 10px;cursor:pointer;display:flex}#side div:hover{background:#2c3250}#side div.on{background:#3776ab55}#side b{margin-left:auto;font-weight:400;opacity:.6}
+#ed{flex:1;display:flex;flex-direction:column;min-width:0}#wrap{flex:1;position:relative;min-height:0}
+#gut,#hl,#code{font:14px/21px Consolas,monospace;padding:8px 0}#gut{position:absolute;left:0;top:0;bottom:0;width:42px;text-align:right;padding-right:8px;color:#6b7089;overflow:hidden;white-space:pre}
+#hl,#code{position:absolute;left:42px;right:0;top:0;bottom:0;margin:0;padding:8px 10px;white-space:pre;overflow:auto;tab-size:4;border:0;outline:0}#hl{pointer-events:none;overflow:hidden}#code{background:transparent;color:transparent;caret-color:#fff;resize:none}#code::selection{background:#3a4a8a;color:transparent}
+.k{color:#c678dd}.s{color:#98c379}.c{color:#5c6370}.n{color:#d19a66}.f{color:#61afef}.b{color:#e5c07b}
+#out{height:38%;display:flex;flex-direction:column;border-top:2px solid #3776ab}#oh{padding:4px 10px;background:#252a3a;display:flex;gap:8px;align-items:center}#o{flex:1;overflow:auto;padding:8px 10px;font:13px Consolas,monospace;white-space:pre-wrap;margin:0}.e{color:#ff6b6b}.i{color:#7aa2f7}
+#stat{padding:2px 10px;background:#3776ab;font-size:12px}
+</style></head><body><div id="app"><div id="bar">
+<button id="run">▶ Endesha (Ctrl+Enter)</button><button class="r" id="stop" disabled>■ Simamisha</button><button class="g" id="new">＋ Faili</button><button class="g" id="dl">⬇ Pakua .py</button><button class="g" id="up">⬆ Pakia</button>
+<select id="ex"><option value="">Mifano…</option></select><input id="pip" placeholder="pip: numpy, pandas…" style="background:#1b1e2b;color:#fff;border:1px solid #3a4156;padding:5px;border-radius:4px;width:150px"><button class="g" id="pipb">📦 Install</button><span style="margin-left:auto" id="ver">Pakia Python…</span></div>
+<div id="main"><div id="side"></div><div id="ed"><div id="wrap"><div id="gut"></div><pre id="hl"></pre><textarea id="code" spellcheck="false"></textarea></div>
+<div id="out"><div id="oh"><b>OUTPUT</b><button class="g" id="clr">Safisha</button><button class="g" id="rl">↻ Anzisha upya</button></div><pre id="o"></pre></div></div></div><div id="stat">Inapakia Pyodide (Python 3 halisi, inahitaji mtandao mara ya kwanza)…</div></div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<script>
+const $=s=>document.querySelector(s);const EX={'Habari Dunia':'print("Habari Dunia!")\nname = "Sade"\nprint(f"Karibu {name}")','Fibonacci':'def fib(n):\n    a, b = 0, 1\n    for _ in range(n):\n        yield a\n        a, b = b, a+b\nprint(list(fib(15)))','Input (swali)':'jina = input("Jina lako ni nani? ")\numri = int(input("Umri? "))\nprint(f"{jina}, miaka {umri+1} ijayo")','Hisabati':'import math, statistics\nd=[4,8,15,16,23,42]\nprint("wastani",statistics.mean(d))\nprint("sqrt",math.sqrt(144),"pi",round(math.pi,4))','Class':'class Mtu:\n    def __init__(s,n): s.n=n\n    def sema(s): return "Mimi ni "+s.n\nprint(Mtu("Nancy").sema())','NumPy':'import numpy as np\na=np.arange(12).reshape(3,4)\nprint(a)\nprint(a.mean(axis=0))'};
+Object.keys(EX).forEach(k=>$('#ex').add(new Option(k,k)));
+let FS=JSON.parse(localStorage.getItem('py_fs')||'null')||{'main.py':EX['Habari Dunia']},cur='main.py',py=null,busy=false;
+const KW='False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield'.split(' '),BI='print len range int str float list dict set tuple input open sum min max abs sorted enumerate zip map filter type isinstance round'.split(' ');
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function hi(s){return esc(s).replace(/(#.*$)|("""[\s\S]*?"""|f?"[^"\n]*"|f?'[^'\n]*')|\b(\d+\.?\d*)\b|\b([A-Za-z_]\w*)\b(\()?/gm,(m,c,st,n,w,p)=>c?`<span class=c>${c}</span>`:st?`<span class=s>${st}</span>`:n?`<span class=n>${n}</span>`:KW.includes(w)?`<span class=k>${w}</span>${p||''}`:BI.includes(w)?`<span class=b>${w}</span>${p||''}`:p?`<span class=f>${w}</span>(`:m)}
+function draw(){const c=$('#code');FS[cur]=c.value;localStorage.setItem('py_fs',JSON.stringify(FS));$('#hl').innerHTML=hi(c.value)+'\n';$('#gut').textContent=c.value.split('\n').map((_,i)=>i+1).join('\n');sync()}
+function sync(){$('#hl').scrollTop=$('#code').scrollTop;$('#hl').scrollLeft=$('#code').scrollLeft;$('#gut').scrollTop=$('#code').scrollTop}
+function side(){$('#side').innerHTML='';Object.keys(FS).forEach(f=>{const d=document.createElement('div');d.className=f===cur?'on':'';d.innerHTML='🐍 '+f+'<b>✕</b>';d.onclick=e=>{if(e.target.tagName==='B'){if(Object.keys(FS).length>1&&confirm('Futa '+f+'?')){delete FS[f];if(cur===f)cur=Object.keys(FS)[0];load()}return}cur=f;load()};$('#side').append(d)})}
+function load(){$('#code').value=FS[cur];draw();side()}
+$('#code').addEventListener('input',draw);$('#code').addEventListener('scroll',sync);
+$('#code').addEventListener('keydown',e=>{const c=e.target,s=c.selectionStart,v=c.value,ins=t=>document.execCommand('insertText',false,t);
+if(e.key==='Tab'){e.preventDefault();ins('    ')}else if(e.key==='Enter'&&!e.ctrlKey){e.preventDefault();const ln=v.slice(v.lastIndexOf('\n',s-1)+1,s);ins('\n'+ln.match(/^\s*/)[0]+(/:\s*$/.test(ln)?'    ':''))}else if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();run()}else if('([{"\''.includes(e.key)&&c.selectionStart===c.selectionEnd){const p={'(':')','[':']','{':'}','"':'"',"'":"'"}[e.key];e.preventDefault();ins(e.key+p);c.selectionStart=c.selectionEnd=s+1}});
+const out=(t,k)=>{const o=$('#o'),sp=document.createElement('span');if(k)sp.className=k;sp.textContent=t;o.append(sp);o.scrollTop=1e9};
+async function init(){try{py=await loadPyodide();py.setStdout({batched:t=>out(t+'\n')});py.setStderr({batched:t=>out(t+'\n','e')});py.setStdin({stdin:()=>{const r=prompt('Input ya Python:');out((r??'')+'\n','i');return r??''}});await py.loadPackage('micropip');$('#ver').textContent='Python '+py.runPython('import sys;sys.version.split()[0]');$('#stat').textContent='Tayari ✔ — Python halisi inafanya kazi kwenye kivinjari';$('#run').disabled=false}catch(e){$('#stat').textContent='Imeshindwa kupakia Python: '+e.message+' (angalia mtandao)'}}
+async function run(){if(!py||busy)return;busy=true;$('#run').disabled=true;$('#stop').disabled=false;$('#stat').textContent='Inaendesha '+cur+'…';const t=performance.now();
+Object.entries(FS).forEach(([f,c])=>py.FS.writeFile('/home/pyodide/'+f,c));try{await py.loadPackagesFromImports(FS[cur]);await py.runPythonAsync(FS[cur]);out('\n✔ Imekamilika ('+(performance.now()-t|0)+' ms)\n','i')}catch(e){out(String(e.message).split('\n').filter(l=>!l.includes('pyodide')).join('\n')+'\n','e')}busy=false;$('#run').disabled=false;$('#stop').disabled=true;$('#stat').textContent='Tayari ✔'}
+$('#run').disabled=true;$('#run').onclick=run;$('#stop').onclick=()=>{if(confirm('Simamisha kwa kuanzisha upya Python?'))location.reload()};$('#rl').onclick=()=>location.reload();$('#clr').onclick=()=>$('#o').textContent='';
+$('#new').onclick=()=>{let n=prompt('Jina la faili (mf. test.py):');if(!n)return;if(!n.includes('.'))n+='.py';FS[n]='';cur=n;load()};
+$('#dl').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([FS[cur]]));a.download=cur;a.click()};
+$('#up').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='.py,.txt,.csv,.json';i.onchange=async()=>{const f=i.files[0];FS[f.name]=await f.text();cur=f.name;load()};i.click()};
+$('#ex').onchange=e=>{if(e.target.value){FS[cur]=EX[e.target.value];load();e.target.value=''}};
+$('#pipb').onclick=async()=>{const p=$('#pip').value.trim();if(!p||!py)return;out('pip install '+p+'…\n','i');try{const mp=py.pyimport('micropip');for(const x of p.split(/[ ,]+/))await mp.install(x);out('✔ Imesakinishwa\n','i')}catch(e){out('❌ '+e.message.split('\n').pop()+'\n','e')}};
+load();init();
+</script></body></html>
