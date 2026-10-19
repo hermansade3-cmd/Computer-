@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TikTok</title>
+<style>
+:root{--c:#fe2c55;--c2:#25f4ee;--bg:#f3f4f8;--card:#fff;--tx:#14171f;--mu:#667085;--bd:#e3e6ee}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1218;--card:#1a1f2a;--tx:#eef1f6;--mu:#9aa4b5;--bd:#2a3140}}
+*{box-sizing:border-box;margin:0}
+body{font:14px/1.45 'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+.hero{background:linear-gradient(135deg,var(--c),var(--c2));color:#fff;padding:22px 16px 28px;text-align:center}
+.logo{font-size:46px;line-height:1}.hero h1{font-size:24px;margin:6px 0 2px}.hero p{opacity:.9;font-size:13px}
+.wrap{max-width:760px;margin:-18px auto 24px;padding:0 12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 10px #0000000d}
+.go{display:block;width:100%;border:0;border-radius:12px;padding:14px;font:700 16px inherit;font-family:inherit;color:#fff;background:linear-gradient(135deg,var(--c),var(--c2));cursor:pointer}
+.go:active{transform:scale(.99)}
+.row{display:flex;gap:8px}.row input{flex:1;min-width:0;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;font:inherit;background:var(--bg);color:var(--tx);outline:0}
+.row input:focus{border-color:var(--c)}
+.row button{border:0;border-radius:10px;padding:0 14px;background:var(--c);color:#fff;font:600 14px inherit;font-family:inherit;cursor:pointer;white-space:nowrap}
+h3{font-size:13px;color:var(--mu);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.q{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.q button{border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:10px;padding:10px 4px;cursor:pointer;font:inherit}
+.q button b{display:block;font-size:22px;font-weight:400}.q button:hover{border-color:var(--c)}
+.hist{display:flex;flex-direction:column;gap:6px}
+.hist a{display:flex;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--bd);border-radius:9px;color:var(--tx);text-decoration:none;cursor:pointer;word-break:break-all;font-size:12.5px}
+.hist a:hover{border-color:var(--c)}.hist small{color:var(--mu);margin-left:auto;white-space:nowrap}
+.note{font-size:12px;color:var(--mu)}
+#pv{display:none}#pv.on{display:block}
+#pv iframe{width:100%;height:520px;border:0;border-radius:10px;background:#000}
+.pvb{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.pvb button{border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:8px;padding:7px 12px;cursor:pointer;font:inherit}
+#msg{font-size:12.5px;margin-top:8px;color:var(--c);min-height:1em}
+.off{background:#fff3cd;color:#664d03;border-radius:8px;padding:8px 10px;font-size:12.5px;margin-bottom:10px;display:none}
+</style></head><body>
+<div class="hero"><div class="logo">🎵</div><h1>TikTok</h1><p>Fungua TikTok moja kwa moja kutoka Sade Computer</p></div>
+<div class="wrap">
+ <div class="card">
+  <div class="off" id="off">⚠ Huna mtandao (offline). Unganisha intaneti ili kufungua TikTok.</div>
+  <button class="go" id="open">🎵 Fungua TikTok</button>
+  <p class="note" style="margin-top:8px">TikTok hairuhusu kuingia ndani ya dirisha lililopachikwa, kwa hivyo "Fungua TikTok" hufungua tab/dirisha jipya. Video za umma (link kamili yenye /video/…) zinaweza kuchezwa hapa chini.</p>
+ </div>
+ <div class="card">
+  <h3>Fungua akaunti au link</h3>
+  <div class="row"><input id="in" placeholder="Username (mfano: sade) AU bandika link ya video ya TikTok" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go2">Nenda</button></div>
+  <div id="msg"></div>
+ </div>
+ <div class="card" id="pv"><h3>Onyesho</h3><div id="pvbox"></div>
+  <div class="pvb"><button id="pvopen">↗ Fungua kwenye tab mpya</button><button id="pvcopy">📋 Nakili link</button><button id="pvclose">✖ Funga onyesho</button></div></div>
+ <div class="card"><h3>Njia za haraka</h3><div class="q" id="q"></div></div>
+ <div class="card"><h3>Ulizofungua hivi karibuni</h3><div class="hist" id="hist"></div><p class="note" id="hn"></p>
+  <div class="pvb"><button id="hclr">🧹 Futa historia</button></div></div>
+</div>
+<script>
+(function(){
+const HOME="https://www.tiktok.com/",PROF="https://www.tiktok.com/@{u}",QUICK=[["🏠", "Kwako", "https://www.tiktok.com/foryou"], ["👥", "Unaowafuata", "https://www.tiktok.com/following"], ["🔍", "Gundua", "https://www.tiktok.com/explore"], ["🔴", "LIVE", "https://www.tiktok.com/live"], ["✉️", "Ujumbe", "https://www.tiktok.com/messages"], ["⬆️", "Pakia", "https://www.tiktok.com/upload"]],KEY='sade_'+"TikTok"+'_hist',IS_YT=false;
+const $=s=>document.querySelector(s);let cur=HOME;
+function embed(s){try{
+ const m=s.match(/tiktok\.com\/[^\s?#]*video\/(\d+)/i)||s.match(/tiktok\.com\/embed\/v2\/(\d+)/i);
+ if(m)return 'https://www.tiktok.com/embed/v2/'+m[1];
+ return null;}catch(e){return null}}
+function norm(s){s=s.trim();if(/^[\w-]+\.[a-z]{2,}(\/|$)/i.test(s)&&!/^https?:/i.test(s))s='https://'+s;return s}
+function hist(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}}
+function save(l){try{localStorage.setItem(KEY,JSON.stringify(l.slice(0,12)))}catch(e){}}
+function add(url,label){const l=hist().filter(x=>x.u!==url);l.unshift({u:url,l:label||url,t:Date.now()});save(l);draw()}
+function ago(t){const m=Math.round((Date.now()-t)/6e4);return m<1?'sasa hivi':m<60?'dk '+m:m<1440?'saa '+Math.round(m/60):'siku '+Math.round(m/1440)}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function draw(){const l=hist(),h=$('#hist');h.innerHTML='';
+ l.forEach(x=>{const a=document.createElement('a');a.innerHTML='🔗 <span>'+esc(x.l)+'</span><small>'+ago(x.t)+'</small>';a.onclick=()=>openUrl(x.u,x.l);h.append(a)});
+ $('#hn').textContent=l.length?'':'Hakuna bado.'}
+function openUrl(u,label){
+ add(u,label);
+ const w=window.open(u,'_blank','noopener,noreferrer');
+ if(!w){try{window.top.open(u,'_blank')}catch(e){location.href=u}}
+}
+function msg(t){$('#msg').textContent=t}
+function showPv(src,u){cur=u;$('#pv').classList.add('on');
+ $('#pvbox').innerHTML='<iframe allow="autoplay;encrypted-media;fullscreen;picture-in-picture;clipboard-write" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+ $('#pvbox iframe').src=src;$('#pv').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function submit(){
+ const v=$('#in').value.trim();if(!v)return msg('Andika au bandika kitu kwanza.');
+ msg('');const s=norm(v);
+ if(/^https?:\/\//i.test(s)){
+  const e=embed(s);
+  add(s,s.replace(/^https?:\/\/(www\.)?/,'').slice(0,70));
+  if(e){showPv(e,s);msg('✅ Inaonyeshwa hapa chini.')}
+  else{openUrl(s);msg('Link hii inafunguliwa kwenye tab mpya.')}
+  return}
+ if(IS_YT){openUrl('https://www.youtube.com/results?search_query='+encodeURIComponent(v),'🔎 '+v);return}
+ const user=v.replace(/^@/,'').replace(/\s+/g,'');
+ openUrl(PROF.replace('{u}',encodeURIComponent(user)),'@'+user)}
+$('#open').onclick=()=>openUrl(HOME,'Ukurasa wa mwanzo');
+$('#go2').onclick=submit;$('#in').onkeydown=e=>{if(e.key==='Enter')submit()};
+$('#pvopen').onclick=()=>openUrl(cur);
+$('#pvcopy').onclick=()=>{const t=cur;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>msg('✅ Link imenakiliwa'),()=>{$('#in').value=t;$('#in').select();msg('Chagua na nakili link kwenye kisanduku.')})};
+$('#pvclose').onclick=()=>{$('#pvbox').innerHTML='';$('#pv').classList.remove('on')};
+$('#hclr').onclick=()=>{save([]);draw()};
+QUICK.forEach(q=>{const b=document.createElement('button');b.innerHTML='<b>'+q[0]+'</b>'+q[1];b.onclick=()=>openUrl(q[2],q[1]);$('#q').append(b)});
+function net(){$('#off').style.display=navigator.onLine?'none':'block'}
+addEventListener('online',net);addEventListener('offline',net);net();draw();
+})();
+</script></body></html>
