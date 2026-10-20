@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#121d30;--key:#1e2b42;--key2:#263750;--accent:#4f8cff;--green:#18b981;--text:#f4f7fb;--muted:#91a2bc}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#1a2b48 0,#0b1220 55%);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);display:flex;justify-content:center;align-items:center;padding:18px}
+.app{width:min(100%,560px);background:rgba(18,29,48,.96);border:1px solid #2b3b56;border-radius:24px;box-shadow:0 24px 70px #0007;overflow:hidden}
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #293951}
+.brand{font-weight:750;letter-spacing:.2px}.brand small{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:2px}
+.top-actions{display:flex;gap:8px}
+button{font:inherit;border:0;cursor:pointer;color:var(--text);transition:filter .12s,transform .08s}
+button:active{transform:scale(.97);filter:brightness(1.2)}
+.chip{background:#24334b;border:1px solid #344965;border-radius:10px;padding:8px 12px;font-size:13px}
+.screen{padding:22px 20px 16px;min-height:146px;display:flex;flex-direction:column;justify-content:flex-end;text-align:right;overflow:hidden}
+.expression{color:var(--muted);font-size:clamp(16px,4vw,21px);min-height:30px;overflow-wrap:anywhere}
+.result{font-size:clamp(30px,8vw,44px);font-weight:650;line-height:1.2;overflow-wrap:anywhere;margin-top:8px}
+.status{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;margin-top:12px}
+.keys{padding:12px 16px 18px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.key{min-height:52px;border-radius:13px;background:var(--key);font-size:17px;font-weight:550;border:1px solid #2a3b55}
+.key:hover{background:var(--key2)}
+.fn{background:#1a2940;color:#bcd3ff;font-size:15px}
+.op{background:#263953;color:#dce9ff}
+.equal{background:var(--accent);font-size:22px;font-weight:750}
+.clear{background:#533047;color:#ffd3e9}
+.history{display:none;padding:0 18px 18px}
+.history.open{display:block}
+.history-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px;margin-bottom:8px}
+.history-list{max-height:170px;overflow:auto;display:grid;gap:6px}
+.hist-item{background:#0e1727;border:1px solid #263750;border-radius:10px;padding:9px 12px;text-align:right;font-size:13px;overflow-wrap:anywhere}
+@media(max-width:390px){body{padding:8px}.app{border-radius:18px}.keys{gap:6px;padding:10px}.key{min-height:48px;font-size:15px}.fn{font-size:13px}.screen{padding:18px 14px 12px}}
+</style>
+<style id="sade-polish">:root{color-scheme:dark light}*{scrollbar-width:thin;scrollbar-color:#6b7fb355 transparent}::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:#6b7fb355;border-radius:9px}::selection{background:#7c9cff55}button,select,input,[role=button]{transition:background .18s,border-color .18s,transform .12s,box-shadow .18s,filter .18s}button:not(:disabled):active{transform:scale(.96)}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #38e8b0;outline-offset:2px}button:not(:disabled):hover{box-shadow:0 4px 14px #0003}@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}</style></head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="brand">Scientific Calculator<small>Hesabu za kawaida na za kisayansi · Offline</small></div>
+    <div class="top-actions">
+      <button class="chip" id="angleBtn" title="Badilisha Degrees/Radians">DEG</button>
+      <button class="chip" id="historyBtn">Historia</button>
+    </div>
+  </header>
+  <section class="screen" aria-live="polite">
+    <div class="expression" id="expression">0</div>
+    <div class="result" id="result">0</div>
+    <div class="status"><span id="memoryStatus">Memory: 0</span><span id="angleStatus">Degrees</span></div>
+  </section>
+  <section class="keys" id="keys">
+    <button class="key fn" data-action="memory-clear">MC</button>
+    <button class="key fn" data-action="memory-recall">MR</button>
+    <button class="key fn" data-action="memory-add">M+</button>
+    <button class="key fn" data-action="memory-sub">M−</button>
+    <button class="key clear" data-action="backspace">⌫</button>
+
+    <button class="key fn" data-insert="(">(</button>
+    <button class="key fn" data-insert=")">)</button>
+    <button class="key fn" data-action="percent">%</button>
+    <button class="key fn" data-action="clear">AC</button>
+    <button class="key op" data-insert="÷">÷</button>
+
+    <button class="key fn" data-insert="sin(">sin</button>
+    <button class="key fn" data-insert="cos(">cos</button>
+    <button class="key fn" data-insert="tan(">tan</button>
+    <button class="key fn" data-insert="√(">√</button>
+    <button class="key op" data-insert="×">×</button>
+
+    <button class="key fn" data-insert="asin(">sin⁻¹</button>
+    <button class="key fn" data-insert="acos(">cos⁻¹</button>
+    <button class="key fn" data-insert="atan(">tan⁻¹</button>
+    <button class="key fn" data-insert="∛(">∛</button>
+    <button class="key op" data-insert="−">−</button>
+
+    <button class="key fn" data-insert="log(">log</button>
+    <button class="key fn" data-insert="ln(">ln</button>
+    <button class="key fn" data-insert="10^(">10ˣ</button>
+    <button class="key fn" data-insert="e^(">eˣ</button>
+    <button class="key op" data-insert="+">+</button>
+
+    <button class="key fn" data-insert="π">π</button>
+    <button class="key fn" data-insert="e">e</button>
+    <button class="key fn" data-insert="^2">x²</button>
+    <button class="key fn" data-insert="^3">x³</button>
+    <button class="key op" data-insert="^">xʸ</button>
+
+    <button class="key fn" data-insert="!">n!</button>
+    <button class="key fn" data-action="reciprocal">1/x</button>
+    <button class="key fn" data-action="abs">|x|</button>
+    <button class="key" data-insert="7">7</button>
+    <button class="key" data-insert="8">8</button>
+
+    <button class="key" data-insert="9">9</button>
+    <button class="key" data-insert="4">4</button>
+    <button class="key" data-insert="5">5</button>
+    <button class="key" data-insert="6">6</button>
+    <button class="key" data-insert="1">1</button>
+
+    <button class="key" data-insert="2">2</button>
+    <button class="key" data-insert="3">3</button>
+    <button class="key" data-insert="0">0</button>
+    <button class="key" data-insert=".">.</button>
+    <button class="key equal" data-action="equals">=</button>
+  </section>
+  <section class="history" id="history">
+    <div class="history-head"><span>Hesabu zilizopita</span><button class="chip" id="clearHistory">Futa historia</button></div>
+    <div class="history-list" id="historyList"><div class="hist-item">Hakuna historia bado.</div></div>
+  </section>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  let expr = "", memory = 0, degrees = true, justEvaluated = false;
+  let history = [];
+  const displayNames = {"÷":"/","×":"*","−":"-","√":"sqrt","π":"pi","^":"**"};
+  const update = () => {
+    $("expression").textContent = expr || "0";
+    $("memoryStatus").textContent = "Memory: " + format(memory);
+    $("angleStatus").textContent = degrees ? "Degrees" : "Radians";
+    $("angleBtn").textContent = degrees ? "DEG" : "RAD";
+    try { $("result").textContent = expr ? format(evaluate(expr)) : "0"; }
+    catch { $("result").textContent = expr ? "…" : "0"; }
+  };
+  const format = n => {
+    if (!Number.isFinite(n)) return String(n);
+    if (Object.is(n,-0)) n=0;
+    return Number(n.toPrecision(12)).toString();
+  };
+  function factorial(n){
+    if(!Number.isInteger(n)||n<0||n>170) throw Error("Factorial: tumia integer 0–170");
+    let r=1; for(let i=2;i<=n;i++)r*=i; return r;
+  }
+  function evaluate(source){
+    let s = source.replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-")
+      .replace(/π/g,"pi").replace(/√\(/g,"sqrt(").replace(/∛\(/g,"cbrt(")
+      .replace(/\bpi\b/g,"Math.PI").replace(/\be\b/g,"Math.E")
+      .replace(/\bsin\(/g,"sin(").replace(/\bcos\(/g,"cos(").replace(/\btan\(/g,"tan(")
+      .replace(/\basin\(/g,"asin(");
+    // Convert calculator functions and constants to safe internal tokens.
+    const funcs = ["sin","cos","tan","asin","acos","atan","sqrt","cbrt","log","ln","abs","fact"];
+    s = s.replace(/\b(sin|cos|tan|asin|acos|atan|sqrt|cbrt|log|ln|abs)\(/g,(_,f)=>"@"+f+"(");
+    s = s.replace(/(\d+(?:\.\d+)?)!/g,"@fact($1)");
+    s = s.replace(/\^/g,"**");
+    // Percent means divide the immediately preceding numeric/group value by 100.
+    s = s.replace(/(\d+(?:\.\d+)?|\))%/g,"($1/100)");
+    // Implicit multiplication for common cases: 2pi, 2sin(...), )(, )number.
+    s = s.replace(/(Math\.PI|Math\.E|\d|\))(?=(Math\.PI|Math\.E|@| \(|\())/g,"$1*");
+    s = s.replace(/(\))(?=\d)/g,"$1*");
+    s = s.replace(/@/g,"Math.");
+    const allowed = /^[\d+\-*/().\sA-Za-z_]*$/;
+    if(!allowed.test(s)) throw Error("Expression si sahihi");
+    // Parse using a strict recursive-descent parser, never eval().
+    const tokens = s.match(/Math\.PI|Math\.E|Math\.[A-Za-z]+|\d+(?:\.\d*)?(?:e[+-]?\d+)?|[()+\-*/]|\*\*|\s+/gi) || [];
+    let t=tokens.filter(x=>! /^\s+$/.test(x)), i=0;
+    function peek(){return t[i]}
+    function take(){return t[i++]}
+    function primary(){
+      let x=take();
+      if(x==="("){let v=add();if(take()!==")")throw Error("Bano halijafungwa");return v;}
+      if(x==="+"||x==="-"){let v=primary();return x==="-"?-v:v;}
+      if(/^Math\.PI$/i.test(x))return Math.PI;
+      if(/^Math\.E$/i.test(x))return Math.E;
+      if(/^Math\./i.test(x)){
+        let name=x.slice(5).toLowerCase();
+        if(take()!=="(")throw Error("Function error");
+        let a=add();if(take()!==")")throw Error("Bano halijafungwa");
+        const rad=v=>degrees?v*Math.PI/180:v;
+        switch(name){
+          case "sin":return Math.sin(rad(a)); case "cos":return Math.cos(rad(a)); case "tan":return Math.tan(rad(a));
+          case "asin":return degrees?Math.asin(a)*180/Math.PI:Math.asin(a);
+          case "acos":return degrees?Math.acos(a)*180/Math.PI:Math.acos(a);
+          case "atan":return degrees?Math.atan(a)*180/Math.PI:Math.atan(a);
+          case "sqrt":return Math.sqrt(a);case "cbrt":return Math.cbrt(a);
+          case "log":return Math.log10(a);case "ln":return Math.log(a);case "abs":return Math.abs(a);
+          case "fact":return factorial(a); default:throw Error("Function haijulikani");
+        }
+      }
+      if(x===undefined)throw Error("Weka namba");
+      if(/^\d/.test(x))return Number(x);
+      throw Error("Expression si sahihi");
+    }
+    function power(){let a=primary();if(peek()==="**"){take();a=Math.pow(a,power());}return a;}
+    function mul(){let a=power();while(["*","/"].includes(peek())){let op=take(),b=power();a=op==="*"?a*b:a/b;}return a;}
+    function add(){let a=mul();while(["+","-"].includes(peek())){let op=take(),b=mul();a=op==="+"?a+b:a-b;}return a;}
+    let value=add();if(i<t.length)throw Error("Expression si sahihi");return value;
+  }
+  function insert(v){
+    if(justEvaluated && /^[0-9.]$/.test(v))expr="";
+    justEvaluated=false;
+    if(v==="^2")expr+="^2";
+    else if(v==="^3")expr+="^3";
+    else expr+=v;
+    update();
+  }
+  function current(){return evaluate(expr||"0");}
+  function action(a){
+    try{
+      switch(a){
+        case "clear":expr="";justEvaluated=false;break;
+        case "backspace":expr=expr.slice(0,-1);justEvaluated=false;break;
+        case "equals":{
+          let val=current(); history.unshift({e:expr||"0",v:format(val)});history=history.slice(0,30);
+          renderHistory();expr=format(val);justEvaluated=true;break;
+        }
+        case "percent":expr+="%";justEvaluated=false;break;
+        case "reciprocal":expr="1/("+ (expr||"0") +")";justEvaluated=false;break;
+        case "abs":expr="abs("+ (expr||"0") +")";justEvaluated=false;break;
+        case "memory-clear":memory=0;break;
+        case "memory-recall":expr+=format(memory);justEvaluated=false;break;
+        case "memory-add":memory+=current();break;
+        case "memory-sub":memory-=current();break;
+      }
+    }catch(e){$("result").textContent="Error";$("expression").textContent=e.message||"Hesabu haijakamilika";return;}
+    update();
+  }
+  $("keys").addEventListener("click",e=>{
+    const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.insert!==undefined)insert(b.dataset.insert);
+    else if(b.dataset.action)action(b.dataset.action);
+  });
+  $("angleBtn").addEventListener("click",()=>{degrees=!degrees;update();});
+  $("historyBtn").addEventListener("click",()=> $("history").classList.toggle("open"));
+  $("clearHistory").addEventListener("click",()=>{history=[];renderHistory();});
+  function renderHistory(){
+    $("historyList").innerHTML="";
+    if(!history.length){$("historyList").innerHTML='<div class="hist-item">Hakuna historia bado.</div>';return;}
+    history.forEach(item=>{
+      const b=document.createElement("button");b.className="hist-item";
+      b.textContent=item.e+" = "+item.v;
+      b.addEventListener("click",()=>{expr=item.e;justEvaluated=false;update();});
+      $("historyList").appendChild(b);
+    });
+  }
+  document.addEventListener("keydown",e=>{
+    if(/^[0-9.]$/.test(e.key)){insert(e.key);e.preventDefault();}
+    else if(["+","-","*","/","(",")","^","%"].includes(e.key)){insert(({ "*":"×","/":"÷","-":"−"}[e.key]||e.key);e.preventDefault();}
+    else if(e.key==="Enter"||e.key==="="){action("equals");e.preventDefault();}
+    else if(e.key==="Backspace"){action("backspace");e.preventDefault();}
+    else if(e.key==="Escape"){action("clear");e.preventDefault();}
+  });
+  update();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<title>Games | Play Zone</title>
+<style>
+:root{--bg:#0b1020;--p:#151c34;--p2:#1f2848;--t:#f2f5ff;--m:#9aa7c7;--a:#8b5cf6;--g:#22d3a5;--b:#2a3558}
+body.light{--bg:#eef1fb;--p:#fff;--p2:#e6eafa;--t:#141a33;--m:#5a6585;--b:#cfd6ee}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;color:var(--t);font:16px system-ui,"Segoe UI",sans-serif;background:radial-gradient(900px 500px at 10% -10%,#4c2fb255,transparent),radial-gradient(700px 400px at 100% 0,#0ea5a533,transparent),var(--bg)}
+body.big{font-size:19px}
+button{font:inherit;color:inherit;border:0;cursor:pointer;background:var(--p2);border-radius:14px;padding:12px 16px;transition:transform .12s,background .2s,box-shadow .2s}
+button:active{transform:scale(.95)}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--g);outline-offset:2px}
+button:disabled{cursor:default}
+.pri{background:linear-gradient(135deg,var(--a),#6366f1);color:#fff;font-weight:700;box-shadow:0 6px 18px #6366f155}
+header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:12px 5%;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 75%,transparent);border-bottom:1px solid var(--b)}
+.logo{font-weight:900;font-size:22px;letter-spacing:-.5px}.logo b{color:var(--g)}
+main{max-width:1100px;margin:auto;padding:20px 5% 50px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:26px;border-radius:26px;background:linear-gradient(120deg,#5b3cc4,#0e7490);color:#fff;margin-bottom:22px;box-shadow:0 18px 40px #4c2fb244}
+.hero h1{margin:0 0 6px;font-size:clamp(24px,5vw,38px)}.hero p{margin:0 0 14px;opacity:.9;line-height:1.5}.hero .e{font-size:clamp(56px,12vw,100px)}
+.hero button{background:#fff;color:#3b2a8f;font-weight:800}
+.tb{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.tb h2{margin:0;font-size:20px}
+.srch{background:var(--p);border:1px solid var(--b);border-radius:14px;padding:11px 14px;color:var(--t);font:inherit;width:min(100%,260px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px}
+.card{text-align:left;padding:16px;border-radius:22px;background:var(--p);border:1px solid var(--b);display:flex;flex-direction:column;gap:6px;min-height:178px}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px #0005;border-color:hsl(var(--h) 70% 55%)}
+.ic{width:56px;height:56px;border-radius:17px;display:grid;place-items:center;font-size:30px;background:linear-gradient(135deg,hsl(var(--h) 80% 58%),hsl(calc(var(--h) + 40) 80% 45%))}
+.card h3{margin:6px 0 0;font-size:16px}.card p{margin:0;color:var(--m);font-size:12.5px;line-height:1.4}.card small{margin-top:auto;color:var(--g);font-weight:700}
+footer{text-align:center;color:var(--m);padding:20px;font-size:13px}
+.ov{position:fixed;inset:0;background:#040712dd;backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:20;padding:10px}.ov.open{display:flex}
+.win{width:min(520px,100%);max-height:96vh;overflow:auto;background:var(--p);border:1px solid var(--b);border-radius:26px;padding:16px;animation:pop .25s}
+@keyframes pop{from{transform:scale(.92);opacity:0}}
+.bar{display:flex;align-items:center;gap:10px}.bar h2{margin:0;flex:1;font-size:20px}.bar button{padding:8px 12px}
+.stats{display:flex;gap:8px;margin:12px 0}.stats div{flex:1;background:var(--p2);border-radius:14px;padding:8px;text-align:center;font-size:12px;color:var(--m)}.stats b{display:block;font-size:22px;color:var(--t)}
+#how{color:var(--m);font-size:13px;margin:6px 0 0}
+#stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;min-height:300px;justify-content:center;padding:4px 0}
+.hint{color:var(--m);font-size:14px;text-align:center;min-height:20px}.sw{touch-action:none}
+.over{position:absolute;inset:0;background:color-mix(in srgb,var(--p) 90%,transparent);backdrop-filter:blur(4px);border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;animation:pop .3s;z-index:3}.over h3{font-size:26px;margin:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.big{font-size:clamp(26px,8vw,40px);font-weight:900;text-align:center;letter-spacing:2px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}.opts button{padding:16px 10px;font-weight:700}
+.gridg{display:grid;gap:10px;width:min(100%,340px)}
+.cc,.hole{aspect-ratio:1;border-radius:18px;font-size:32px;font-weight:900;padding:0;display:grid;place-items:center}
+.cc.flip{background:#6366f1}.cc.ok{background:#16a34a}.hole.up{background:#facc15;transform:scale(1.05)}
+.b48{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px;background:var(--p2);border-radius:16px;width:min(100%,340px);aspect-ratio:1}
+.t{display:grid;place-items:center;border-radius:10px;font:800 clamp(18px,6vw,28px) system-ui;font-style:normal;background:#ffffff0f;color:#fff;transition:background .15s}
+.simon{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:min(100%,300px)}.pad{aspect-ratio:1;border-radius:26px;opacity:.5;transition:.12s}.pad.lit{opacity:1;filter:brightness(1.3);transform:scale(1.05)}
+.react{width:100%;height:240px;border-radius:22px;font-size:20px;font-weight:800;color:#fff}.idle{background:#3b82f6}.wait{background:#ef4444}.go{background:#22c55e}
+.kb{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.kb button{width:40px;padding:9px 0}
+.fld{background:var(--p2);color:var(--t);border:1px solid var(--b);border-radius:14px;padding:12px;font:inherit;width:140px;text-align:center}
+.dpad{display:grid;grid-template-columns:repeat(3,58px);gap:6px}.dpad button{padding:10px 0}
+.set{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--b)}
+.set select{background:var(--p2);color:var(--t);border:1px solid var(--b);border-radius:10px;padding:9px}.set input{width:22px;height:22px;accent-color:var(--a)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="logo">🎮 Play<b>Zone</b></div><button onclick="$('#set').classList.add('open')">⚙️ Mipangilio</button></header>
+<main>
+<section class="hero"><div><h1>Karibu kwenye Games!</h1><p>Michezo rahisi ya kucheza kwa kugusa au kuswipe. Hakuna akaunti, inafanya kazi bila intaneti, na rekodi zako zinahifadhiwa.</p><button onclick="rnd()">🎲 Nishangaze</button></div><div class="e">🕹️</div></section>
+<div class="tb"><h2>Michezo <span id="cnt"></span></h2><input class="srch" id="q" placeholder="🔍 Tafuta mchezo..." aria-label="Tafuta mchezo"></div>
+<section class="grid" id="list"></section>
+</main>
+<footer>PlayZone • Cheza, pumzika na ufurahie</footer>
+
+<div class="ov" id="play" role="dialog" aria-modal="true"><div class="win">
+<div class="bar"><h2 id="pt"></h2><button onclick="start()" aria-label="Anza upya">🔄</button><button onclick="closeG()" aria-label="Funga">✕</button></div>
+<p id="how"></p>
+<div class="stats"><div>Alama<b id="sc">0</b></div><div>Rekodi<b id="bs">0</b></div></div>
+<div id="stage"></div></div></div>
+
+<div class="ov" id="set" role="dialog" aria-modal="true"><div class="win">
+<div class="bar"><h2>⚙️ Mipangilio</h2><button onclick="$('#set').classList.remove('open')">✕</button></div>
+<div class="set"><label for="th">Mandhari</label><select id="th"><option value="dark">Giza</option><option value="light">Mwanga</option></select></div>
+<div class="set"><label for="lv">Ugumu</label><select id="lv"><option value="0">Rahisi</option><option value="1">Wastani</option><option value="2">Ngumu</option></select></div>
+<div class="set"><label for="sn">Sauti</label><input id="sn" type="checkbox"></div>
+<div class="set"><label for="bg">Maandishi makubwa</label><input id="bg" type="checkbox"></div>
+<div class="set"><label>Futa rekodi zote</label><button onclick="if(confirm('Futa rekodi zote?')){P.best={};sv();list()}">Futa</button></div>
+</div></div>
+
+<script>
+"use strict";
+const $=q=>document.querySelector(q),E=(t,c,h)=>{const e=document.createElement(t);c&&(e.className=c);h!=null&&(e.innerHTML=h);return e};
+const R=n=>Math.floor(Math.random()*n),sh=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+let P={theme:"dark",sound:1,lvl:0,big:0,best:{}};
+try{Object.assign(P,JSON.parse(localStorage.getItem("playzone")||"{}"))}catch(e){}
+const sv=()=>{try{localStorage.setItem("playzone",JSON.stringify(P))}catch(e){}};
+let AC;function beep(f=520,d=.09,t="sine"){if(!P.sound)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.value=f;g.gain.value=.05;o.connect(g);g.connect(AC.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.stop(AC.currentTime+d)}catch(e){}}
+function applyP(){document.body.classList.toggle("light",P.theme=="light");document.body.classList.toggle("big",!!P.big);$("#th").value=P.theme;$("#lv").value=P.lvl;$("#sn").checked=!!P.sound;$("#bg").checked=!!P.big}
+$("#th").onchange=e=>{P.theme=e.target.value;sv();applyP()};$("#lv").onchange=e=>{P.lvl=+e.target.value;sv()};$("#sn").onchange=e=>{P.sound=e.target.checked?1:0;sv()};$("#bg").onchange=e=>{P.big=e.target.checked?1:0;sv();applyP()};
+
+let cur,cl=[],sc=0,over=0,kh=null;
+const ti=(f,m)=>{const i=setInterval(f,m);cl.push(()=>clearInterval(i));return i},to=(f,m)=>{const i=setTimeout(f,m);cl.push(()=>clearTimeout(i));return i};
+const setS=n=>{sc=n;$("#sc").textContent=n};
+function clock(sec,fin){const e=E("div","hint");let t=sec;const u=()=>e.textContent="⏱ "+t+"s";u();ti(()=>{t--;u();if(t<=0)fin()},1000);return{el:e,sub:n=>{t=Math.max(0,t-n);u();if(!t)fin()}}}
+function swipe(el,f){let x,y;el.addEventListener("touchstart",e=>{x=e.touches[0].clientX;y=e.touches[0].clientY},{passive:true});el.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-x,dy=t.clientY-y;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;f(Math.abs(dx)>Math.abs(dy)?(dx>0?"r":"l"):(dy>0?"d":"u"))},{passive:true})}
+function pad(s,f){const d=E("div","dpad");[["",""],["u","⬆"],["",""],["l","⬅"],["d","⬇"],["r","➡"]].forEach(([k,l])=>{const b=E("button","",l);if(!k)b.style.visibility="hidden";else b.onclick=()=>f(k);d.append(b)});s.append(d)}
+const KEYS={ArrowUp:"u",w:"u",ArrowDown:"d",s:"d",ArrowLeft:"l",a:"l",ArrowRight:"r",d:"r"};
+
+function openG(id){closeG();cur=CAT.find(g=>g[0]==id);$("#pt").textContent=cur[1]+" "+cur[2];$("#how").textContent=cur[3];$("#play").classList.add("open");start()}
+function start(){cl.forEach(f=>f());cl=[];kh=null;over=0;setS(0);$("#bs").textContent=P.best[cur[0]]||0;const s=$("#stage");s.innerHTML="";cur[5](s)}
+function closeG(){cl.forEach(f=>f());cl=[];kh=null;cur=null;$("#play").classList.remove("open")}
+function end(msg){if(over)return;over=1;cl.forEach(f=>f());cl=[];kh=null;const b=P.best[cur[0]]||0,nb=sc>b;if(nb){P.best[cur[0]]=sc;sv();list()}$("#bs").textContent=Math.max(b,sc);
+const o=E("div","over",`<h3>${msg}</h3><div>Alama: <b>${sc}</b>${nb?" 🏆 Rekodi mpya!":""}</div>`),a=E("button","pri","🔄 Cheza tena"),c=E("button","","Michezo mingine"),r=E("div","row");a.onclick=start;c.onclick=closeG;r.append(a,c);o.append(r);$("#stage").append(o)}
+
+/* ---------- MICHEZO ---------- */
+function snake(s){const N=16,c=E("canvas","sw"),W=Math.min(innerWidth-70,380);c.width=c.height=N*24;c.style.cssText=`width:${W}px;height:${W}px;border-radius:16px`;const x=c.getContext("2d");
+let b=[{x:8,y:8},{x:7,y:8},{x:6,y:8}],d={x:1,y:0},q=[],go=0,f;const nf=()=>{let p;do p={x:R(N),y:R(N)};while(b.some(z=>z.x==p.x&&z.y==p.y));return p};f=nf();
+const turn=k=>{go=1;const m={u:[0,-1],d:[0,1],l:[-1,0],r:[1,0]}[k],l=q.length?q[q.length-1]:d;if(m[0]==-l.x&&m[1]==-l.y||m[0]==l.x&&m[1]==l.y)return;if(q.length<2)q.push({x:m[0],y:m[1]})};
+kh=e=>{const k=KEYS[e.key];if(k){e.preventDefault();turn(k)}};swipe(c,turn);
+function draw(){for(let i=0;i<N*N;i++){x.fillStyle=(i%N+(i/N|0))%2?"#10182e":"#0d1428";x.fillRect(i%N*24,(i/N|0)*24,24,24)}
+x.font="20px serif";x.textBaseline="middle";x.fillText("🍎",f.x*24+1,f.y*24+13);b.forEach((z,i)=>{x.fillStyle=i?`hsl(${160-i*2} 70% 50%)`:"#34d399";x.beginPath();x.roundRect(z.x*24+1,z.y*24+1,22,22,i?7:10);x.fill()})}
+function tick(){if(!go)return;if(q.length)d=q.shift();const h={x:b[0].x+d.x,y:b[0].y+d.y};if(h.x<0||h.y<0||h.x>=N||h.y>=N||b.some(z=>z.x==h.x&&z.y==h.y)){beep(150,.3,"sawtooth");return end("Umegonga! 💥")}b.unshift(h);if(h.x==f.x&&h.y==f.y){setS(sc+1);beep(700);f=nf()}else b.pop();draw()}
+ti(tick,[170,125,90][P.lvl]);draw();s.append(c,E("div","hint","Swipe au tumia mishale kuanza"));pad(s,turn)}
+
+function g2048(s){let B=Array(16).fill(0),won=0;const bd=E("div","b48 sw");s.append(bd,E("div","hint","Swipe au tumia mishale"));
+const add=()=>{const f=B.map((v,i)=>v?-1:i).filter(i=>i>=0);B[f[R(f.length)]]=Math.random()<.9?2:4};add();add();
+const draw=()=>bd.innerHTML=B.map(v=>`<i class="t" style="${v?`background:hsl(${(Math.log2(v)*32+220)%360} 62% 48%)`:""}">${v||""}</i>`).join("");
+const can=()=>B.includes(0)||B.some((v,i)=>(i%4<3&&v==B[i+1])||(i<12&&v==B[i+4]));
+function mv(k){const o=B.join();let gain=0;for(let r=0;r<4;r++){const ids=[0,1,2,3].map(i=>k=="l"?r*4+i:k=="r"?r*4+3-i:k=="u"?i*4+r:(3-i)*4+r),a=ids.map(i=>B[i]).filter(Boolean),n=[];for(let j=0;j<a.length;j++){if(a[j]==a[j+1]){n.push(a[j]*2);gain+=a[j]*2;j++}else n.push(a[j])}while(n.length<4)n.push(0);ids.forEach((id,j)=>B[id]=n[j])}
+if(o==B.join())return;add();setS(sc+gain);beep(380,.05);draw();if(!won&&B.includes(2048)){won=1;beep(900,.4)}if(!can())end(won?"Umefika 2048! 🏆":"Hakuna hatua tena")}
+kh=e=>{const k=KEYS[e.key];if(k&&e.key.startsWith("Arrow")){e.preventDefault();mv(k)}};swipe(bd,mv);draw()}
+
+function memory(s){const ic=["🍎","🐸","🚗","🌟","🍉","🐶","🎈","🦋"],cs=sh([...ic,...ic]);let o=[],d=0,m=0,lock=0;const info=E("div","hint","Hatua: 0"),g=E("div","gridg");g.style.gridTemplateColumns="repeat(4,1fr)";
+const bs=cs.map((v,i)=>{const b=E("button","cc","❔");b.onclick=()=>{if(lock||o.includes(i)||b.classList.contains("ok"))return;b.className="cc flip";b.textContent=v;beep(500,.05);o.push(i);
+if(o.length==2){m++;info.textContent="Hatua: "+m;const[x,y]=o;if(cs[x]==cs[y]){bs[x].className=bs[y].className="cc ok";o=[];d++;setS(d*10);beep(760,.15);if(d==8){setS(sc+Math.max(0,40-(m-8)*3));end("Hongera! 🎉")}}else{lock=1;to(()=>{[x,y].forEach(k=>{bs[k].className="cc";bs[k].textContent="❔"});o=[];lock=0},700)}}};g.append(b);return b});s.append(info,g)}
+
+const W3=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+const win=b=>{for(const l of W3)if(b[l[0]]&&b[l[0]]==b[l[1]]&&b[l[0]]==b[l[2]])return b[l[0]];return b.every(Boolean)?"D":0};
+function mm(b,p){const w=win(b);if(w)return w=="O"?1:w=="X"?-1:0;let r=p=="O"?-2:2;b.forEach((v,i)=>{if(!v){b[i]=p;const z=mm(b,p=="O"?"X":"O");b[i]="";r=p=="O"?Math.max(r,z):Math.min(r,z)}});return r}
+function ai(b){const e=b.map((v,i)=>v?-1:i).filter(i=>i>=0);if(P.lvl==0)return e[R(e.length)];if(P.lvl==1){for(const p of["O","X"])for(const i of e){b[i]=p;const w=win(b);b[i]="";if(w==p)return i}return e[R(e.length)]}let bs=-2,bi=e[0];for(const i of e){b[i]="O";const r=mm(b,"X");b[i]="";if(r>bs){bs=r;bi=i}}return bi}
+function ttt(s){let b,t,mode=1,done;const top=E("div","row"),g=E("div","gridg"),msg=E("div","hint"),m1=E("button","pri","🤖 Kompyuta"),m2=E("button","","👥 Rafiki");g.style.gridTemplateColumns="repeat(3,1fr)";top.append(m1,m2);
+const reset=()=>{b=Array(9).fill("");t="X";done=0;draw();msg.textContent=mode?"Wewe ni X — anza!":"Zamu ya X"};
+m1.onclick=()=>{mode=1;m1.className="pri";m2.className="";reset()};m2.onclick=()=>{mode=0;m2.className="pri";m1.className="";reset()};
+function draw(){g.innerHTML="";b.forEach((v,i)=>{const c=E("button","cc",v);if(v)c.style.color=v=="X"?"#60a5fa":"#f472b6";c.onclick=()=>{if(done||b[i]||(mode&&t=="O"))return;b[i]=t;beep(t=="X"?500:400,.07);fin()};g.append(c)})}
+function fin(){draw();const r=win(b);if(r){done=1;if(r=="D"){msg.textContent="Sare! 🤝";to(reset,1200)}else if(!mode)end(r+" ameshinda! 🏆");else if(r=="X"){setS(sc+1);msg.textContent="Umeshinda! 🎉";to(reset,1200)}else end("Kompyuta imeshinda 🤖")}
+else{t=t=="X"?"O":"X";msg.textContent=mode?(t=="O"?"Kompyuta inafikiri...":"Zamu yako"):"Zamu ya "+t;if(mode&&t=="O")to(()=>{b[ai(b)]="O";beep(400,.07);fin()},450)}}
+s.append(top,g,msg);reset()}
+
+function simon(s){const C=["#ef4444","#22c55e","#3b82f6","#eab308"],F=[262,330,392,523];let seq=[],i=0,ok=0;const st=E("div","hint"),g=E("div","simon");
+const ps=C.map((c,k)=>{const p=E("button","pad");p.style.background=c;p.onclick=()=>{if(!ok)return;flash(k);if(k!=seq[i])return end("Umekosea! ❌");if(++i==seq.length){ok=0;setS(sc+1);st.textContent="Safi! 🎉";to(next,900)}};g.append(p);return p});
+const flash=k=>{beep(F[k],.25);ps[k].classList.add("lit");to(()=>ps[k].classList.remove("lit"),250)};
+function next(){seq.push(R(4));i=0;st.textContent="Tazama...";const sp=P.lvl==2?380:560;seq.forEach((k,j)=>to(()=>flash(k),700+j*sp));to(()=>{ok=1;st.textContent="Zamu yako!"},700+seq.length*sp)}
+s.append(st,g);to(next,400)}
+
+function whack(s){const c=clock(20,()=>end("Muda umeisha ⏱")),g=E("div","gridg");g.style.gridTemplateColumns="repeat(3,1fr)";let h=-1,tm;const sp=[1000,750,550][P.lvl];cl.push(()=>clearTimeout(tm));
+const hs=Array.from({length:9},(_,i)=>{const b=E("button","hole");b.onclick=()=>{if(i==h){setS(sc+1);beep(800,.06);show()}else beep(200,.08,"square")};g.append(b);return b});
+function show(){clearTimeout(tm);if(hs[h]){hs[h].textContent="";hs[h].classList.remove("up")}h=R(9);hs[h].textContent="⭐";hs[h].classList.add("up");tm=setTimeout(show,sp)}
+s.append(c.el,g);show()}
+
+function reaction(s){let st=0,t0,ms=[],tm;cl.push(()=>clearTimeout(tm));const p=E("button","react idle","Gusa kuanza (raundi 5)");
+p.onclick=()=>{if(st==0||st==3){st=1;p.className="react wait";p.textContent="Subiri kijani...";tm=setTimeout(()=>{st=2;t0=performance.now();p.className="react go";p.textContent="GUSA SASA!";beep(800,.1)},1000+Math.random()*2500)}
+else if(st==1){clearTimeout(tm);st=3;p.className="react idle";p.textContent="Mapema mno! Gusa kujaribu tena"}
+else{const m=Math.round(performance.now()-t0);ms.push(m);st=3;if(ms.length==5){const a=Math.round(ms.reduce((x,y)=>x+y)/5);setS(Math.max(0,1000-a));return end("Wastani: "+a+" ms ⚡")}p.className="react idle";p.textContent=m+" ms • raundi "+ms.length+"/5 — gusa kuendelea"}};s.append(p)}
+
+function clicker(s){const c=clock(10,()=>end("Muda umeisha ⏱")),b=E("button","pri","👆 GUSA!");b.style.cssText="width:220px;height:220px;border-radius:50%;font-size:30px";b.onclick=()=>{setS(sc+1);beep(500+sc*5,.04)};s.append(c.el,b)}
+
+function math(s){const c=clock(30,()=>end("Muda umeisha ⏱")),q=E("div","big"),o=E("div","opts"),mx=[10,20,50][P.lvl];s.append(c.el,q,o);
+function nx(){const a=1+R(mx),b=1+R(mx),op=["+","-","×"][R(3)],A=op=="+"?a+b:op=="-"?a-b:a*b;q.textContent=`${a} ${op} ${b} = ?`;const z=new Set([A]);while(z.size<4)z.add(A+R(11)-5);o.innerHTML="";sh([...z]).forEach(v=>{const bt=E("button","",v);bt.onclick=()=>{if(v==A){setS(sc+1);beep(700,.06)}else{c.sub(3);beep(200,.1,"square")}if(!over)nx()};o.append(bt)})}nx()}
+
+function color(s){const c=clock(20,()=>end("Muda umeisha ⏱")),w=E("div","big"),o=E("div","opts"),N=["Nyekundu","Bluu","Kijani","Njano"],H=["#ef4444","#3b82f6","#22c55e","#eab308"];let k;
+s.append(c.el,E("div","hint","Chagua RANGI ya wino, si neno lenyewe!"),w,o);
+N.forEach((n,i)=>{const b=E("button","",n);b.style.borderBottom="5px solid "+H[i];b.onclick=()=>{if(i==k){setS(sc+1);beep(700,.06)}else{c.sub(3);beep(200,.1,"square")}if(!over)nx()};o.append(b)});
+function nx(){k=R(4);w.textContent=N[R(4)];w.style.color=H[k]}nx()}
+
+function hang(s){const WD=["PAKA","SIMU","NYUMBA","RAFIKI","SHULE","MTOTO","CHAKULA","ZIMAMOTO","TANZANIA","KITABU","MAJI","JUA","MCHEZO"],w=WD[R(WD.length)];let u=[],l=6;const hw=E("div","big"),hl=E("div","hint"),kb=E("div","kb");
+const draw=()=>{hw.textContent=[...w].map(c=>u.includes(c)?c:"_").join(" ");hl.textContent="❤️".repeat(l)+"🖤".repeat(6-l)};
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(c=>{const b=E("button","",c);b.onclick=()=>{b.disabled=1;b.style.opacity=.3;u.push(c);if(w.includes(c))beep(700,.06);else{l--;beep(200,.12,"square")}draw();if([...w].every(x=>u.includes(x))){setS(l*10+w.length);end("Umeshinda! 🎉")}else if(!l)end("Neno lilikuwa "+w+" 😢")};kb.append(b)});s.append(hl,hw,kb);draw()}
+
+function guess(s){const mx=[20,50,100][P.lvl],a=1+R(mx);let n=0;const h=E("div","hint",`Kisia namba kati ya 1 na ${mx}`),i=E("input","fld"),go=E("button","pri","Kisia"),r=E("div","row");i.type="number";i.inputMode="numeric";r.append(i,go);
+const f=()=>{if(!i.value)return;const v=+i.value;n++;i.value="";if(v==a){setS(Math.max(1,100-n*8));end(`Sahihi baada ya ${n}! 🎉`)}else{beep(300,.08);h.innerHTML=`<b>${v}</b> ni ndogo/kubwa mno: tafuta ${v<a?"kubwa zaidi ⬆️":"ndogo zaidi ⬇️"} • majaribio ${n}`}};go.onclick=f;i.onkeydown=e=>e.key=="Enter"&&f();s.append(h,r)}
+
+function rps(s){const em=["✊","✋","✌️"],N=["Jiwe","Karatasi","Mkasi"],out=E("div","big","🤔"),h=E("div","hint","Shinda mfululizo! Ukishindwa mchezo unaisha."),r=E("div","row");
+em.forEach((e,i)=>{const b=E("button","pri",e);b.style.fontSize="34px";b.onclick=()=>{const c=R(3);out.textContent=e+" vs "+em[c];if(i==c)h.textContent="Sare — rudia";else if((i-c+3)%3==1){setS(sc+1);beep(700);h.textContent="Umeshinda! 🎉"}else end("Kompyuta: "+N[c])};r.append(b)});s.append(out,h,r)}
+
+function trivia(s){const Q=[["Mji mkuu wa Tanzania?","Dodoma","Dar es Salaam","Arusha","Mwanza"],["Mlima mrefu zaidi Afrika?","Kilimanjaro","Meru","Kenya","Elgon"],["Siku ngapi kwa wiki?","7","5","6","8"],["2 + 3 × 4 = ?","14","20","24","9"],["Sayari tunayoishi?","Dunia","Mirihi","Zuhura","Zohali"],["Ziwa kubwa zaidi Afrika?","Victoria","Tanganyika","Nyasa","Rukwa"],["Rais wa kwanza wa Tanzania?","Julius Nyerere","Ali Hassan Mwinyi","Benjamin Mkapa","Abeid Karume"],["Kisiwa maarufu kwa karafuu?","Zanzibar","Mafia","Kilwa","Ukerewe"],["Lugha ya taifa ya Tanzania?","Kiswahili","Kiarabu","Kireno","Kifaransa"],["Maji huchemka kwa nyuzi ngapi (°C)?","100","50","90","120"],["Mnyama mkubwa wa nchi kavu?","Tembo","Twiga","Simba","Kiboko"],["Bahari iliyo mashariki ya Tanzania?","Hindi","Atlantiki","Pasifiki","Arktiki"]],qs=sh(Q).slice(0,8);let i=0;
+const p=E("div","hint"),q=E("div","big"),o=E("div","opts");q.style.fontSize="22px";s.append(p,q,o);
+function nx(){if(i==8)return end(`Umepata ${sc}/8 🧠`);const[t,...a]=qs[i];p.textContent=`Swali ${i+1}/8`;q.textContent=t;o.innerHTML="";sh(a.map((x,j)=>[x,j])).forEach(([x,j])=>{const b=E("button","",x);b.onclick=()=>{[...o.children].forEach(z=>z.disabled=1);if(!j){setS(sc+1);b.style.background="#16a34a";beep(700)}else{b.style.background="#dc2626";beep(200,.15,"square");[...o.children].find(z=>z.textContent==a[0]).style.background="#16a34a"}i++;to(nx,900)};o.append(b)})}nx()}
+
+const CAT=[
+["snake","🐍","Snake","Kula 🍎 ukue mrefu. Swipe au mishale; epuka ukuta na mkia.",150,snake],
+["2048","🔢","2048","Swipe kuunganisha namba zinazofanana hadi 2048.",260,g2048],
+["memory","🧠","Memory","Fungua kadi mbili, tafuta jozi zote 8.",280,memory],
+["ttt","⭕","Tic-Tac-Toe","Dhidi ya kompyuta au rafiki. Weka mstari wa 3.",330,ttt],
+["simon","🟢","Simon","Tazama rangi na uzirudie kwa mpangilio.",120,simon],
+["whack","⭐","Gusa Nyota","Gusa nyota kabla haijapotea, sekunde 20.",48,whack],
+["reaction","⚡","Reaction","Pima kasi yako: gusa mara tu kijani kinapoonekana.",50,reaction],
+["clicker","👆","Quick Click","Gusa mara nyingi uwezavyo ndani ya sekunde 10.",200,clicker],
+["math","➕","Hesabu Haraka","Jibu hesabu nyingi ndani ya sekunde 30.",20,math],
+["color","🎨","Color Match","Chagua rangi ya wino, si neno.",300,color],
+["hang","📝","Kisia Neno","Kisia neno la Kiswahili kwa herufi, una maisha 6.",180,hang],
+["guess","🔎","Kisia Namba","Tafuta namba iliyofichwa kwa vidokezo.",230,guess],
+["rps","✊","Jiwe Karatasi Mkasi","Shinda mfululizo dhidi ya kompyuta.",10,rps],
+["trivia","🌍","Trivia","Maswali 8 ya maarifa kwa Kiswahili.",160,trivia]];
+
+function list(){const q=$("#q").value.toLowerCase(),l=CAT.filter(g=>(g[2]+g[3]).toLowerCase().includes(q));$("#cnt").textContent="("+l.length+")";const L=$("#list");L.innerHTML="";
+l.forEach(g=>{const c=E("button","card",`<div class="ic">${g[1]}</div><h3>${g[2]}</h3><p>${g[3]}</p><small>🏆 Rekodi: ${P.best[g[0]]||0}</small>`);c.style.setProperty("--h",g[4]);c.onclick=()=>openG(g[0]);L.append(c)})}
+const rnd=()=>openG(CAT[R(CAT.length)][0]);
+$("#q").oninput=list;
+document.addEventListener("keydown",e=>{if(e.key=="Escape"){closeG();$("#set").classList.remove("open")}else if(kh&&!/INPUT|SELECT/.test(document.activeElement.tagName))kh(e)});
+$("#play").onclick=e=>{if(e.target.id=="play")closeG()};$("#set").onclick=e=>{if(e.target.id=="set")e.target.classList.remove("open")};
+applyP();list();
+</script>
+</body>
+</html>

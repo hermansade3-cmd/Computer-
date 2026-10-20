@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Circuit Designer — KiCad Simulator</title>
+<style>
+:root{--bg:#0b1220;--pn:#111b2e;--bd:#223250;--ac:#38e8b0;--tx:#dbe7ff}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:13px Inter,Segoe UI,system-ui,sans-serif;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100%}#bar{display:flex;gap:6px;padding:8px;background:linear-gradient(180deg,#14213a,#0f192d);align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--bd)}
+button,select,input{background:#172742;color:var(--tx);border:1px solid var(--bd);padding:5px 10px;border-radius:8px;cursor:pointer;font:inherit;transition:.12s}button:hover{background:#1f355a;border-color:var(--ac)}button.on{background:var(--ac);color:#03251b;border-color:var(--ac);font-weight:700}button.r{background:#5b1f2c;border-color:#8b2f43}
+#main{flex:1;display:flex;min-height:0}#tools{width:112px;background:var(--pn);overflow:auto;padding:6px;display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--bd)}#tools button{text-align:left;padding:6px 8px;font-size:12px}#tools hr{border:0;border-top:1px solid var(--bd);width:100%;margin:2px 0}
+#cv{flex:1;display:block;background:radial-gradient(circle at 50% 30%,#0f1b30,#080e19);min-width:0;cursor:crosshair}#rp{width:240px;background:var(--pn);padding:10px;display:flex;flex-direction:column;gap:8px;overflow:auto;border-left:1px solid var(--bd)}#sc{background:#03070d;border:1px solid var(--bd);border-radius:8px;width:100%;height:130px}#nfo{font:12px Consolas,monospace;white-space:pre-wrap;line-height:1.6;background:#0b1424;border-radius:8px;padding:8px}
+#st{background:#0f192d;padding:4px 12px;font-size:12px;color:var(--ac);border-top:1px solid var(--bd)}
+</style><style id="sade-polish">:root{color-scheme:dark light}*{scrollbar-width:thin;scrollbar-color:#6b7fb355 transparent}::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:#6b7fb355;border-radius:9px}::selection{background:#7c9cff55}button,select,input,[role=button]{transition:background .18s,border-color .18s,transform .12s,box-shadow .18s,filter .18s}button:not(:disabled):active{transform:scale(.96)}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #38e8b0;outline-offset:2px}button:not(:disabled):hover{box-shadow:0 4px 14px #0003}@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}</style></head><body><div id="app"><div id="bar">
+<button id="run" class="on">⏸ Pumzika</button><button id="rst">↺ Weka upya</button><label>dt <select id="dt"><option value="1e-5">10µs</option><option value="1e-4">100µs</option><option value="1e-3" selected>1ms</option><option value="1e-2">10ms</option></select></label>
+<select id="ex"><option value="">Mifano…</option></select><button id="un">↶</button><button id="rd">↷</button><button id="sv">💾 Hifadhi</button><button id="ld">📂 Pakia</button><button id="ex2">⬇ JSON</button><button id="nl">📄 SPICE</button><button id="ps">📷 PNG</button><button id="clr" class="r">🗑 Futa yote</button></div>
+<div id="main"><div id="tools"></div><canvas id="cv"></canvas><div id="rp"><b>Sifa</b><div id="nfo">Chagua kipengele au weka kipya.</div><div id="pe"></div><b>Oscilloscope</b><canvas id="sc" width="214" height="120"></canvas><div style="font-size:11px;opacity:.7">Tumia Probe kwenye waya/pin kuona voltage. Space: SW/Run · R: zungusha · Del: futa · Dbl-click: badilisha thamani</div></div></div>
+<div id="st">Tayari</div></div>
+<script>
+const $=s=>document.querySelector(s),cv=$('#cv'),g=cv.getContext('2d'),sc=$('#sc').getContext('2d'),G=20;
+const TY={R:{n:'Resistor',u:'Ω',v:1000,c:'#e8b35a'},C:{n:'Capacitor',u:'F',v:1e-6,c:'#6ac'},L:{n:'Inductor',u:'H',v:.1,c:'#c8a'},V:{n:'Betri DC',u:'V',v:9,c:'#f66'},AC:{n:'Chanzo AC',u:'V',v:5,f:50,c:'#fa6'},I:{n:'Chanzo I',u:'A',v:.01,c:'#9f9'},SW:{n:'Swichi',u:'',v:1,c:'#ddd'},D:{n:'Diode',u:'',v:0,c:'#ccc'},LED:{n:'LED',u:'',v:0,c:'#f55'},GND:{n:'Ground',u:'',v:0,c:'#8c8'},ZD:{n:'Zener',u:'V',v:5.1,c:'#fd6'},NPN:{n:'Transistor NPN',u:'',v:100,c:'#9cf'},PNP:{n:'Transistor PNP',u:'',v:100,c:'#c9f'},OA:{n:'Op-Amp',u:'V',v:12,c:'#6fe'}};
+let P=[],W=[],PR=[],sel=null,tool='sel',run=true,t=0,ws=null,mouse=[0,0],drag=null,hist=[],dt=1e-3,state={};
+const ND=(x,y)=>x+','+y,rot=(x,y,r)=>[[x,y],[-y,x],[-x,-y],[y,-x]][r%4],
+pins=p=>p.k==='GND'?[[p.x,p.y]]:(p.k==='NPN'||p.k==='PNP'?[[-40,0],[20,-40],[20,40]]:p.k==='OA'?[[-40,-20],[-40,20],[40,0]]:[[-40,0],[40,0]]).map(q=>rot(q[0],q[1],p.r)).map(a=>[p.x+a[0],p.y+a[1]]);
+const parse=s=>{const m=String(s).trim().match(/^(-?[\d.]+(?:e[+-]?\d+)?)\s*([pnuµmkKMG]?)/);if(!m)return NaN;const x={p:1e-12,n:1e-9,u:1e-6,'µ':1e-6,m:1e-3,k:1e3,K:1e3,M:1e6,G:1e9,'':1}[m[2]];return parseFloat(m[1])*x};
+const fm=(v,u)=>{const a=Math.abs(v);if(a===0)return '0'+u;const s=[[1e9,'G'],[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n'],[1e-12,'p']].find(x=>a>=x[0]*.9999)||[1e-12,'p'];return (+(v/s[0]).toPrecision(3))+s[1]+u};
+// ---------- Simulation ----------
+function nets(){const par={},f=k=>par[k]===k?k:(par[k]=f(par[k])),u=(a,b)=>{par[f(a)]=f(b)},pts=new Set();
+const add=k=>{if(!(k in par))par[k]=k;pts.add(k)};P.forEach(p=>pins(p).forEach(a=>add(ND(...a))));W.forEach(w=>{add(ND(w[0],w[1]));add(ND(w[2],w[3]));u(ND(w[0],w[1]),ND(w[2],w[3]))});PR.forEach(p=>add(ND(...p)));
+W.forEach(w=>{pts.forEach(k=>{const[x,y]=k.split(',').map(Number);if(((w[0]===w[2]&&x===w[0])&&y>=Math.min(w[1],w[3])&&y<=Math.max(w[1],w[3]))||((w[1]===w[3]&&y===w[1])&&x>=Math.min(w[0],w[2])&&x<=Math.max(w[0],w[2])))u(k,ND(w[0],w[1]))})});
+const gnd=P.filter(p=>p.k==='GND').map(p=>ND(p.x,p.y));if(gnd.length)gnd.forEach(k=>u(k,gnd[0]));else{const v=P.find(p=>p.k==='V'||p.k==='AC');if(v){const a=pins(v)[0];u(ND(...a),ND(...a))}}
+const root=gnd.length?f(gnd[0]):(()=>{const v=P.find(p=>p.k==='V'||p.k==='AC');return v?f(ND(...pins(v)[0])):null})(),id={},cnt=1;let c=cnt;if(root)id[root]=0;else c=0;
+pts.forEach(k=>{const r=f(k);if(!(r in id))id[r]=c++});return{id:k=>id[f(k)],n:c-1+(root?0:1)>0?c:c,cnt:c,rootless:!root}}
+function solve(A,z){const n=z.length;for(let i=0;i<n;i++){let m=i;for(let r=i+1;r<n;r++)if(Math.abs(A[r][i])>Math.abs(A[m][i]))m=r;if(Math.abs(A[m][i])<1e-18)A[m][i]=1e-12;[A[i],A[m]]=[A[m],A[i]];[z[i],z[m]]=[z[m],z[i]];for(let r=i+1;r<n;r++){const f=A[r][i]/A[i][i];if(f){for(let c=i;c<n;c++)A[r][c]-=f*A[i][c];z[r]-=f*z[i]}}}
+const x=new Array(n);for(let i=n-1;i>=0;i--){let s=z[i];for(let c=i+1;c<n;c++)s-=A[i][c]*x[c];x[i]=s/A[i][i]}return x}
+
+const gz=(v,Vz)=>{const vv=Math.max(-Vz-1.5,Math.min(.9,v)),a=Math.exp(vv/.02585),b=Math.exp((-vv-Vz)/.03);return[1e-12*(a-1)-1e-9*b,1e-12/.02585*a+1e-9/.03*b+1e-12,vv]};
+function bjt(p,vk,NET){const[pb,pc,pe]=pins(p),B=NET.id(ND(...pb)),C=NET.id(ND(...pc)),E=NET.id(ND(...pe)),s=p.k==='PNP'?-1:1,V=n=>vk[n]||0,Vt=.02585,Is=1e-14,bf=p.v,br=2;
+const ve=Math.min(.9,s*(V(B)-V(E))),vc=Math.min(.9,s*(V(B)-V(C))),Ee=Math.exp(ve/Vt),Ec=Math.exp(vc/Vt),a=Is/Vt*Ee,b=Is/Vt*Ec;
+const Ib=Is/bf*(Ee-1)+Is/br*(Ec-1),Ic=Is*(Ee-Ec)-Is/br*(Ec-1),Ie=-(Ib+Ic);
+return[[B,Ib,a/bf,b/br,ve,vc],[C,Ic,a,-b-b/br,ve,vc],[E,Ie,-a/bf-a,-b/br+b+b/br,ve,vc]].map(r=>({n:r[0],i:r[1]*s,de:r[2],dc:r[3],Ieq:s*(r[1]-r[2]*r[4]-r[3]*r[5]),B,C,E,Ib:Ib*s,Ic:Ic*s}))}
+function multi(p,A,z,vk,N,NET){if(p.k==='OA'){const[pp,pn,po]=pins(p),P=NET.id(ND(...pp)),M=NET.id(ND(...pn)),O=NET.id(ND(...po)),V=n=>vk[n]||0,Av=1e4,vd=V(P)-V(M),t=Av*vd,sat=Math.abs(t)>=p.v,T=Math.max(-p.v,Math.min(p.v,t)),sl=sat?1e-3:Av;if(O>0){A[O-1][O-1]+=1;if(P>0)A[O-1][P-1]-=sl;if(M>0)A[O-1][M-1]+=sl;z[O-1]+=T-sl*vd}return true}
+if(p.k==='NPN'||p.k==='PNP'){bjt(p,vk,NET).forEach(r=>{if(r.n<=0)return;const row=A[r.n-1],add=(c,v)=>{if(c>0)row[c-1]+=v};add(r.B,r.de+r.dc);add(r.E,-r.de);add(r.C,-r.dc);z[r.n-1]-=r.Ieq});return true}return false}
+function multiD(p,vk,NET,S){if(p.k==='OA'){const[,,po]=pins(p),O=NET.id(ND(...po));S.cur=0;S.dv=vk[O]||0;return true}if(p.k==='NPN'||p.k==='PNP'){const r=bjt(p,vk,NET)[0];S.cur=r.Ic;S.dv=(vk[r.C]||0)-(vk[r.E]||0);S.ib=r.Ib;return true}return false}
+let NET=null,VN=[];
+function step(){if(!NET)NET=nets();const N=NET.cnt-1;const els=P.filter(p=>p.k!=='GND');const vs=els.filter(p=>p.k==='V'||p.k==='AC');const M=N+vs.length;if(N<1)return;
+let vk=VN.length===N+1?VN.slice():new Array(N+1).fill(0);const gm=1e-12;let x;
+for(let it=0;it<40;it++){const A=Array.from({length:M},()=>new Array(M).fill(0)),z=new Array(M).fill(0);
+for(let i=0;i<N;i++)A[i][i]+=gm;
+const sg=(a,b,gg)=>{if(a>0)A[a-1][a-1]+=gg;if(b>0)A[b-1][b-1]+=gg;if(a>0&&b>0){A[a-1][b-1]-=gg;A[b-1][a-1]-=gg}},si=(a,b,i)=>{if(a>0)z[a-1]-=i;if(b>0)z[b-1]+=i};
+let k=0;els.forEach(p=>{if(multi(p,A,z,vk,N,NET))return;const[pa,pb]=pins(p),a=NET.id(ND(...pa)),b=NET.id(ND(...pb)),S=state[p.id]||(state[p.id]={v:0,i:0});
+if(p.k==='R')sg(a,b,1/Math.max(p.v,1e-6));else if(p.k==='SW')sg(a,b,p.on?1e3:1e-9);else if(p.k==='C'){const gg=p.v/dt;sg(a,b,gg);si(a,b,-gg*S.v)}else if(p.k==='L'){const gg=dt/p.v;sg(a,b,gg);si(a,b,S.i)}
+else if(p.k==='I')si(a,b,p.v);else if(p.k==='ZD'){const q=gz((vk[a]||0)-(vk[b]||0),p.v);sg(a,b,q[1]);si(a,b,q[0]-q[1]*q[2])}else if(p.k==='D'||p.k==='LED'){const nv=(p.k==='LED'?2:1)*.02585,Is=p.k==='LED'?1e-18:1e-12,vd=Math.min((vk[a]||0)-(vk[b]||0),p.k==='LED'?3:.9),e=Math.exp(vd/nv),gg=Is/nv*e+1e-12;sg(a,b,gg);si(a,b,Is*(e-1)-gg*vd)}
+else if(p.k==='V'||p.k==='AC'){const r=N+k++,V=p.k==='V'?p.v:p.v*Math.sin(2*Math.PI*(p.f||50)*t);if(b>0){A[b-1][r]+=1;A[r][b-1]+=1}if(a>0){A[a-1][r]-=1;A[r][a-1]-=1}z[r]=V}});
+x=solve(A,z);const nx=[0,...x.slice(0,N)];let d=0;for(let i=0;i<=N;i++)d=Math.max(d,Math.abs(nx[i]-(vk[i]||0)));vk=nx;if(d<1e-7)break}
+VN=vk;let k=0;els.forEach(p=>{if(multiD(p,vk,NET,state[p.id]||(state[p.id]={v:0,i:0})))return;const[pa,pb]=pins(p),va=vk[NET.id(ND(...pa))]||0,vb=vk[NET.id(ND(...pb))]||0,S=state[p.id],v=va-vb;let i=0;
+if(p.k==='R')i=v/Math.max(p.v,1e-6);else if(p.k==='SW')i=v*(p.on?1e3:1e-9);else if(p.k==='C'){i=p.v/dt*(v-S.v);S.v=v}else if(p.k==='L'){i=dt/p.v*v+S.i;S.i=i}else if(p.k==='I')i=p.v;
+else if(p.k==='ZD')i=gz(v,p.v)[0];else if(p.k==='D'||p.k==='LED'){const nv=(p.k==='LED'?2:1)*.02585,Is=p.k==='LED'?1e-18:1e-12;i=Is*(Math.exp(Math.min(v,p.k==='LED'?3:.9)/nv)-1)}else{i=-x[N+k++]}
+S.i=p.k==='L'?S.i:i;S.cur=i;S.dv=v});t+=dt;PR.forEach((q,j)=>{const h=(state['p'+j]=state['p'+j]||[]);h.push(VN[NET.id(ND(...q))]||0);if(h.length>600)h.shift()})}
+// ---------- Drawing ----------
+const vc=v=>{const a=Math.min(1,Math.abs(v)/12);return v>=0?`rgb(${60+190*a|0},${200-100*a|0},${80})`:`rgb(80,${160-60*a|0},${200+50*a|0})`};
+function sym(p){const c=TY[p.k].c;g.strokeStyle=c;g.fillStyle=c;g.lineWidth=2;g.beginPath();const S=state[p.id]||{cur:0};
+if(p.k==='GND'){g.moveTo(0,0);g.lineTo(0,10);g.moveTo(-14,10);g.lineTo(14,10);g.moveTo(-9,15);g.lineTo(9,15);g.moveTo(-4,20);g.lineTo(4,20);g.stroke();return}
+if(p.k==='NPN'||p.k==='PNP'){g.moveTo(-40,0);g.lineTo(-8,0);g.moveTo(-8,-18);g.lineTo(-8,18);g.moveTo(-8,-8);g.lineTo(20,-24);g.lineTo(20,-40);g.moveTo(-8,8);g.lineTo(20,24);g.lineTo(20,40);g.stroke();g.beginPath();const u=p.k==='NPN'?1:-1;g.moveTo(20,24);g.lineTo(u>0?8:6,u>0?25:14);g.lineTo(u>0?14:12,u>0?14:25);if(u<0){g.moveTo(-1,12);g.lineTo(6,14);g.lineTo(2,20)}g.fill();g.beginPath();g.arc(2,0,26,0,7);g.globalAlpha=.25;g.stroke();g.globalAlpha=1;return}
+if(p.k==='OA'){g.moveTo(-40,-20);g.lineTo(-20,-20);g.moveTo(-40,20);g.lineTo(-20,20);g.moveTo(20,0);g.lineTo(40,0);g.moveTo(-20,-36);g.lineTo(-20,36);g.lineTo(24,0);g.closePath();g.stroke();g.font='bold 13px sans-serif';g.textAlign='center';g.fillText('+',-14,-16);g.fillText('−',-14,24);return}
+g.moveTo(-40,0);g.lineTo(-20,0);g.moveTo(20,0);g.lineTo(40,0);
+if(p.k==='R'){g.moveTo(-20,0);for(let i=0;i<6;i++)g.lineTo(-20+i*6.7+3.3,i%2?7:-7);g.lineTo(20,0)}
+else if(p.k==='C'){g.moveTo(-20,0);g.lineTo(-4,0);g.moveTo(-4,-12);g.lineTo(-4,12);g.moveTo(4,-12);g.lineTo(4,12);g.moveTo(4,0);g.lineTo(20,0)}
+else if(p.k==='L'){for(let i=0;i<4;i++)g.arc(-15+i*10,0,5,Math.PI,0)}
+else if(p.k==='SW'){g.moveTo(-20,0);g.lineTo(p.on?20:15,p.on?0:-14)}
+else if(p.k==='D'||p.k==='LED'||p.k==='ZD'){if(p.k==='ZD'){g.moveTo(10,-10);g.lineTo(15,-14);g.moveTo(10,10);g.lineTo(5,14)}g.moveTo(-10,-10);g.lineTo(-10,10);g.lineTo(10,0);g.closePath();g.moveTo(10,-10);g.lineTo(10,10);g.moveTo(-20,0);g.lineTo(-10,0);g.moveTo(10,0);g.lineTo(20,0);
+if(p.k==='LED'){const b=Math.min(1,Math.max(0,S.cur||0)/.015);if(b>.02){g.stroke();g.beginPath();const gr=g.createRadialGradient(0,0,2,0,0,36);gr.addColorStop(0,`rgba(255,80,60,${.9*b})`);gr.addColorStop(1,'rgba(255,60,40,0)');g.fillStyle=gr;g.arc(0,0,36,0,7);g.fill();g.beginPath()}g.moveTo(-2,-14);g.lineTo(6,-22);g.moveTo(4,-12);g.lineTo(12,-20)}}
+else{g.moveTo(16,0);g.arc(0,0,16,0,7);if(p.k==='V'){g.moveTo(-16,0);g.lineTo(-26,0)}g.stroke();g.beginPath();g.font='bold 14px sans-serif';g.textAlign='center';if(p.k==='V'){g.fillText('+',7,5);g.fillText('−',-8,5)}else if(p.k==='AC'){g.moveTo(-10,0);g.bezierCurveTo(-5,-12,-1,-12,0,0);g.bezierCurveTo(1,12,5,12,10,0)}else{g.moveTo(-8,0);g.lineTo(8,0);g.lineTo(3,-4);g.moveTo(8,0);g.lineTo(3,4)}}
+g.stroke()}
+function draw(){const r=cv.getBoundingClientRect();if(cv.width!==r.width|0||cv.height!==r.height|0){cv.width=r.width;cv.height=r.height}g.clearRect(0,0,cv.width,cv.height);g.fillStyle='#1d3150';for(let x=0;x<cv.width;x+=G)for(let y=0;y<cv.height;y+=G)g.fillRect(x,y,1,1);
+W.forEach(w=>{const v=NET?VN[NET.id(ND(w[0],w[1]))]||0:0;g.strokeStyle=run&&NET?vc(v):'#4c8';g.lineWidth=2.5;g.beginPath();g.moveTo(w[0],w[1]);g.lineTo(w[2],w[3]);g.stroke()});
+P.forEach(p=>{g.save();g.translate(p.x,p.y);g.rotate(p.r*Math.PI/2);if(p===sel){g.fillStyle='#ffffff14';g.fillRect(-46,-24,92,48)}sym(p);g.restore();
+g.fillStyle='#d8f0e0';g.font='11px sans-serif';g.textAlign='center';const lbl=p.k==='GND'?'GND':p.k==='SW'?(p.on?'ON':'OFF'):p.k==='D'||p.k==='LED'?p.k:fm(p.v,TY[p.k].u)+(p.k==='AC'?'@'+(p.f||50)+'Hz':'');g.fillText(lbl,p.x,p.y+(p.r%2?-0:-24)-(p.r%2?(-34):0));
+const S=state[p.id];if(S&&run&&p.k!=='GND'){g.fillStyle='#ffd166';g.fillText(fm(S.cur||0,'A'),p.x+(p.r%2?30:0),p.y+(p.r%2?4:30))}});
+pins({k:'x',x:0,y:0,r:0});P.forEach(p=>pins(p).forEach(a=>{g.fillStyle='#fff';g.fillRect(a[0]-2,a[1]-2,4,4)}));
+PR.forEach((q,j)=>{g.strokeStyle='#ff0';g.beginPath();g.arc(q[0],q[1],6,0,7);g.stroke();g.fillStyle='#ff0';g.font='bold 11px sans-serif';g.fillText('P'+(j+1)+' '+(NET&&VN.length?fm(VN[NET.id(ND(...q))]||0,'V'):''),q[0]+10,q[1]-8)});
+if(ws){g.strokeStyle='#ff0';g.setLineDash([4,4]);g.beginPath();g.moveTo(ws[0],ws[1]);g.lineTo(mouse[0],ws[1]);g.lineTo(mouse[0],mouse[1]);g.stroke();g.setLineDash([])}
+if(TY[tool]){g.globalAlpha=.5;g.save();g.translate(mouse[0],mouse[1]);sym({k:tool,r:0,id:'g',on:1});g.restore();g.globalAlpha=1}
+scope()}
+function scope(){sc.fillStyle='#000';sc.fillRect(0,0,214,120);sc.strokeStyle='#1b3a28';for(let i=1;i<4;i++){sc.beginPath();sc.moveTo(0,i*30);sc.lineTo(214,i*30);sc.stroke()}
+PR.forEach((q,j)=>{const h=state['p'+j]||[];if(!h.length)return;const mx=Math.max(1e-3,...h.map(Math.abs));sc.strokeStyle=['#ff0','#0ff','#f0f','#0f0'][j%4];sc.beginPath();h.forEach((v,i)=>{const X=i*214/600,Y=60-v/mx*50;i?sc.lineTo(X,Y):sc.moveTo(X,Y)});sc.stroke();sc.fillStyle=sc.strokeStyle;sc.font='10px sans-serif';sc.fillText('P'+(j+1)+' ±'+fm(mx,'V'),4,12+j*11)})}
+// ---------- UI ----------
+function tools(){const T=$('#tools');T.innerHTML='';[['sel','↖ Chagua'],['wire','〰 Waya'],['probe','🔎 Probe'],...Object.keys(TY).map(k=>[k,TY[k].n])].forEach(([k,n])=>{const b=document.createElement('button');b.textContent=n;b.className=tool===k?'on':'';b.onclick=()=>{tool=k;ws=null;tools()};T.append(b)})}
+const snap=v=>Math.round(v/G)*G,pos=e=>{const r=cv.getBoundingClientRect();return[snap(e.clientX-r.left),snap(e.clientY-r.top)]};
+const hit=(x,y)=>P.find(p=>Math.hypot(p.x-x,p.y-y)<(p.k==='GND'?16:28));
+let UH=[],RH=[];const ch=(nh)=>{NET=null;VN=[];state={};t=0;PR.forEach((_,j)=>state['p'+j]=[]);auto();if(nh!==1){UH.push(dump());if(UH.length>60)UH.shift();RH=[]}};
+const auto=()=>{localStorage.setItem('cd_auto',JSON.stringify({P,W,PR}))};
+let uid=1;cv.onmousedown=e=>{const[x,y]=pos(e);if(e.button===2){ws=null;tool='sel';tools();return}
+if(tool==='sel'){const p=hit(x,y);sel=p||null;if(p)drag={p,ox:x-p.x,oy:y-p.y,moved:0};info()}
+else if(tool==='wire'){if(!ws)ws=[x,y];else{if(ws[1]!==ws[1]||ws[0]!==x)if(ws[0]!==x)W.push([ws[0],ws[1],x,ws[1]]);if(ws[1]!==y)W.push([x,ws[1],x,y]);ws=[x,y];ch()}}
+else if(tool==='probe'){PR.push([x,y]);if(PR.length>4)PR.shift();ch()}
+else{const p={id:uid++,k:tool,x,y,r:0,v:TY[tool].v,f:TY[tool].f,on:1};P.push(p);sel=p;tool='sel';tools();ch();info()}};
+cv.onmousemove=e=>{mouse=pos(e);if(NET&&VN.length){const id=NET.id(ND(...mouse));if(id!==undefined&&isFinite(VN[id]))$('#st').textContent='🔎 Voltage kwenye ('+mouse+') = '+fm(VN[id],'V')}if(drag){const[x,y]=mouse;if(x-drag.ox!==drag.p.x||y-drag.oy!==drag.p.y){drag.p.x=x-drag.ox;drag.p.y=y-drag.oy;drag.moved=1;NET=null}}};
+onmouseup=()=>{if(drag){if(drag.moved)ch();else if(drag.p.k==='SW'){drag.p.on=!drag.p.on;info()}drag=null}};
+cv.ondblclick=e=>{const p=hit(...pos(e));if(p&&!['GND','D','LED','SW'].includes(p.k)){const s=prompt(TY[p.k].n+' ('+TY[p.k].u+'): mf. 4.7k, 100u, 9',fm(p.v,''));const v=parse(s);if(!isNaN(v)){p.v=v;ch()}if(p.k==='AC'){const f=parse(prompt('Frequency (Hz)',p.f||50));if(f>0)p.f=f}info()}else if(!p){const q=pos(e),i=W.findIndex(w=>(w[0]===w[2]&&w[0]===q[0]&&q[1]>=Math.min(w[1],w[3])&&q[1]<=Math.max(w[1],w[3]))||(w[1]===w[3]&&w[1]===q[1]&&q[0]>=Math.min(w[0],w[2])&&q[0]<=Math.max(w[0],w[2])));if(i>=0){W.splice(i,1);ch()}}};
+cv.oncontextmenu=e=>e.preventDefault();
+onkeydown=e=>{if(['INPUT','SELECT'].includes(e.target.tagName))return;if(e.ctrlKey&&e.key==='z'){$('#un').click();return}if(e.ctrlKey&&e.key==='y'){$('#rd').click();return}if(e.key==='Escape'){ws=null;tool='sel';tools()}else if(e.key==='r'&&sel){sel.r=(sel.r+1)%4;ch()}else if((e.key==='Delete'||e.key==='Backspace')&&sel){P=P.filter(p=>p!==sel);sel=null;ch();info()}else if(e.key===' '){e.preventDefault();if(sel&&sel.k==='SW'){sel.on=!sel.on;info()}else $('#run').click()}else if(e.key==='w'){tool='wire';tools()}};
+function info(){const p=sel;$('#nfo').textContent=p?`${TY[p.k].n}\nThamani: ${p.k==='SW'?(p.on?'Imefungwa':'Wazi'):fm(p.v,TY[p.k].u)}\n`+(state[p.id]?`I = ${fm(state[p.id].cur||0,'A')}\nV = ${fm(state[p.id].dv||0,'V')}\nP = ${fm(Math.abs((state[p.id].cur||0)*(state[p.id].dv||0)),'W')}`:''):`Vipengele: ${P.length}  Waya: ${W.length}\nNodi: ${NET?NET.cnt:0}\nMuda: ${t.toFixed(3)} s`;}
+$('#run').onclick=()=>{run=!run;$('#run').textContent=run?'⏸ Pumzika':'▶ Endesha';$('#run').className=run?'on':''};$('#rst').onclick=()=>{state={};VN=[];t=0;PR.forEach((_,j)=>state['p'+j]=[])};$('#dt').onchange=e=>dt=+e.target.value;
+$('#clr').onclick=()=>{if(confirm('Futa mzunguko wote?')){P=[];W=[];PR=[];sel=null;ch()}};
+const dump=()=>JSON.stringify({P,W,PR});const loadJ=(s,nh)=>{const o=JSON.parse(s);P=o.P;W=o.W;PR=o.PR||[];uid=Math.max(0,...P.map(p=>p.id))+1;sel=null;ch(nh)};
+$('#un').onclick=()=>{if(UH.length>1){RH.push(UH.pop());loadJ(UH[UH.length-1],1)}};$('#rd').onclick=()=>{if(RH.length){const x=RH.pop();UH.push(x);loadJ(x,1)}};
+$('#nl').onclick=()=>{if(!NET)NET=nets();const nm={R:'R',C:'C',L:'L',V:'V',AC:'V',I:'I',SW:'R',D:'D',LED:'D',ZD:'D',NPN:'Q',PNP:'Q',OA:'X'};let o='* Sade Circuit Designer\n';P.filter(p=>p.k!=='GND').forEach(p=>{const n=pins(p).map(a=>NET.id(ND(...a))).join(' ');o+=(nm[p.k]||'X')+p.id+' '+n+' '+(p.k==='AC'?'SIN(0 '+p.v+' '+(p.f||50)+')':p.k==='SW'?(p.on?'0.001':'1G'):p.k==='NPN'?'NPN':p.k==='PNP'?'PNP':p.k==='OA'?'OPAMP':['LED','D','ZD'].includes(p.k)?'DMOD':p.v)+'\n'});o+='.tran 1m 1\n.end\n';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([o]));a.download='mzunguko.cir';a.click()};
+$('#sv').onclick=()=>{localStorage.setItem('cd_save',dump());$('#st').textContent='Imehifadhiwa ✔'};$('#ld').onclick=()=>{const s=localStorage.getItem('cd_save');s?loadJ(s):alert('Hakuna iliyohifadhiwa')};
+$('#ex2').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([dump()]));a.download='mzunguko.json';a.click()};$('#ps').onclick=()=>{const a=document.createElement('a');a.href=cv.toDataURL();a.download='mzunguko.png';a.click()};
+const mk=(k,x,y,r,v,f)=>({id:uid++,k,x,y,r,v:v??TY[k].v,f,on:1});
+const EXS={'LED + Resistor':()=>({P:[mk('V',120,200,3,9),mk('R',200,160,0,330),mk('LED',280,200,1),mk('GND',200,240,0)],W:[[120,160,160,160],[240,160,280,160],[280,240,120,240]],PR:[[240,160]]}),
+'RC Charging':()=>({P:[mk('V',120,200,3,5),mk('SW',200,160,0),mk('R',320,160,0,1000),mk('C',400,200,1,1e-3),mk('GND',260,240,0)],W:[[120,160,160,160],[240,160,280,160],[360,160,400,160],[400,240,120,240]],PR:[[400,160]]}),
+'Voltage Divider':()=>({P:[mk('V',120,200,3,12),mk('R',200,160,0,10000),mk('R',280,200,1,5000),mk('GND',200,240,0)],W:[[120,160,160,160],[240,160,280,160],[280,240,120,240]],PR:[[280,160]]}),
+'Half-wave Rectifier':()=>({P:[mk('AC',120,200,3,10,50),mk('D',220,160,0),mk('R',300,200,1,1000),mk('GND',200,240,0)],W:[[120,160,180,160],[260,160,300,160],[300,240,120,240]],PR:[[120,160],[300,160]]}),
+'Transistor Switch':()=>({P:[mk('V',120,200,3,9),mk('R',200,220,0,47000),mk('NPN',320,220,0,100),mk('R',260,100,0,330),mk('LED',340,140,1),mk('GND',340,300,0)],W:[[160,220,160,160],[120,160,160,160],[240,220,280,220],[120,160,120,100],[120,100,220,100],[300,100,340,100],[340,260,340,300],[120,240,120,300],[120,300,340,300]],PR:[[340,180]]}),
+'Inverting Op-Amp':()=>({P:[mk('AC',100,240,3,1,100),mk('R',180,200,0,1000),mk('OA',300,200,0,12),mk('R',300,140,0,10000),mk('GND',260,180,0),mk('GND',100,280,0)],W:[[100,200,140,200],[220,200,220,220],[220,220,260,220],[260,140,220,140],[220,140,220,200],[340,140,340,200]],PR:[[100,200],[340,200]]}),
+'Zener Regulator':()=>({P:[mk('V',120,200,3,12),mk('R',200,160,0,330),mk('ZD',280,200,3,5.1),mk('R',360,200,1,1000),mk('GND',200,240,0)],W:[[120,160,160,160],[240,160,280,160],[280,240,120,240],[280,160,360,160],[360,240,280,240]],PR:[[280,160]]}),
+'RLC Series':()=>({P:[mk('AC',120,200,3,5,159),mk('R',200,160,0,10),mk('L',320,160,0,.01),mk('C',440,200,1,1e-4),mk('GND',200,240,0)],W:[[120,160,160,160],[240,160,280,160],[360,160,440,160],[440,240,120,240]],PR:[[440,160],[120,160]]})};
+Object.keys(EXS).forEach(k=>$('#ex').add(new Option(k,k)));$('#ex').onchange=e=>{if(e.target.value){loadJ(JSON.stringify(EXS[e.target.value]()));e.target.value=''}};
+let fr=0;(function loop(){if(run&&P.length)try{for(let i=0;i<8;i++)step()}catch(x){$('#st').textContent='Kosa la simulation: '+x.message}if(++fr%6===0)info();draw();requestAnimationFrame(loop)})();
+try{const a=localStorage.getItem('cd_auto');a&&JSON.parse(a).P.length?loadJ(a):loadJ(JSON.stringify(EXS['LED + Resistor']()))}catch(e){loadJ(JSON.stringify(EXS['LED + Resistor']()))}
+tools();
+</script></body></html>
