@@ -108,7 +108,7 @@ td{padding:6px 4px;border-bottom:1px solid var(--bd)}tr:last-child td{border-bot
 /* ============ INJINI YA MFUMO MZIMA (inaendeshwa kwenye desktop/parent) ============ */
 function RT(){
  'use strict';
- const VER=4,W=window,D=document;
+ const VER=5,W=window,D=document;
  if(W.SADEACC&&W.SADEACC.v>=VER)return;
  if(W.SADEACC&&W.SADEACC.destroy){try{W.SADEACC.destroy()}catch(e){}}
  const BASE={isz:100,hc:0,gs:0,inv:0,ra:0};
@@ -176,7 +176,7 @@ function RT(){
   if(X.bold)o.push('*'+t+'{font-weight:700 !important}');
   if(!root){let s='';if(X.ls)s+='letter-spacing:'+X.ls+'px !important;';if(X.ws)s+='word-spacing:'+X.ws+'px !important;';if(X.lh)s+='line-height:'+X.lh/10+' !important;';if(s)o.push('body *'+t+'{'+s+'}')}
   const th=TH[X.theme];
-  if(th)o.push('html,body,*'+t+':not(.acc-keep):not(.acc-keep *):not(img):not(video):not(canvas):not(iframe){background-color:'+th[0]+' !important;color:'+th[1]+' !important;border-color:'+th[1]+' !important;-webkit-text-fill-color:'+th[1]+' !important;text-shadow:none !important}a,a *{color:'+th[2]+' !important;-webkit-text-fill-color:'+th[2]+' !important}');
+  if(th){o.push('html,body,[data-sa-bg]'+t+':not(.acc-keep):not(.acc-keep *):not(img):not(video):not(canvas):not(iframe){background-color:'+th[0]+' !important}');o.push('html,body,*'+t+':not(.acc-keep):not(.acc-keep *):not(img):not(video):not(canvas):not(iframe){color:'+th[1]+' !important;border-color:'+th[1]+' !important;-webkit-text-fill-color:'+th[1]+' !important;text-shadow:none !important}a,a *{color:'+th[2]+' !important;-webkit-text-fill-color:'+th[2]+' !important}')}
   if(X.lnk)o.push('a,[role=link]{text-decoration:underline !important;text-decoration-thickness:2px !important;text-underline-offset:3px !important;background-image:linear-gradient(rgba(255,214,0,.28),rgba(255,214,0,.28)) !important}');
   if(X.foc)o.push('*:focus-visible{outline:3px solid #ffbf00 !important;outline-offset:2px !important;box-shadow:0 0 0 6px #000 !important}');
   if(X.cursz>0){const u=curUrl(+X.cursz,/^#[0-9a-f]{6}$/i.test(X.curcol)?X.curcol:'#000000');
@@ -194,7 +194,9 @@ function RT(){
 
  /* ---- docs (desktop + programu ndani ya iframe) ---- */
  function docs(){const out=[];const walk=(d,fr,dep)=>{out.push([d,fr]);if(dep>3)return;d.querySelectorAll('iframe,frame').forEach(f=>{try{const cd=f.contentDocument;if(cd&&cd.documentElement)walk(cd,f,dep+1)}catch(e){}})};walk(D,null,0);return out}
- function inject(d,fr){
+function mark(d){if(!TH[X.theme]||!d.body)return;const w=d.defaultView,a=d.body.getElementsByTagName('*'),n=Math.min(a.length,5000);
+  for(let i=0;i<n;i++){const e=a[i];if(e.__sab)continue;e.__sab=1;try{const m=w.getComputedStyle(e).backgroundColor.match(/[\d.]+/g);if(m&&(m.length<4||+m[3]>.15))e.setAttribute('data-sa-bg','')}catch(_){}}}
+ function inject(d,fr){mark(d);
   let st=d.getElementById('sade-acc-css');
   if(!st){st=d.createElement('style');st.id='sade-acc-css';(d.head||d.documentElement).appendChild(st)}
   const t=css(!fr);if(st.textContent!==t)st.textContent=t;
@@ -333,8 +335,16 @@ function RT(){
    if(A2&&!A2.__sacc){const os=A2.start;A2.start=function(){try{if(W.SADEACC===R&&X.vfl&&!R._b)R.flash()}catch(e){}return os.apply(this,arguments)};A2.__sacc=1}}catch(e){}}
 
  /* ---- apply ---- */
+ function sos(){const bad=TH[X.theme]||R.get('hc')||R.get('gs')||R.get('inv')||X.ct!=100||X.br!=100||X.sa!=100||X.nl||X.cb!=='none';
+  let b=D.getElementById('sa-sos');
+  if(!bad){if(b)b.style.display='none';return}
+  const o=mkOv();if(!o)return;
+  if(!b){b=D.createElement('button');b.id='sa-sos';b.type='button';b.textContent='Rudisha mwanzo';
+   b.style.cssText='position:absolute;left:10px;bottom:10px;pointer-events:auto;padding:10px 16px;border:3px solid #000;border-radius:8px;background:#b00020;color:#fff;font:800 15px Arial,sans-serif;cursor:pointer;-webkit-text-fill-color:#fff';
+   b.onclick=()=>{R.reset();toast('Mipangilio yote imerudishwa')};o.appendChild(b)}
+  b.style.display='block'}
  function apply(){
-  scan();
+  scan();sos();
   if(X.osk)oskRender();else if(ok)ok.style.display='none';
   const k=(X.rest?1:0)+'|'+X.restm;
   if(k!==rKey){rKey=k;clearInterval(rI);rI=0;if(X.rest)rI=setInterval(()=>toast('Pumzisha macho: tazama kitu kilicho mbali kwa sekunde 20',20000),Math.max(1,+X.restm||20)*60000)}
@@ -360,7 +370,7 @@ function RT(){
 <script>
 /* ============ KIOLESURA CHA MIPANGILIO ============ */
 (function(){
- const RTV=4; // lazima ilingane na VER ndani ya RT()
+ const RTV=5; // lazima ilingane na VER ndani ya RT()
  const P=(()=>{let c=[];try{c=[window.parent,window.top,window.opener,window.opener&&window.opener.top]}catch(e){}for(const w of c){try{if(w&&w!==window&&w.document&&w.document.body)return w}catch(e){}}return window})();
  const th=()=>{try{document.documentElement.classList.toggle('dk',P.document.body.classList.contains('dark'))}catch(e){}};
  th();try{new MutationObserver(th).observe(P.document.body,{attributes:true,attributeFilter:['class']})}catch(e){}
@@ -474,7 +484,7 @@ function RT(){
   const b=el('button','btn p',svg('save',16)+'Tumia mipangilio hii');b.type='button';b.onclick=()=>{try{const n=R.load(JSON.parse(t.value));say('Imewekwa: '+n+' mipangilio')}catch(e){say('Mipangilio si sahihi')}};
   r.append(a,b);w.appendChild(r);return w}
  function bootEl(){const w=el('div','pn');
-  const code='<scr'+'ipt>(function(){var W=window,V=4;function rt(x){try{if(x&&!(W.SADEACC&&W.SADEACC.v>=V)){var s=document.createElement("script");s.textContent=x;document.body.appendChild(s)}}catch(e){}}function ok(w){try{for(;w&&w!==w.parent;w=w.parent)if(w.parent===W)return 1}catch(e){}return w===W.opener}try{rt(localStorage.getItem("sade_acc_rt"))}catch(e){}addEventListener("message",function(e){var d=e.data;if(!d||!d.sadeAcc||!ok(e.source))return;rt(d.rt);try{W.SADEACC.load(d.state)}catch(x){}});addEventListener("storage",function(e){if(/^sade_acc/.test(e.key||"")){try{rt(localStorage.getItem("sade_acc_rt"));W.SADEACC&&W.SADEACC.reload()}catch(x){}}})})()</scr'+'ipt>';
+  const code='<scr'+'ipt>(function(){var W=window,V=5;function rt(x){try{if(x&&!(W.SADEACC&&W.SADEACC.v>=V)){var s=document.createElement("script");s.textContent=x;document.body.appendChild(s)}}catch(e){}}function ok(w){try{for(;w&&w!==w.parent;w=w.parent)if(w.parent===W)return 1}catch(e){}return w===W.opener}try{rt(localStorage.getItem("sade_acc_rt"))}catch(e){}addEventListener("message",function(e){var d=e.data;if(!d||!d.sadeAcc||!ok(e.source))return;rt(d.rt);try{W.SADEACC.load(d.state)}catch(x){}});addEventListener("storage",function(e){if(/^sade_acc/.test(e.key||"")){try{rt(localStorage.getItem("sade_acc_rt"));W.SADEACC&&W.SADEACC.reload()}catch(x){}}})})()</scr'+'ipt>';
   w.innerHTML='<b>Washa mipangilio hii kompyuta inapoanza</b><div class="m" style="margin:2px 0 8px">Mipangilio ya Utofautishaji, Rangi za kijivu, Geuza rangi, Mwendo na ukubwa wa icons huanza yenyewe. Ili mipangilio ibadilishe desktop nzima hata programu ikifunguliwa kama faili tofauti kwenye APK, weka msimbo huu mara moja mwishoni mwa <b>index.html</b>, kabla ya &lt;/body&gt;.</div>';
   const p=el('pre');p.textContent=code;w.appendChild(p);
   const r=el('div','r');const b=el('button','btn',svg('copy',16)+'Nakili msimbo');b.type='button';b.onclick=async()=>{say((await copy(code))?'Msimbo umenakiliwa':'Imeshindwa kunakili')};r.appendChild(b);w.appendChild(r);return w}
