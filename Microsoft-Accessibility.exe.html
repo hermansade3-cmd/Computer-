@@ -79,15 +79,8 @@ td{padding:6px 4px;border-bottom:1px solid var(--bd)}tr:last-child td{border-bot
 .sw2 b{display:block;font-size:18px}.sw2 span{font-size:11.5px}
 .app{min-height:calc(100% - var(--rh,0px))}
 @media(min-width:601px){nav{top:var(--rh,0px);height:calc(100vh - var(--rh,0px))}}
-.rtop{position:sticky;top:0;z-index:2147483000;background:var(--card);color:var(--fg);border-bottom:2px solid var(--ac);box-shadow:0 2px 8px rgba(0,0,0,.2);font:600 14px/1.4 'Segoe UI',system-ui,sans-serif;letter-spacing:normal;word-spacing:normal;text-shadow:none}
-.rt-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 14px}
-.rt-t{flex:1;min-width:120px}
-.rtop button,.rtop .chip{font:inherit;letter-spacing:normal;word-spacing:normal}
-.rtop .chip{background:var(--sel);color:var(--fg);font-weight:500}
-#rst{background:#c42b1c;border-color:#c42b1c;color:#fff;font-weight:700;padding:8px 18px}
-#rst:hover{filter:brightness(1.1)}
 </style></head><body>
-<div class="rtop acc-keep acc-safe" id="rtop"><div class="rt-in" id="rtin"><span class="rt-t">Mipangilio ya Accessibility</span><span class="chip" id="cnt"></span><button class="btn" id="rst" type="button"></button></div></div>
+<div id="rtop" class="acc-safe acc-keep"></div>
 <div class="app">
  <nav class="acc-keep" aria-label="Sehemu za Accessibility">
   <div class="ttl" id="ttl"></div>
@@ -115,7 +108,7 @@ td{padding:6px 4px;border-bottom:1px solid var(--bd)}tr:last-child td{border-bot
 /* ============ INJINI YA MFUMO MZIMA (inaendeshwa kwenye desktop/parent) ============ */
 function RT(){
  'use strict';
- const VER=3,W=window,D=document;
+ const VER=4,W=window,D=document;
  if(W.SADEACC&&W.SADEACC.v>=VER)return;
  if(W.SADEACC&&W.SADEACC.destroy){try{W.SADEACC.destroy()}catch(e){}}
  const BASE={isz:100,hc:0,gs:0,inv:0,ra:0};
@@ -156,13 +149,15 @@ function RT(){
  R.preset=o=>{R.reset(true);const b=base();Object.keys(o).forEach(k=>{if(k in BASE)b[k]=o[k];else if(k in DEF)X[k]=o[k]});saveBase();LSs('sade_acc_x',JSON.stringify(X));apply();R.emit()};
  R.load=o=>{let n=0;Object.keys(o||{}).forEach(k=>{if(!(k in R.def))return;let v=o[k];const d=R.def[k];if(typeof d==='number'){v=Number(v);if(!isFinite(v))return}else v=String(v);if(k in BASE)base()[k]=v;else X[k]=v;n++});saveBase();LSs('sade_acc_x',JSON.stringify(X));apply();R.emit();return n};
  R.sub=f=>R.subs.push(f);R.TH=TH;
+ R.reload=()=>{try{X=Object.assign({},DEF,JSON.parse(LSg('sade_acc_x')||'{}'))}catch(e){}R._b2=null;apply();R.emit()};
  R.emit=()=>R.subs.forEach(f=>{try{f()}catch(e){}});
 
  /* ---- CSS ---- */
+ const cl=(v,a,b)=>Math.min(b,Math.max(a,+v||100));
  function filt(){const f=[];
   if(R.get('hc'))f.push('contrast(1.3) saturate(1.15)');
-  if(X.ct!=100)f.push('contrast('+X.ct/100+')');
-  if(X.br!=100)f.push('brightness('+X.br/100+')');
+  if(cl(X.ct,70,200)!=100)f.push('contrast('+cl(X.ct,70,200)/100+')');
+  if(cl(X.br,60,150)!=100)f.push('brightness('+cl(X.br,60,150)/100+')');
   if(X.sa!=100)f.push('saturate('+X.sa/100+')');
   if(X.nl>0)f.push('sepia('+X.nl/100+') saturate(1.1)');
   if(/^(prot|deut|trit)$/.test(X.cb))f.push('url(#sade-cb-'+X.cb+')');
@@ -181,7 +176,7 @@ function RT(){
   if(X.bold)o.push('*'+t+'{font-weight:700 !important}');
   if(!root){let s='';if(X.ls)s+='letter-spacing:'+X.ls+'px !important;';if(X.ws)s+='word-spacing:'+X.ws+'px !important;';if(X.lh)s+='line-height:'+X.lh/10+' !important;';if(s)o.push('body *'+t+'{'+s+'}')}
   const th=TH[X.theme];
-  if(th)o.push('html,body,*'+t+':not(.acc-keep):not(.acc-keep *):not(img):not(video):not(canvas):not(iframe){background-color:'+th[0]+' !important;color:'+th[1]+' !important;border-color:'+th[1]+' !important}a,a *{color:'+th[2]+' !important}');
+  if(th)o.push('html,body,*'+t+':not(.acc-keep):not(.acc-keep *):not(img):not(video):not(canvas):not(iframe){background-color:'+th[0]+' !important;color:'+th[1]+' !important;border-color:'+th[1]+' !important;-webkit-text-fill-color:'+th[1]+' !important;text-shadow:none !important}a,a *{color:'+th[2]+' !important;-webkit-text-fill-color:'+th[2]+' !important}');
   if(X.lnk)o.push('a,[role=link]{text-decoration:underline !important;text-decoration-thickness:2px !important;text-underline-offset:3px !important;background-image:linear-gradient(rgba(255,214,0,.28),rgba(255,214,0,.28)) !important}');
   if(X.foc)o.push('*:focus-visible{outline:3px solid #ffbf00 !important;outline-offset:2px !important;box-shadow:0 0 0 6px #000 !important}');
   if(X.cursz>0){const u=curUrl(+X.cursz,/^#[0-9a-f]{6}$/i.test(X.curcol)?X.curcol:'#000000');
@@ -365,12 +360,14 @@ function RT(){
 <script>
 /* ============ KIOLESURA CHA MIPANGILIO ============ */
 (function(){
- const RTV=3; // lazima ilingane na VER ndani ya RT()
- const P=(()=>{try{if(parent!==window&&parent.document)return parent}catch(e){}return window})();
+ const RTV=4; // lazima ilingane na VER ndani ya RT()
+ const P=(()=>{let c=[];try{c=[window.parent,window.top,window.opener,window.opener&&window.opener.top]}catch(e){}for(const w of c){try{if(w&&w!==window&&w.document&&w.document.body)return w}catch(e){}}return window})();
  const th=()=>{try{document.documentElement.classList.toggle('dk',P.document.body.classList.contains('dark'))}catch(e){}};
  th();try{new MutationObserver(th).observe(P.document.body,{attributes:true,attributeFilter:['class']})}catch(e){}
  try{if(!P.SADEACC||P.SADEACC.v<RTV){if(P===window)RT();else{const s=P.document.createElement('script');s.textContent='('+RT.toString()+')()';P.document.head.appendChild(s)}}}catch(e){}
  const R=P.SADEACC;
+ const framed=window.parent!==window||!!window.opener,MODE=P!==window?'Moja kwa moja (desktop imefikiwa)':(framed?'Kupitia daraja la postMessage (weka mstari wa Anza kiotomatiki kwenye index.html)':'Peke yake (haijafunguliwa ndani ya desktop)');
+ if(R&&P===window&&framed){const out=()=>{const m={sadeAcc:1,state:R.all(),rt:'('+RT.toString()+')()'};[window.parent,window.top,window.opener].forEach(w=>{try{w&&w!==window&&w.postMessage(m,'*')}catch(e){}})};R.sub(out);setTimeout(out,300)}
  const $=(s,r)=>(r||document).querySelector(s);
  const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
  const IC={
@@ -399,7 +396,10 @@ function RT(){
  const svg=(n,s)=>'<svg width="'+(s||18)+'" height="'+(s||18)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+IC[n]+'</svg>';
  $('#ttl').innerHTML=svg('access',22)+'<span>Accessibility</span>';
  $('#sic').innerHTML=svg('search',15);
- $('#rst').innerHTML=svg('reset',16)+'Rudisha yote';
+ const rt=$('#rtop'),sr=rt.attachShadow({mode:'open'});
+ sr.innerHTML='<style>:host{all:initial;display:block;position:sticky;top:0;z-index:2147483000}.b{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 14px;background:#fff;color:#000;border-bottom:3px solid #003e7e;box-shadow:0 2px 8px rgba(0,0,0,.35);font:700 15px/1.4 Arial,Helvetica,sans-serif}.t{flex:1;min-width:120px}.c{padding:3px 10px;border-radius:12px;background:#e6e6e6;color:#000;font:600 12px Arial,sans-serif}button{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border:3px solid #000;border-radius:6px;background:#b00020;color:#fff;font:800 15px Arial,sans-serif;cursor:pointer}button:hover{background:#8c0019}button:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}svg{display:block}</style><div class="b" id="bar"><span class="t">Mipangilio ya Accessibility</span><span class="c" id="cnt"></span><button type="button" id="rst" aria-label="Rudisha mwanzo"></button></div>';
+ const RST=sr.getElementById('rst'),CNT=sr.getElementById('cnt'),BAR=sr.getElementById('bar');
+ RST.innerHTML=svg('reset',16)+'Rudisha mwanzo';
 
  if(!R){$('#pg').innerHTML='<div class="grp"><div class="pn"><b>Mfumo wa Accessibility haujaweza kuanza.</b><div class="m">Fungua programu hii ndani ya Sade Computer au kwenye kivinjari kinachoruhusu JavaScript.</div></div></div>';return}
 
@@ -474,11 +474,11 @@ function RT(){
   const b=el('button','btn p',svg('save',16)+'Tumia mipangilio hii');b.type='button';b.onclick=()=>{try{const n=R.load(JSON.parse(t.value));say('Imewekwa: '+n+' mipangilio')}catch(e){say('Mipangilio si sahihi')}};
   r.append(a,b);w.appendChild(r);return w}
  function bootEl(){const w=el('div','pn');
-  const code=['<scr'+'ipt>try{var r=localStorage.getItem("sade_acc_rt");if(r){var s=document.createElement("script");s.textContent=r;document.body.appendChild(s)}}catch(e){}</scr'+'ipt>'].join('');
-  w.innerHTML='<b>Washa mipangilio hii kompyuta inapoanza</b><div class="m" style="margin:2px 0 8px">Mipangilio ya Utofautishaji, Rangi za kijivu, Geuza rangi, Mwendo na ukubwa wa icons huanza yenyewe. Kwa mipangilio mingine yote (kishale, maandishi, rula, kibodi ya skrini n.k.) weka mstari huu mmoja mwishoni mwa <b>index.html</b>, kabla ya &lt;/body&gt;.</div>';
+  const code='<scr'+'ipt>(function(){var W=window,V=4;function rt(x){try{if(x&&!(W.SADEACC&&W.SADEACC.v>=V)){var s=document.createElement("script");s.textContent=x;document.body.appendChild(s)}}catch(e){}}function ok(w){try{for(;w&&w!==w.parent;w=w.parent)if(w.parent===W)return 1}catch(e){}return w===W.opener}try{rt(localStorage.getItem("sade_acc_rt"))}catch(e){}addEventListener("message",function(e){var d=e.data;if(!d||!d.sadeAcc||!ok(e.source))return;rt(d.rt);try{W.SADEACC.load(d.state)}catch(x){}});addEventListener("storage",function(e){if(/^sade_acc/.test(e.key||"")){try{rt(localStorage.getItem("sade_acc_rt"));W.SADEACC&&W.SADEACC.reload()}catch(x){}}})})()</scr'+'ipt>';
+  w.innerHTML='<b>Washa mipangilio hii kompyuta inapoanza</b><div class="m" style="margin:2px 0 8px">Mipangilio ya Utofautishaji, Rangi za kijivu, Geuza rangi, Mwendo na ukubwa wa icons huanza yenyewe. Ili mipangilio ibadilishe desktop nzima hata programu ikifunguliwa kama faili tofauti kwenye APK, weka msimbo huu mara moja mwishoni mwa <b>index.html</b>, kabla ya &lt;/body&gt;.</div>';
   const p=el('pre');p.textContent=code;w.appendChild(p);
   const r=el('div','r');const b=el('button','btn',svg('copy',16)+'Nakili msimbo');b.type='button';b.onclick=async()=>{say((await copy(code))?'Msimbo umenakiliwa':'Imeshindwa kunakili')};r.appendChild(b);w.appendChild(r);return w}
- function aboutEl(){const w=el('div','pn');w.innerHTML='<b>Kuhusu</b><div class="m" style="margin-top:2px">Accessibility ya Sade Computer, toleo 1.0. Mipangilio inahifadhiwa kwenye kifaa hiki tu na inatumika kwenye desktop na programu zote zilizofunguliwa.</div>';return w}
+ function aboutEl(){const w=el('div','pn');w.innerHTML='<b>Kuhusu</b><div class="m" style="margin-top:2px">Accessibility ya Sade Computer, toleo 1.1. Mipangilio inahifadhiwa kwenye kifaa hiki tu na inatumika kwenye desktop na programu zote zilizofunguliwa.<br><b>Hali ya muunganisho:</b> '+MODE+'</div>';return w}
 
  /* ---- mpangilio wa kurasa ---- */
  const FMT={pc:v=>v+'%',px:v=>v+' px',ms:v=>(v/1000).toFixed(1)+' s',lh:v=>v?(v/10).toFixed(1)+'×':'Kawaida',min:v=>v+' dak',x:v=>(+v).toFixed(1)+'×'};
@@ -500,8 +500,8 @@ function RT(){
     RG('czoom','Ukuzaji ndani ya programu','Hukuza maudhui ya programu zilizofunguliwa tu',80,250,10,FMT.pc)]},
    {h:'Rangi na mwangaza',i:[
     T('hc','Utofautishaji wa juu','Rangi zinakuwa kali na wazi'),T('gs','Rangi za kijivu (grayscale)','Skrini nzima inakuwa nyeusi na nyeupe'),T('inv','Geuza rangi (invert)','Hubadilisha mwanga kuwa giza na kinyume chake'),
-    RG('br','Mwangaza','Punguza au ongeza mwanga wa skrini',50,150,5,FMT.pc),
-    RG('ct','Utofautishaji (contrast)','Tofauti kati ya sehemu nyeusi na nyeupe',50,200,5,FMT.pc),
+    RG('br','Mwangaza','Punguza au ongeza mwanga wa skrini',60,150,5,FMT.pc),
+    RG('ct','Utofautishaji (contrast)','Tofauti kati ya sehemu nyeusi na nyeupe',70,200,5,FMT.pc),
     RG('sa','Ukali wa rangi (saturation)','0% ni kijivu, 200% ni rangi kali sana',0,200,10,FMT.pc),
     RG('nl','Mwanga wa usiku','Hupunguza mwanga wa buluu, rangi zinakuwa joto',0,80,5,FMT.pc),
     SL('cb','Marekebisho ya upofu wa rangi','Husaidia kutofautisha rangi zinazochanganyika',[['none','Hakuna'],['prot','Protanopia (nyekundu)'],['deut','Deuteranopia (kijani)'],['trit','Tritanopia (buluu)']])]},
@@ -582,10 +582,10 @@ function RT(){
    p.s.forEach(s=>{if(s.h)m.appendChild(el('h3',null,s.h));const g=el('div','grp');s.i.forEach(it=>g.appendChild(row(it)));m.appendChild(g)})}
   nav();sync()}
  function nav(){const q=$('#q').value.trim();[...$('#nv').children].forEach(b=>b.classList.toggle('on',!q&&b.dataset.p===cur))}
- function sync(){ups.forEach(f=>{try{f()}catch(e){}});const n=R.active();$('#cnt').textContent=n?n+' zimewashwa':'Hakuna kilichobadilishwa'}
+ function sync(){ups.forEach(f=>{try{f()}catch(e){}});const n=R.active();CNT.textContent=n?n+' zimewashwa':'Hakuna kilichobadilishwa'}
  PAGES.forEach(p=>{const b=el('button','nb',svg(p.ic,18)+'<span>'+p.n+'</span>');b.type='button';b.dataset.p=p.id;b.onclick=()=>{cur=p.id;$('#q').value='';render()};$('#nv').appendChild(b)});
  $('#q').oninput=render;
- $('#rst').onclick=()=>{R.reset();commit();say('Mipangilio yote imerudishwa')};
+ RST.onclick=()=>{R.reset();commit();say('Mipangilio yote imerudishwa')};
  R.sub(sync);
  /* ---- hakiki na uthibitisho wa mabadiliko ---- */
  const CD=30,dock=$('#dock'),dkt=$('#dkt'),dkp=$('#dkp'),dkg=$('#dkg'),dks=$('#dks');
@@ -619,9 +619,9 @@ function RT(){
  $('#dka').onclick=e=>e.preventDefault();
  R.sub(onChg);gs();
  /* ---- upau wa Rudisha: haubadiliki na accessibility ---- */
- const rt=$('#rtop'),rti=$('#rtin'),rtv=()=>document.documentElement.style.setProperty('--rh',rt.offsetHeight+'px');
+ const rtv=()=>document.documentElement.style.setProperty('--rh',rt.offsetHeight+'px');
  function safe(){const fr=P!==window,z=(+R.get('zoom')||100)/100,cz=fr?(+R.get('czoom')||100)/100:1;
-  rti.style.zoom=String(1/(z*cz));rt.style.filter=R.get('inv')?'invert(1) hue-rotate(180deg)':'';rtv()}
+  BAR.style.zoom=String(1/(z*cz));rt.style.filter=R.get('inv')?'hue-rotate(180deg) invert(1)':'';rtv()}
  R.sub(safe);safe();addEventListener('resize',rtv);try{new ResizeObserver(rtv).observe(rt)}catch(e){}
  render();
 })();
