@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network Status</title>
+<style>
+:root{--bg:#f3f3f3;--fg:#1a1a1a;--card:#fff;--bd:#d9d9d9;--mut:#5f5f5f;--ac:#0067c0;--ok:#107c10;--warn:#c27c00;--bad:#c42b1c;--hv:#e8f1fb;color-scheme:light}
+.dk{--bg:#202020;--fg:#f1f1f1;--card:#2b2b2b;--bd:#444;--mut:#a8a8a8;--ac:#4cc2ff;--ok:#6ccb5f;--warn:#fce100;--bad:#ff99a4;--hv:#3a3a3a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;padding:14px;font:14px/1.45 'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+h2{margin:0 0 12px;font-size:19px;font-weight:600}
+h3{margin:0 0 8px;font-size:14px;font-weight:600}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:12px;margin:0 0 10px}
+.r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sp{justify-content:space-between}
+button,select{padding:7px 12px;border:1px solid var(--bd);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer;font:inherit}
+button:hover{background:var(--hv)}button:disabled{opacity:.5;cursor:default}
+button:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button.p,button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.dk button.p,.dk button.on{color:#001d33}
+.hero{display:flex;align-items:center;gap:14px}
+.dot{width:16px;height:16px;border-radius:50%;background:var(--ok);flex:none;box-shadow:0 0 0 5px rgba(16,124,16,.18)}
+.dot.off{background:var(--bad);box-shadow:0 0 0 5px rgba(196,43,28,.18)}
+.big{font-size:20px;font-weight:600}
+.m{color:var(--mut);font-size:12px}
+.badge{display:inline-block;padding:2px 9px;border-radius:10px;font-size:12px;font-weight:600;border:1px solid currentColor}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.k{border:1px solid var(--bd);border-radius:8px;padding:9px 10px}
+.k b{display:block;font-size:19px;font-weight:600}
+.k span{font-size:12px;color:var(--mut)}
+table{width:100%;border-collapse:collapse}
+td{border-bottom:1px solid var(--bd);padding:6px 4px;vertical-align:top;word-break:break-word}
+tr:last-child td{border-bottom:0}
+td:first-child{width:42%;color:var(--mut)}
+canvas{width:100%;height:110px;display:block}
+.bar2{height:10px;border-radius:5px;background:var(--bd);overflow:hidden;margin-top:8px}
+.bar2 i{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
+pre{white-space:pre-wrap;font:12px Consolas,monospace;margin:0;max-height:180px;overflow:auto}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<h2>📡 Network Status</h2>
+
+<div class="c">
+ <div class="hero"><div class="dot" id="dot"></div>
+  <div style="flex:1"><div class="big" id="st">…</div><div class="m" id="up"></div></div>
+  <span class="badge" id="q">—</span></div>
+</div>
+
+<div class="c">
+ <div class="r sp" style="margin-bottom:8px"><h3 style="margin:0">Ping (muda wa kujibu)</h3><span class="m" id="pr"></span></div>
+ <canvas id="cv" width="600" height="110" aria-label="Grafu ya ping"></canvas>
+ <div class="g" style="margin-top:10px">
+  <div class="k"><b id="kNow">—</b><span>Sasa</span></div>
+  <div class="k"><b id="kAvg">—</b><span>Wastani</span></div>
+  <div class="k"><b id="kMin">—</b><span>Chini zaidi</span></div>
+  <div class="k"><b id="kMax">—</b><span>Juu zaidi</span></div>
+  <div class="k"><b id="kJit">—</b><span>Jitter</span></div>
+  <div class="k"><b id="kLoss">—</b><span>Vifurushi vilivyopotea</span></div>
+ </div>
+ <div class="r" style="margin-top:10px">
+  <button class="p" id="pg">⚡ Jaribu muunganisho</button>
+  <button id="mon">👁 Fuatilia moja kwa moja</button>
+ </div>
+</div>
+
+<div class="c">
+ <h3>Kasi ya mtandao</h3>
+ <div class="g">
+  <div class="k"><b id="kDl">—</b><span>Kupakua (Mbps)</span></div>
+  <div class="k"><b id="kUl">—</b><span>Kupakia (Mbps)</span></div>
+  <div class="k"><b id="kData">—</b><span>Data iliyotumika</span></div>
+ </div>
+ <div class="bar2"><i id="bar"></i></div>
+ <div class="r" style="margin-top:10px">
+  <select id="sz" aria-label="Ukubwa wa jaribio">
+   <option value="1000000">Jaribio dogo (1 MB)</option>
+   <option value="5000000" selected>Jaribio la kati (5 MB)</option>
+   <option value="15000000">Jaribio kubwa (15 MB)</option>
+  </select>
+  <button class="p" id="sp">🚀 Pima kasi</button>
+  <span class="m" id="spm"></span>
+ </div>
+ <div class="m" style="margin-top:6px">Jaribio la kasi linatumia data ya intaneti. Chagua ukubwa mdogo ukiwa na bando kidogo.</div>
+</div>
+
+<div class="c">
+ <h3>Takwimu za kipindi hiki</h3>
+ <div class="g">
+  <div class="k"><b id="sSent">0</b><span>Majaribio</span></div>
+  <div class="k"><b id="sCut">0</b><span>Mara zilizokatika</span></div>
+  <div class="k"><b id="sOffT">0s</b><span>Muda offline</span></div>
+ </div>
+</div>
+
+<div class="c">
+ <h3>Taarifa za muunganisho na kifaa</h3>
+ <table id="t"></table>
+ <div class="r" style="margin-top:10px">
+  <button id="ipb">🌍 Onyesha IP yangu</button>
+  <span class="m" id="ipm"></span>
+ </div>
+</div>
+
+<div class="r" style="margin-bottom:10px">
+ <button id="cp">📋 Nakili ripoti</button>
+ <button id="cl">🗑 Futa historia</button>
+ <span class="m" id="cm"></span>
+</div>
+
+<h3>Historia</h3>
+<pre id="lg" class="c"></pre>
+
+<script>
+const P=(()=>{try{if(parent!==window&&parent.document)return parent}catch(e){}return window})();
+function theme(){try{const d=P.document.body.classList.contains("dark");document.documentElement.classList.toggle("dk",d)}catch(e){}}
+theme();try{new MutationObserver(theme).observe(P.document.body,{attributes:true,attributeFilter:["class"]})}catch(e){}
+
+(function(){
+ const $=s=>document.querySelector(s),n=navigator,c=n.connection||n.mozConnection||n.webkitConnection;
+ const PING=['https://www.gstatic.com/generate_204','https://www.google.com/generate_204'];
+ const S={pings:[],sent:0,lost:0,cuts:0,offTotal:0,since:Date.now(),offAt:n.onLine?0:Date.now(),bytes:0,dl:null,ul:null,ip:null,batt:null};
+ let LG=[],monT=null,busy=false;
+ try{LG=JSON.parse(localStorage.getItem('sade_net_log')||'[]')}catch(e){}
+ const saveLog=()=>{try{localStorage.setItem('sade_net_log',JSON.stringify(LG))}catch(e){}};
+ const log=t=>{LG.unshift(new Date().toLocaleTimeString()+' — '+t);LG.length=Math.min(LG.length,40);$('#lg').textContent=LG.join('\n');saveLog()};
+ const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+ const fmtT=ms=>{let s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60);s%=60;return h?h+'h '+m+'m':m?m+'m '+s+'s':s+'s'};
+ const fmtB=b=>b>=1e6?(b/1e6).toFixed(1)+' MB':b>=1e3?Math.round(b/1e3)+' KB':b+' B';
+
+ function quality(){
+  const v=S.pings.filter(x=>x!=null);
+  if(!n.onLine)return['Offline','bad'];
+  if(!v.length)return['Haijapimwa','m'];
+  const a=v.slice(-8).reduce((x,y)=>x+y,0)/Math.min(8,v.length),l=lossPct();
+  if(l>=20||a>600)return['Dhaifu','bad'];
+  if(l>=5||a>250)return['Wastani','warn'];
+  if(a>100)return['Nzuri','ok'];
+  return['Bora kabisa','ok'];
+ }
+ const lossPct=()=>S.pings.length?Math.round(S.pings.filter(x=>x==null).length/S.pings.length*100):0;
+
+ function tick(){
+  const on=n.onLine;
+  $('#dot').className='dot'+(on?'':' off');
+  $('#st').textContent=on?'Uko Online':'Uko Offline';
+  const off=S.offTotal+(S.offAt?Date.now()-S.offAt:0);
+  $('#up').textContent=on?'Umeunganishwa kwa '+fmtT(Date.now()-S.since):'Umekatika kwa '+fmtT(Date.now()-S.offAt);
+  const q=quality(),b=$('#q');b.textContent=q[0];b.className='badge '+q[1];
+  $('#sSent').textContent=S.sent;$('#sCut').textContent=S.cuts;$('#sOffT').textContent=fmtT(off);
+ }
+
+ function stats(){
+  const v=S.pings.filter(x=>x!=null),last=S.pings[S.pings.length-1];
+  $('#kNow').textContent=last==null?(S.pings.length?'✕':'—'):last+' ms';
+  if(v.length){
+   const avg=v.reduce((a,b)=>a+b,0)/v.length;
+   let j=0;for(let i=1;i<v.length;i++)j+=Math.abs(v[i]-v[i-1]);j=v.length>1?j/(v.length-1):0;
+   $('#kAvg').textContent=Math.round(avg)+' ms';$('#kMin').textContent=Math.min(...v)+' ms';$('#kMax').textContent=Math.max(...v)+' ms';$('#kJit').textContent=Math.round(j)+' ms';
+  }
+  $('#kLoss').textContent=S.pings.length?lossPct()+'%':'—';
+  $('#kDl').textContent=S.dl!=null?S.dl.toFixed(1):'—';$('#kUl').textContent=S.ul!=null?S.ul.toFixed(1):'—';$('#kData').textContent=fmtB(S.bytes);
+  chart();tick();
+ }
+
+ function chart(){
+  const cv=$('#cv'),x=cv.getContext('2d'),w=cv.width,h=cv.height,cs=getComputedStyle(document.documentElement);
+  x.clearRect(0,0,w,h);
+  const d=S.pings.slice(-40),v=d.filter(a=>a!=null);
+  x.strokeStyle=cs.getPropertyValue('--bd');x.lineWidth=1;
+  for(let i=1;i<4;i++){x.beginPath();x.moveTo(0,h*i/4);x.lineTo(w,h*i/4);x.stroke()}
+  if(!d.length){x.fillStyle=cs.getPropertyValue('--mut');x.font='14px Segoe UI,sans-serif';x.fillText('Bonyeza "Jaribu muunganisho" kuanza',14,h/2);return}
+  const mx=Math.max(200,...v)*1.1,st=w/39;
+  x.strokeStyle=cs.getPropertyValue('--ac');x.lineWidth=2.5;x.lineJoin='round';x.beginPath();let pen=false;
+  d.forEach((p,i)=>{if(p==null){pen=false;return}const X=i*st+4,Y=h-6-(p/mx)*(h-14);if(!pen){x.moveTo(X,Y);pen=true}else x.lineTo(X,Y)});x.stroke();
+  d.forEach((p,i)=>{const X=i*st+4;if(p==null){x.fillStyle=cs.getPropertyValue('--bad');x.fillRect(X-2,h-12,4,10)}else{x.fillStyle=cs.getPropertyValue('--ac');x.beginPath();x.arc(X,h-6-(p/mx)*(h-14),2.5,0,7);x.fill()}});
+ }
+
+ function info(){
+  const r=[['Hali',n.onLine?'Online':'Offline']];
+  if(c)r.push(['Aina ya mtandao',c.type||'haijulikani'],['Kasi (effective)',c.effectiveType||'?'],['Downlink',c.downlink!=null?c.downlink+' Mbps':'?'],['RTT (kivinjari)',c.rtt!=null?c.rtt+' ms':'?'],['Data saver',c.saveData?'Imewashwa':'Imezimwa']);
+  else r.push(['Muunganisho','Taarifa hazipatikani kwenye kivinjari hiki']);
+  if(S.batt)r.push(['Betri',S.batt]);
+  r.push(['Mfumo',n.userAgentData&&n.userAgentData.platform||n.platform||'?'],['Lugha',n.language||'?'],['Saa za eneo',(()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){return '?'}})()],['Skrini',screen.width+'×'+screen.height],['CPU cores',n.hardwareConcurrency||'?']);
+  if(n.deviceMemory)r.push(['RAM',n.deviceMemory+' GB']);
+  if(S.ip)r.push(...S.ip);
+  $('#t').innerHTML=r.map(x=>'<tr><td>'+esc(x[0])+'</td><td>'+esc(x[1])+'</td></tr>').join('');
+ }
+
+ async function ping1(){
+  for(const u of PING){
+   const t=performance.now();
+   try{const ac=new AbortController(),to=setTimeout(()=>ac.abort(),6000);await fetch(u+'?t='+Date.now(),{mode:'no-cors',cache:'no-store',signal:ac.signal});clearTimeout(to);return Math.round(performance.now()-t)}catch(e){}
+  }
+  return null;
+ }
+ async function doPing(manual){
+  if(busy)return;busy=true;
+  if(manual)$('#pr').textContent='Inajaribu…';
+  const ms=await ping1();S.sent++;S.pings.push(ms);if(S.pings.length>200)S.pings.shift();
+  const m=ms!=null?'✅ Intaneti inafanya kazi · '+ms+' ms':'❌ Imeshindwa kufikia intaneti';
+  $('#pr').textContent=m;if(manual||ms==null)log(m);
+  busy=false;stats();
+ }
+ $('#pg').onclick=async()=>{$('#pg').disabled=true;for(let i=0;i<4;i++){await doPing(true)}$('#pg').disabled=false};
+
+ $('#mon').onclick=()=>{
+  const b=$('#mon');
+  if(monT){clearInterval(monT);monT=null;b.classList.remove('on');b.textContent='👁 Fuatilia moja kwa moja';log('Ufuatiliaji umesimamishwa');}
+  else{b.classList.add('on');b.textContent='⏹ Simamisha ufuatiliaji';log('Ufuatiliaji umeanza (kila sekunde 4)');doPing();monT=setInterval(doPing,4000)}
+ };
+
+ async function speed(){
+  const sz=+$('#sz').value,b=$('#sp'),bar=$('#bar'),m=$('#spm');
+  b.disabled=true;S.dl=null;S.ul=null;bar.style.width='0';
+  try{
+   m.textContent='Inapakua…';
+   const ac=new AbortController(),to=setTimeout(()=>ac.abort(),45000),t=performance.now();
+   const res=await fetch('https://speed.cloudflare.com/__down?bytes='+sz+'&t='+Date.now(),{cache:'no-store',signal:ac.signal});
+   const rd=res.body.getReader();let got=0;
+   for(;;){const o=await rd.read();if(o.done)break;got+=o.value.length;bar.style.width=Math.min(50,got/sz*50)+'%'}
+   clearTimeout(to);
+   const sec=(performance.now()-t)/1000;S.dl=got*8/sec/1e6;S.bytes+=got;stats();
+   m.textContent='Inapakia…';
+   const up=Math.min(sz,5000000),blob=new Blob([new Uint8Array(up)]),t2=performance.now();
+   const ac2=new AbortController(),to2=setTimeout(()=>ac2.abort(),45000);
+   await fetch('https://speed.cloudflare.com/__up',{method:'POST',body:blob,cache:'no-store',signal:ac2.signal});
+   clearTimeout(to2);
+   const s2=(performance.now()-t2)/1000;S.ul=up*8/s2/1e6;S.bytes+=up;bar.style.width='100%';stats();
+   const msg='🚀 Kupakua '+S.dl.toFixed(1)+' Mbps · Kupakia '+S.ul.toFixed(1)+' Mbps';m.textContent=msg;log(msg);
+  }catch(e){
+   m.textContent='❌ Jaribio limeshindwa. Angalia muunganisho wako.';log('❌ Jaribio la kasi limeshindwa');stats();
+  }
+  b.disabled=false;
+ }
+ $('#sp').onclick=speed;
+
+ $('#ipb').onclick=async()=>{
+  const m=$('#ipm');m.textContent='Inatafuta…';
+  try{
+   const j=await(await fetch('https://ipwho.is/',{cache:'no-store'})).json();
+   if(!j.success)throw 0;
+   S.ip=[['Anwani ya IP',j.ip],['Mtoa huduma (ISP)',j.connection&&j.connection.isp||'?'],['Nchi',j.country||'?'],['Mji',j.city||'?']];
+   m.textContent='';$('#ipb').style.display='none';info();log('IP imepatikana');
+  }catch(e){m.textContent='❌ Imeshindwa kupata IP'}
+ };
+
+ $('#cp').onclick=async()=>{
+  const v=S.pings.filter(x=>x!=null),avg=v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):'?';
+  const t=['📡 RIPOTI YA MTANDAO',new Date().toLocaleString(),'Hali: '+(n.onLine?'Online':'Offline'),'Ubora: '+quality()[0],'Ping wastani: '+avg+' ms','Vifurushi vilivyopotea: '+lossPct()+'%','Kupakua: '+(S.dl!=null?S.dl.toFixed(1)+' Mbps':'-'),'Kupakia: '+(S.ul!=null?S.ul.toFixed(1)+' Mbps':'-'),'Mara zilizokatika: '+S.cuts].join('\n');
+  try{await navigator.clipboard.writeText(t);$('#cm').textContent='✅ Imenakiliwa'}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');$('#cm').textContent='✅ Imenakiliwa'}catch(_){$('#cm').textContent='❌ Imeshindwa kunakili'}a.remove()}
+  setTimeout(()=>$('#cm').textContent='',2500);
+ };
+ $('#cl').onclick=()=>{LG=[];saveLog();$('#lg').textContent='';S.pings=[];S.sent=0;S.cuts=0;$('#cm').textContent='✅ Imefutwa';setTimeout(()=>$('#cm').textContent='',2000);stats()};
+
+ addEventListener('online',()=>{if(S.offAt){S.offTotal+=Date.now()-S.offAt;S.offAt=0}S.since=Date.now();info();stats();log('🟢 Imeunganishwa tena')});
+ addEventListener('offline',()=>{S.cuts++;S.offAt=Date.now();info();stats();log('🔴 Muunganisho umekatika')});
+ if(c&&c.addEventListener)c.addEventListener('change',()=>{info();log('Muunganisho umebadilika: '+(c.effectiveType||'?'))});
+ addEventListener('resize',chart);
+
+ try{if(n.getBattery)n.getBattery().then(b=>{const f=()=>{S.batt=Math.round(b.level*100)+'%'+(b.charging?' (inachaji)':'');info()};f();b.addEventListener('levelchange',f);b.addEventListener('chargingchange',f)})}catch(e){}
+
+ $('#lg').textContent=LG.join('\n');
+ info();stats();setInterval(tick,1000);
+ log(n.onLine?'Hali ya kuanza: Online':'Hali ya kuanza: Offline');
+ if(n.onLine)doPing();
+})();
+</script></body></html>
