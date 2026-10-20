@@ -85,11 +85,18 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
 .lst .it b{font-size:22px;text-align:center}.lst .it em{font-style:normal;color:#888;font-size:11px;text-align:right}
 .lst .it span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lst .it small{color:#666}
 @media(max-width:760px){.lst .lh,.lst .it{grid-template-columns:26px 28px 1fr 84px}}
+
+.si{width:1em;height:1em;display:inline-block;vertical-align:middle;flex:none}
+.ic b,.it b{line-height:0;padding:2px 0}.ic b .si{width:44px;height:44px;filter:drop-shadow(0 2px 3px #0006)}.it b .si{width:44px;height:44px}
+.lst .it b .si{width:26px;height:26px}#menu .sa b .si{width:34px;height:34px}#menu .rc b .si{width:30px;height:30px}
+#tb button .si{width:24px;height:24px}.h span .si{width:18px;height:18px;vertical-align:-4px}.sd div .si,#menu .ft .si{width:18px;height:18px;vertical-align:-4px}
+.ic b,#menu .sa b,#menu .rc b,.it b{display:flex;justify-content:center;align-items:center}
+.lst .it b{justify-content:center}
 </style></head><body>
 <!--
   SADE COMPUTER — ORODHA YA MAFAILI (kushuka chini)
   Kila faili linafunguliwa kama  <jina-la-faili>.html  (mf. notes.txt.html)
-  01. 📁 Nyaraka (Documents)  (11)
+  01. Nyaraka (Documents)  (11)
         01. notes.txt
         02. report.doc
         03. report.docx
@@ -101,7 +108,7 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
         09. budget.xls
         10. budget.xlsx
         11. data.csv
-  02. 📁 Picha (Pictures)  (8)
+  02. Picha (Pictures)  (8)
         01. picha1.jpg
         02. picha2.jpeg
         03. nembo.png
@@ -110,21 +117,21 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
         06. mpya.webp
         07. mchoro.svg
         08. app.ico
-  03. 📁 Video (Videos)  (6)
+  03. Video (Videos)  (6)
         01. video1.mp4
         02. filamu.mkv
         03. zamani.avi
         04. apple.mov
         05. windows.wmv
         06. wavuti.webm
-  04. 📁 Muziki (Music)  (6)
+  04. Muziki (Music)  (6)
         01. wimbo.mp3
         02. ubora.wav
         03. aac-sauti.aac
         04. flac-sauti.flac
         05. ogg-sauti.ogg
         06. app-sauti.m4a
-  05. 📁 Programu (Programs)  (58)
+  05. Programu (Programs)  (58)
         01. cmd.exe
         02. calc.exe
         03. notepad.exe
@@ -177,7 +184,7 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
         50. Microsoft-TextToSpeech.exe
         51. Microsoft-Network.exe
         52. Microsoft-Accessibility.exe
-  06. 📁 Code (Dev)  (12)
+  06. Code (Dev)  (12)
         01. index.html
         02. style.css
         03. app.js
@@ -190,20 +197,20 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
         10. query.sql
         11. app.ts
         12. README.md
-  07. 📁 Zilizobanwa (Archives)  (5)
+  07. Zilizobanwa (Archives)  (5)
         01. mafaili.zip
         02. backup.rar
         03. picha.7z
         04. source.tar
         05. logs.gz
-  08. 📁 Database  (6)
+  08. Database  (6)
         01. app.db
         02. watu.sqlite
         03. watu.sqlite3
         04. ofisi.mdb
         05. mauzo.accdb
         06. database.bak
-  09. 📁 Mfumo (System)  (9)
+  09. Mfumo (System)  (9)
         01. mfumo.log
         02. muda.tmp
         03. settings.ini
@@ -213,7 +220,7 @@ html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
         07. kazi.cab
         08. hati.vbs
         09. hitilafu.dmp
-  10. 📁 Diski (Disks)  (7)
+  10. Diski (Disks)  (7)
         01. windows.iso
         02. diski.img
         03. mashine.vhd
@@ -397,7 +404,99 @@ const FOLD={
 };
 const ico={"txt": "📄", "doc": "📘", "docx": "📘", "pdf": "📕", "rtf": "📝", "odt": "📃", "ppt": "📙", "pptx": "📙", "xls": "📗", "xlsx": "📗", "csv": "📊", "jpg": "🖼️", "jpeg": "🖼️", "png": "🖼️", "gif": "🎞️", "bmp": "🖼️", "webp": "🖼️", "svg": "🎨", "ico": "⭐", "mp4": "🎬", "Music": "🎵", "exe": "⚙️", "msi": "📦", "dll": "🧩", "sys": "🛠️", "bat": "📟", "cmd": "📟", "ps1": "📟", "lnk": "🔗", "html": "🌐", "css": "🎨", "js": "🟨", "json": "🧾", "xml": "🧾", "py": "🐍", "java": "☕", "cpp": "➕", "php": "🐘", "sql": "🗃️", "ts": "🟦", "md": "📝", "zip": "🗜️", "rar": "🗜️", "7z": "🗜️", "tar": "🗜️", "gz": "🗜️", "db": "🗄️", "sqlite": "🗄️", "sqlite3": "🗄️", "mdb": "🗄️", "accdb": "🗄️", "bak": "💾", "log": "📜", "tmp": "🕑", "ini": "⚙️", "cfg": "⚙️", "dat": "🔢", "reg": "🧬", "cab": "📦", "vbs": "📜", "dmp": "💥", "iso": "💿", "img": "💿", "vhd": "💽", "vhdx": "💽", "vmdk": "💽", "ova": "🖥️", "ovf": "🖥️"};
 const ICN={"Microsoft-Edge.exe":"🌐","Microsoft-Copilot.exe":"✨","Microsoft-Office.exe":"🏢","Microsoft-Word.exe":"📘","Microsoft-Excel.exe":"📗","Microsoft-PowerPoint.exe":"📙","Microsoft-Outlook.exe":"📧","Microsoft-OneNote.exe":"📓","Mozilla-Firefox.exe":"🦊","Google-Chrome.exe":"🌍","Microsoft-Games.exe":"🎮","Microsoft-Photos.exe":"🖼️","Microsoft-MediaPlayer.exe":"🎵","Microsoft-Maps.exe":"🗺️","Microsoft-Weather.exe":"☀️","Microsoft-Translator.exe":"🌐","Microsoft-Calendar.exe":"📅","Microsoft-Clock.exe":"⏰","Microsoft-Camera.exe":"📷","Microsoft-Money.exe":"💱","Microsoft-News.exe":"📰","Microsoft-TaskManager.exe":"📊","Microsoft-Dictionary.exe":"📖","Microsoft-Encyclopedia.exe":"📚","Microsoft-Todo.exe":"✅","Microsoft-StickyNotes.exe":"🗒️","Microsoft-Recorder.exe":"🎙️","Microsoft-QRCode.exe":"🔳","Microsoft-Converter.exe":"📐","Microsoft-Passwords.exe":"🔐","Microsoft-Crypto.exe":"🪙","Microsoft-DeviceManager.exe":"🖥️","Microsoft-Backup.exe":"🛡️","Microsoft-DiskCleanup.exe":"🧹","Microsoft-PDFReader.exe":"📕","Microsoft-ScreenRecorder.exe":"🎥","Microsoft-Contacts.exe":"👥","Microsoft-Clipboard.exe":"📋","Microsoft-TextToSpeech.exe":"🗣️","Microsoft-Network.exe":"📡","Microsoft-Accessibility.exe":"♿","Visual-Studio-Code.exe":"💻","Python-IDE.exe":"🐍","HTML-CSS-JS-Editor.exe":"🌐","Scientific-Calculator.exe":"🔬","Circuit-Designer.exe":"🔌","Music-DJ-Mix.exe":"🎧","Facebook.exe":"📘","Instagram.exe":"📸","TikTok.exe":"🎵","YouTube.exe":"▶️"};
-const fi=n=>ICN[n]||ico[n.split(".").pop().toLowerCase()]||"📄";
+/* ===== SADE ICONS (SVG, bila emoji) ===== */
+const G={
+doc:'<path d="M5 6h14M5 11h14M5 16h9"/>',
+tbl:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9.5h18M3 14.5h18M9 4v16"/>',
+bar:'<path d="M5 20V11M12 20V4M19 20v-6"/>',
+img:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5L5 20"/>',
+vid:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9.5v5l4.5-2.5z"/>',
+mus:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+zip:'<rect x="3" y="3" width="18" height="5" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8M10 12h4"/>',
+db:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+code:'<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/>',
+brace:'<path d="M8 4C6 4 6 6 6 8s0 3-2 4c2 1 2 2 2 4s0 4 2 4M16 4c2 0 2 2 2 4s0 3 2 4c-2 1-2 2-2 4s0 4-2 4"/>',
+gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2.5l1.6 2.2 2.7-.6.9 2.6 2.6.9-.6 2.7L21.5 12l-2.2 1.6.6 2.7-2.6.9-.9 2.6-2.7-.6L12 21.5l-1.6-2.2-2.7.6-.9-2.6-2.6-.9.6-2.7L2.5 12l2.2-1.6-.6-2.7 2.6-.9.9-2.6 2.7.6z"/>',
+term:'<path d="M4 17l6-6-6-6M12 19h8"/>',
+globe:'<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
+star:'<path d="M12 3l2.2 6 6.3.4-5 4 1.7 6.2L12 16l-5.2 3.6 1.7-6.2-5-4 6.3-.4z"/>',
+spark:'<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2zM19 3v4M17 5h4"/>',
+case:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/>',
+mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+note:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v18M12 8h4"/>',
+chrome:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M12 8.5h8.5M8.9 14l-4.3-7.4M15 14l-4.3 7.4"/>',
+pad:'<rect x="2" y="6" width="20" height="12" rx="5"/><path d="M7 10v4M5 12h4"/><circle cx="15.5" cy="11" r=".6"/><circle cx="17.5" cy="13" r=".6"/>',
+pin:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>',
+tr:'<path d="M4 5h8M8 3v2M5 5c0 4 3 7 6 8M11 5c0 3-3 7-7 9M13 20l4-9 4 9M14.5 17h5"/>',
+cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+clk:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+cam:'<path d="M4 7h3l2-3h6l2 3h3v13H4z"/><circle cx="12" cy="13.5" r="3.5"/>',
+swap:'<path d="M7 7h13l-3-3M17 17H4l3 3"/>',
+news:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h6M7 13h10M7 17h10"/>',
+act:'<path d="M2 12h4l3-8 4 16 3-8h6"/>',
+book:'<path d="M4 4h12a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3zM4 17a3 3 0 0 1 3-3h12"/>',
+lib:'<path d="M3 20h18M5 20V8h4v12M11 20V4h4v16M17 20l1-9 4 1-1 8"/>',
+chk:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8.5 12l2.5 2.5L16 9.5"/>',
+stk:'<path d="M4 4h16v11l-5 5H4zM15 20v-5h5"/>',
+mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M14 21h3M21 17v4"/>',
+rul:'<path d="M3 17L17 3l4 4L7 21zM7 13l2 2M10 10l2 2M13 7l2 2"/>',
+lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+coin:'<circle cx="12" cy="12" r="9"/><path d="M10 7v10M10 7h3.5a2.5 2.5 0 0 1 0 5H10m3.5 0a2.5 2.5 0 0 1 0 5H10M12 5v2M12 17v2"/>',
+mon:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+shld:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4"/>',
+trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+hdd:'<rect x="3" y="13" width="18" height="7" rx="2"/><path d="M3 13l3-8h12l3 8M7 16.5h.01M11 16.5h.01"/>',
+rec:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/>',
+usr:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-4 3-6 7-6s7 2 7 6M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2.5.7 4 2.7 4 6"/>',
+clp:'<rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/>',
+spk:'<path d="M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/>',
+wifi:'<path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0M12 19.5v.01"/>',
+acc:'<circle cx="12" cy="4.5" r="2"/><path d="M4 8.5l8 1.5 8-1.5M12 10v5M12 15l-3.5 6M12 15l3.5 6"/>',
+py:'<path d="M12 3c-4 0-5 1.5-5 3v3h5v1H5.5C3.5 10 3 12 3 14s1 4 3 4h2v-3a3 3 0 0 1 3-3h4a2.5 2.5 0 0 0 2.5-2.5V6c0-2-2-3-5.5-3z"/><path d="M12 21c4 0 5-1.5 5-3v-3h-5v-1h6.5c2 0 2.5-2 2.5-4s-1-4-3-4h-2v3a3 3 0 0 1-3 3h-4A2.5 2.5 0 0 0 7 14v4c0 2 2 3 5 3z"/>',
+ide:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M10 13l-2 2 2 2M14 13l2 2-2 2"/>',
+calc:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18.5h.01M12 18.5h.01M16 18.5h.01"/>',
+flask:'<path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3M7.5 15h9"/>',
+chip:'<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
+hp:'<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="7" rx="1.5"/><rect x="17" y="14" width="4" height="7" rx="1.5"/>',
+fb:'<path fill="#fff" stroke="none" d="M14 21v-8h3l.5-3.5H14V7.5c0-1 .5-1.8 2-1.8h1.8V2.6C17.2 2.5 16.2 2.4 15.2 2.4 12.6 2.4 10.5 4 10.5 7v2.5h-3V13h3v8z"/>',
+ig:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/>',
+tt:'<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.3 2.5 2 4.2 5 4.5"/>',
+yt:'<path fill="#fff" stroke="none" d="M9.5 8l6.5 4-6.5 4z"/>',
+pal:'<path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2.2-.5-1.3.3-2.3 1.8-2.3H18a3 3 0 0 0 3-3C21 7 17 3 12 3z"/><path d="M7.5 11h.01M10 7.5h.01M14.5 7.5h.01"/>',
+pen:'<path d="M4 20h4L20 8l-4-4L4 16z"/>',
+pc:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/>',
+disc:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 6a6 6 0 0 1 6 6"/>',
+link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+pkg:'<path d="M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/>',
+puz:'<path d="M10 4a2 2 0 1 1 4 0v2h4v4h-2a2 2 0 1 0 0 4h2v6H4v-6h2a2 2 0 1 0 0-4H4V6h6z"/>',
+warn:'<path d="M12 3l10 18H2zM12 10v5M12 18v.01"/>',
+sld:'<path d="M4 6h16M4 12h4M12 12h8M4 18h12M18 18h2"/><circle cx="10" cy="12" r="1.5"/><circle cx="17" cy="18" r="1.5"/>',
+sav:'<path d="M5 3h12l4 4v14H5zM8 3v6h8V3M8 21v-7h8v7"/>',
+grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+shp:'<circle cx="7" cy="7" r="3.5"/><rect x="13" y="3.5" width="8" height="8" rx="1"/><path d="M5 21l4-8 4 8z"/>',
+srv:'<rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01"/>'};
+const _S='fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"';
+const gl=(g,t,w)=>`<g transform="${t}" ${_S} stroke-width="${w}">${G[g]||G.doc}</g>`;
+const svg=b=>`<svg class="si" viewBox="0 0 32 32" aria-hidden="true">${b}</svg>`;
+const PG=(c,g,l)=>svg(`<path d="M7 2h13l7 7v19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="${c}"/><path d="M20 2v5a2 2 0 0 0 2 2h5z" fill="#fff" opacity=".45"/>`+(l?`<text x="16" y="23.5" font-size="${l.length>3?6.5:l.length>2?8:10}" font-weight="700" fill="#fff" text-anchor="middle" font-family="Arial,sans-serif">${l}</text>`:gl(g,'translate(8.5 13) scale(.62)',2.4)));
+const AP=(a,b,g)=>{const i='g'+a.slice(1)+b.slice(1);return svg(`<defs><linearGradient id="${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect x="1.5" y="1.5" width="29" height="29" rx="8" fill="url(#${i})"/>`+gl(g,'translate(7 7) scale(.75)',2))};
+const FO=(c,g)=>{const P='M3 8a2 2 0 0 1 2-2h7l3 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z';return svg(`<path d="${P}" fill="${c}"/><path d="${P}" fill="#000" opacity=".2"/><path d="M3 13a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="${c}"/><path d="M3 13a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v2H3z" fill="#fff" opacity=".22"/>`+(g?gl(g,'translate(10 14) scale(.5)',2.8):''))};
+const FILE_SPEC={txt:['#78909c','doc'],md:['#546e7a',0,'MD'],rtf:['#5c6bc0','doc'],log:['#8d6e63','doc'],odt:['#1e88e5','doc'],doc:['#1e6fd9','doc'],docx:['#1e6fd9','doc'],pdf:['#e53935',0,'PDF'],ppt:['#f4511e','bar'],pptx:['#f4511e','bar'],xls:['#1e9e5a','tbl'],xlsx:['#1e9e5a','tbl'],csv:['#00897b','tbl'],
+jpg:['#8e44ad','img'],jpeg:['#8e44ad','img'],png:['#8e44ad','img'],gif:['#d81b60','vid'],bmp:['#8e44ad','img'],webp:['#8e44ad','img'],svg:['#f57c00','shp'],ico:['#fbc02d','star'],mp4:['#d32f2f','vid'],mp3:['#ec407a','mus'],wav:['#ec407a','mus'],Music:['#ec407a','mus'],
+exe:['#1976d2','pc'],msi:['#6d4c41','pkg'],dll:['#00838f','puz'],sys:['#455a64','chip'],bat:['#37474f','term'],cmd:['#37474f','term'],ps1:['#1a4a8c','term'],vbs:['#6d4c41','term'],lnk:['#0097a7','link'],
+html:['#e65100','code'],css:['#1565c0','brace'],js:['#f9a825',0,'JS'],json:['#43a047','brace'],xml:['#00897b','code'],py:['#2e7dbf','py'],java:['#c62828','book'],cpp:['#00599c',0,'C++'],php:['#6a5acd',0,'PHP'],sql:['#546e7a','db'],ts:['#2f74c0',0,'TS'],
+zip:['#ef6c00','zip'],rar:['#ef6c00','zip'],'7z':['#ef6c00','zip'],tar:['#ef6c00','zip'],gz:['#ef6c00','zip'],cab:['#6d4c41','pkg'],db:['#546e7a','db'],sqlite:['#546e7a','db'],sqlite3:['#546e7a','db'],mdb:['#a4373a','db'],accdb:['#a4373a','db'],bak:['#6d4c41','sav'],
+tmp:['#90a4ae','clk'],ini:['#607d8b','gear'],cfg:['#607d8b','gear'],dat:['#757575',0,'DAT'],reg:['#5e35b1','sld'],dmp:['#c62828','warn'],iso:['#455a64','disc'],img:['#455a64','disc'],vhd:['#455a64','hdd'],vhdx:['#455a64','hdd'],vmdk:['#455a64','hdd'],ova:['#37474f','srv'],ovf:['#37474f','srv']};
+const APP_SPEC={'Microsoft-Edge.exe':['#0ea5e9','#16a34a','globe'],'Microsoft-Copilot.exe':['#7c3aed','#06b6d4','spark'],'Microsoft-Office.exe':['#e64a19','#ff8a65','case'],'Microsoft-Word.exe':['#1e6fd9','#4f9cf5','doc'],'Microsoft-Excel.exe':['#188a4e','#34c27a','tbl'],'Microsoft-PowerPoint.exe':['#d9411e','#ff7a4d','bar'],'Microsoft-Outlook.exe':['#0f6cbd','#3aa0f3','mail'],'Microsoft-OneNote.exe':['#7b2fa8','#b066d9','note'],'Mozilla-Firefox.exe':['#ff6d00','#e91e63','globe'],'Google-Chrome.exe':['#ea4335','#fbbc05','chrome'],'Microsoft-Games.exe':['#2e7d32','#66bb6a','pad'],'Microsoft-Photos.exe':['#8e24aa','#ec407a','img'],'Microsoft-MediaPlayer.exe':['#e91e63','#ff7043','mus'],'Microsoft-Maps.exe':['#0097a7','#26c6da','pin'],'Microsoft-Weather.exe':['#1e88e5','#fbc02d','sun'],'Microsoft-Translator.exe':['#3949ab','#5c6bc0','tr'],'Microsoft-Calendar.exe':['#1565c0','#42a5f5','cal'],'Microsoft-Clock.exe':['#455a64','#78909c','clk'],'Microsoft-Camera.exe':['#37474f','#607d8b','cam'],'Microsoft-Money.exe':['#2e7d32','#9ccc65','swap'],'Microsoft-News.exe':['#c62828','#ef5350','news'],'Microsoft-TaskManager.exe':['#00796b','#26a69a','act'],'Microsoft-Dictionary.exe':['#4527a0','#7e57c2','book'],'Microsoft-Encyclopedia.exe':['#6d4c41','#a1887f','lib'],'Microsoft-Todo.exe':['#1976d2','#64b5f6','chk'],'Microsoft-StickyNotes.exe':['#f9a825','#ffd54f','stk'],'Microsoft-Recorder.exe':['#d32f2f','#ff7043','mic'],'Microsoft-QRCode.exe':['#263238','#546e7a','qr'],'Microsoft-Converter.exe':['#ef6c00','#ffa726','rul'],'Microsoft-Passwords.exe':['#37474f','#1e88e5','lock'],'Microsoft-Crypto.exe':['#f57c00','#fbc02d','coin'],'Microsoft-DeviceManager.exe':['#0277bd','#29b6f6','mon'],'Microsoft-Backup.exe':['#2e7d32','#43a047','shld'],'Microsoft-DiskCleanup.exe':['#00897b','#4db6ac','hdd'],'Microsoft-PDFReader.exe':['#c62828','#ef5350','doc'],'Microsoft-ScreenRecorder.exe':['#ad1457','#ec407a','rec'],'Microsoft-Contacts.exe':['#0277bd','#4fc3f7','usr'],'Microsoft-Clipboard.exe':['#5d4037','#8d6e63','clp'],'Microsoft-TextToSpeech.exe':['#6a1b9a','#ab47bc','spk'],'Microsoft-Network.exe':['#1565c0','#26c6da','wifi'],'Microsoft-Accessibility.exe':['#1976d2','#42a5f5','acc'],'Visual-Studio-Code.exe':['#0065a9','#2b9bf0','code'],'Python-IDE.exe':['#306998','#f2c53d','py'],'HTML-CSS-JS-Editor.exe':['#e65100','#ff9800','ide'],'Scientific-Calculator.exe':['#6a1b9a','#8e24aa','flask'],'Circuit-Designer.exe':['#00695c','#26a69a','chip'],'Music-DJ-Mix.exe':['#4a148c','#e040fb','hp'],'Facebook.exe':['#1877f2','#0a58c9','fb'],'Instagram.exe':['#f58529','#c13584','ig'],'TikTok.exe':['#111827','#fe2c55','tt'],'YouTube.exe':['#e00000','#ff4d4d','yt'],'cmd.exe':['#1c1c1c','#4b4b4b','term'],'calc.exe':['#00897b','#26a69a','calc'],'paint.exe':['#e91e63','#ff9800','pal'],'notepad.exe':['#1e88e5','#64b5f6','pen']};
+const SYS_SPEC={pc:['#1565c0','#42a5f5','pc'],bin:['#546e7a','#90a4ae','trash'],desk:['#0277bd','#4fc3f7','mon'],set:['#546e7a','#90a4ae','gear'],off:['#00796b','#26a69a','hdd']};
+const FOLD_SPEC={Nyaraka:['#3b82d6','doc'],Picha:['#ab47bc','img'],Video:['#e53935','vid'],Muziki:['#ec407a','mus'],Programu:['#3949ab','grid'],Code:['#00897b','code'],Zilizobanwa:['#ef6c00','zip'],Database:['#546e7a','db'],Mfumo:['#607d8b','gear'],Diski:['#455a64','hdd']};
+const IA=k=>{const s=SYS_SPEC[k];return AP(s[0],s[1],s[2])};
+const FD=k=>{k=String(k);if(typeof BIN!=='undefined'&&k===BIN)return IA('bin');if(k==='Desktop')return IA('desk');const s=FOLD_SPEC[k.split(' ')[0]];return FO(s?s[0]:'#f2b01e',s?s[1]:0)};
+const FIL=n=>{const a=APP_SPEC[n];if(a)return AP(a[0],a[1],a[2]);const s=FILE_SPEC[String(n).split('.').pop()]||FILE_SPEC[n]||['#78909c','doc'];return PG(s[0],s[1],s[2])};
+const fi=FIL;
+
 </script>
 <script>const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -427,15 +526,15 @@ function explorer(f){
  const go=(c,p)=>{cur=c;if(!p){H=H.slice(0,hi+1);H.push(c);hi++}q.value='';draw()};
  const bk=E('button','','←'),fw=E('button','','→'),up=E('button','','↑');bk.onclick=()=>{if(hi>0){hi--;go(H[hi],1)}};fw.onclick=()=>{if(hi<H.length-1){hi++;go(H[hi],1)}};up.onclick=()=>go(null);
  const nav=E('div','bar');nav.append(bk,fw,up,ad,q);const row=E('div');row.style.cssText='display:flex;flex:1;min-height:0';row.append(side,body);body.style.flex=1;body.style.overflow='auto';
- function draw(){ad.textContent='💻 Kompyuta Hii › Diski (C:)'+(cur?' › '+cur:'');side.innerHTML='';
-  const si=(t,c)=>{const d=E('div',c===cur?'on':'',t);d.onclick=()=>go(c);side.append(d)};si('💻 Kompyuta Hii',null);Object.keys(FOLD).forEach(k=>si('📁 '+k.split(' ')[0],k));
+ function draw(){ad.textContent='Kompyuta Hii › Diski (C:)'+(cur?' › '+cur:'');side.innerHTML='';
+  const si=(t,c)=>{const d=E('div',c===cur?'on':'',t);d.onclick=()=>go(c);side.append(d)};si(IA('pc')+' Kompyuta Hii',null);Object.keys(FOLD).forEach(k=>si(FD(k)+' '+k.split(' ')[0],k));
   body.innerHTML='';body.classList.add('lst');let n=0;const t=q.value.toLowerCase();
   body.append(E('div','lh','<span>#</span><span></span><span>Jina</span><span>Aina</span>'));
   const mk=(ic,nm,ty,fn)=>{n++;const i=E('div','it','<em>'+String(n).padStart(2,'0')+'</em><b>'+ic+'</b><span>'+esc(nm)+'</span><small>'+ty+'</small>');i.ondblclick=fn;i.onclick=()=>{body.querySelectorAll('.it').forEach(z=>z.style.background='');i.style.background='#cce4f7'};body.append(i)};
-  if(!cur)Object.keys(FOLD).filter(k=>k.toLowerCase().includes(t)).forEach(k=>mk('📁',k,'Folda · '+FOLD[k].split(',').length+' vitu',()=>go(k)));
+  if(!cur)Object.keys(FOLD).filter(k=>k.toLowerCase().includes(t)).forEach(k=>mk(FD(k),k,'Folda · '+FOLD[k].split(',').length+' vitu',()=>go(k)));
   else FOLD[cur].split(',').filter(x=>x.toLowerCase().includes(t)).sort((x,y)=>x.localeCompare(y,undefined,{sensitivity:'base'})).forEach(x=>mk(fi(x),x,ext(x).toUpperCase()+' · Faili',()=>openF(cur,x)));
   stt.textContent=n+' vitu'+(OFFN?'  ·  💾 '+OFFN+' vimehifadhiwa offline':'')}
- q.oninput=draw;draw();box.append(nav,row,stt);win('Explorer','📁',680,420,box)}
+ q.oninput=draw;draw();box.append(nav,row,stt);win('Explorer',FD('Nyaraka'),680,420,box)}
 /* ===== OFFLINE STORAGE (IndexedDB) ===== */
 let OFFN=0,PAT=null,syncing=0;
 const DB=(()=>{let p;const open=()=>p||(p=new Promise((res,rej)=>{if(!window.indexedDB)return rej();const q=indexedDB.open('SadeComputerDB',1);q.onupgradeneeded=()=>{q.result.createObjectStore('files');q.result.createObjectStore('meta')};q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)}));
@@ -472,7 +571,7 @@ addEventListener('message',e=>{if(e.data&&e.data.close)wins.slice().forEach(w=>{
 const TAP=matchMedia('(pointer:coarse)').matches;
 document.addEventListener('click',e=>{if(!TAP)return;const t=e.target.closest('.it,.ic');if(t&&t.ondblclick)t.ondblclick(e)});
 /* ===== DESKTOP / START ===== */
-const DI=[['💻','Kompyuta Hii',()=>explorer()],['📁','Nyaraka',()=>explorer('Nyaraka (Documents)')],['🖼️','Picha',()=>explorer('Picha (Pictures)')],['⬛','Terminal',()=>openF('Programu (Programs)','cmd.exe')],['🧮','Calculator',()=>openF('Programu (Programs)','calc.exe')],['🎨','Paint',()=>openF('Programu (Programs)','paint.exe')],['📝','Notepad',()=>openF('Programu (Programs)','notepad.exe')],['🌐','Microsoft Edge',()=>openF('Programu (Programs)','Microsoft-Edge.exe'),1],['✨','Microsoft Copilot',()=>openF('Programu (Programs)','Microsoft-Copilot.exe'),1],['🏢','Microsoft Office',()=>openF('Programu (Programs)','Microsoft-Office.exe'),1],['📘','Microsoft Word',()=>openF('Programu (Programs)','Microsoft-Word.exe'),1],['📗','Microsoft Excel',()=>openF('Programu (Programs)','Microsoft-Excel.exe'),1],['📙','Microsoft PowerPoint',()=>openF('Programu (Programs)','Microsoft-PowerPoint.exe'),1],['📧','Microsoft Outlook',()=>openF('Programu (Programs)','Microsoft-Outlook.exe'),1],['📓','Microsoft OneNote',()=>openF('Programu (Programs)','Microsoft-OneNote.exe'),1],['🦊','Mozilla Firefox',()=>openF('Programu (Programs)','Mozilla-Firefox.exe'),1],['🌍','Google Chrome',()=>openF('Programu (Programs)','Google-Chrome.exe'),1],['🎮','Microsoft Games',()=>openF('Programu (Programs)','Microsoft-Games.exe'),1],['🖼️','Microsoft Photos',()=>openF('Programu (Programs)','Microsoft-Photos.exe'),1],['🎵','Media Player',()=>openF('Programu (Programs)','Microsoft-MediaPlayer.exe'),1],['🗺️','Microsoft Maps',()=>openF('Programu (Programs)','Microsoft-Maps.exe'),1],['☀️','Microsoft Weather',()=>openF('Programu (Programs)','Microsoft-Weather.exe'),1],['🌐','Microsoft Translator',()=>openF('Programu (Programs)','Microsoft-Translator.exe'),1],['📅','Microsoft Calendar',()=>openF('Programu (Programs)','Microsoft-Calendar.exe'),1],['⏰','Microsoft Clock',()=>openF('Programu (Programs)','Microsoft-Clock.exe'),1],['📷','Microsoft Camera',()=>openF('Programu (Programs)','Microsoft-Camera.exe'),1],['💱','Microsoft Money',()=>openF('Programu (Programs)','Microsoft-Money.exe'),1],['📰','Microsoft News',()=>openF('Programu (Programs)','Microsoft-News.exe'),1],['📊','Task Manager',()=>openF('Programu (Programs)','Microsoft-TaskManager.exe'),1],['📖','Dictionary',()=>openF('Programu (Programs)','Microsoft-Dictionary.exe'),1],['📚','Encyclopedia',()=>openF('Programu (Programs)','Microsoft-Encyclopedia.exe'),1],['✅','To Do',()=>openF('Programu (Programs)','Microsoft-Todo.exe'),1],['🗒️','Sticky Notes',()=>openF('Programu (Programs)','Microsoft-StickyNotes.exe'),1],['🎙️','Voice Recorder',()=>openF('Programu (Programs)','Microsoft-Recorder.exe'),1],['🔳','QR Code',()=>openF('Programu (Programs)','Microsoft-QRCode.exe'),1],['📐','Converter',()=>openF('Programu (Programs)','Microsoft-Converter.exe'),1],['🔐','Passwords',()=>openF('Programu (Programs)','Microsoft-Passwords.exe'),1],['🪙','Crypto Markets',()=>openF('Programu (Programs)','Microsoft-Crypto.exe'),1],['🗑️','Recycle Bin',()=>alert('Recycle Bin ni tupu')],['⚙️','Settings',()=>settings(),1]];
+const DI=[[IA('pc'),'Kompyuta Hii',()=>explorer()],[FD('Nyaraka'),'Nyaraka',()=>explorer('Nyaraka (Documents)')],[FD('Picha'),'Picha',()=>explorer('Picha (Pictures)')],[FIL('cmd.exe'),'Terminal',()=>openF('Programu (Programs)','cmd.exe')],[FIL('calc.exe'),'Calculator',()=>openF('Programu (Programs)','calc.exe')],[FIL('paint.exe'),'Paint',()=>openF('Programu (Programs)','paint.exe')],[FIL('notepad.exe'),'Notepad',()=>openF('Programu (Programs)','notepad.exe')],[FIL('Microsoft-Edge.exe'),'Microsoft Edge',()=>openF('Programu (Programs)','Microsoft-Edge.exe'),1],[FIL('Microsoft-Copilot.exe'),'Microsoft Copilot',()=>openF('Programu (Programs)','Microsoft-Copilot.exe'),1],[FIL('Microsoft-Office.exe'),'Microsoft Office',()=>openF('Programu (Programs)','Microsoft-Office.exe'),1],[FIL('Microsoft-Word.exe'),'Microsoft Word',()=>openF('Programu (Programs)','Microsoft-Word.exe'),1],[FIL('Microsoft-Excel.exe'),'Microsoft Excel',()=>openF('Programu (Programs)','Microsoft-Excel.exe'),1],[FIL('Microsoft-PowerPoint.exe'),'Microsoft PowerPoint',()=>openF('Programu (Programs)','Microsoft-PowerPoint.exe'),1],[FIL('Microsoft-Outlook.exe'),'Microsoft Outlook',()=>openF('Programu (Programs)','Microsoft-Outlook.exe'),1],[FIL('Microsoft-OneNote.exe'),'Microsoft OneNote',()=>openF('Programu (Programs)','Microsoft-OneNote.exe'),1],[FIL('Mozilla-Firefox.exe'),'Mozilla Firefox',()=>openF('Programu (Programs)','Mozilla-Firefox.exe'),1],[FIL('Google-Chrome.exe'),'Google Chrome',()=>openF('Programu (Programs)','Google-Chrome.exe'),1],[FIL('Microsoft-Games.exe'),'Microsoft Games',()=>openF('Programu (Programs)','Microsoft-Games.exe'),1],[FIL('Microsoft-Photos.exe'),'Microsoft Photos',()=>openF('Programu (Programs)','Microsoft-Photos.exe'),1],[FIL('Microsoft-MediaPlayer.exe'),'Media Player',()=>openF('Programu (Programs)','Microsoft-MediaPlayer.exe'),1],[FIL('Microsoft-Maps.exe'),'Microsoft Maps',()=>openF('Programu (Programs)','Microsoft-Maps.exe'),1],[FIL('Microsoft-Weather.exe'),'Microsoft Weather',()=>openF('Programu (Programs)','Microsoft-Weather.exe'),1],[FIL('Microsoft-Translator.exe'),'Microsoft Translator',()=>openF('Programu (Programs)','Microsoft-Translator.exe'),1],[FIL('Microsoft-Calendar.exe'),'Microsoft Calendar',()=>openF('Programu (Programs)','Microsoft-Calendar.exe'),1],[FIL('Microsoft-Clock.exe'),'Microsoft Clock',()=>openF('Programu (Programs)','Microsoft-Clock.exe'),1],[FIL('Microsoft-Camera.exe'),'Microsoft Camera',()=>openF('Programu (Programs)','Microsoft-Camera.exe'),1],[FIL('Microsoft-Money.exe'),'Microsoft Money',()=>openF('Programu (Programs)','Microsoft-Money.exe'),1],[FIL('Microsoft-News.exe'),'Microsoft News',()=>openF('Programu (Programs)','Microsoft-News.exe'),1],[FIL('Microsoft-TaskManager.exe'),'Task Manager',()=>openF('Programu (Programs)','Microsoft-TaskManager.exe'),1],[FIL('Microsoft-Dictionary.exe'),'Dictionary',()=>openF('Programu (Programs)','Microsoft-Dictionary.exe'),1],[FIL('Microsoft-Encyclopedia.exe'),'Encyclopedia',()=>openF('Programu (Programs)','Microsoft-Encyclopedia.exe'),1],[FIL('Microsoft-Todo.exe'),'To Do',()=>openF('Programu (Programs)','Microsoft-Todo.exe'),1],[FIL('Microsoft-StickyNotes.exe'),'Sticky Notes',()=>openF('Programu (Programs)','Microsoft-StickyNotes.exe'),1],[FIL('Microsoft-Recorder.exe'),'Voice Recorder',()=>openF('Programu (Programs)','Microsoft-Recorder.exe'),1],[FIL('Microsoft-QRCode.exe'),'QR Code',()=>openF('Programu (Programs)','Microsoft-QRCode.exe'),1],[FIL('Microsoft-Converter.exe'),'Converter',()=>openF('Programu (Programs)','Microsoft-Converter.exe'),1],[FIL('Microsoft-Passwords.exe'),'Passwords',()=>openF('Programu (Programs)','Microsoft-Passwords.exe'),1],[FIL('Microsoft-Crypto.exe'),'Crypto Markets',()=>openF('Programu (Programs)','Microsoft-Crypto.exe'),1],[IA('bin'),'Recycle Bin',()=>alert('Recycle Bin ni tupu')],[IA('set'),'Settings',()=>settings(),1]];
 DI.filter(x=>!x[3]).forEach(([i,n,f])=>{const d=E('div','ic','<b>'+i+'</b>'+n);d.ondblclick=f;d.onclick=()=>{document.querySelectorAll('.ic').forEach(x=>x.classList.remove('s'));d.classList.add('s')};$('#desk').append(d)});
 [0,5,6,7,8].forEach(k=>{const b=E('button','',DI[k][0]);b.title=DI[k][1];b.onclick=DI[k][2];$('#pins').append(b)});
 const M=$('#menu'),REC=[['Nyaraka (Documents)','notes.txt'],['Nyaraka (Documents)','budget.xlsx'],['Nyaraka (Documents)','presentation.pptx'],['Picha (Pictures)','picha1.jpg'],['Muziki (Music)','Music'],['Code (Dev)','index.html']];
@@ -521,8 +620,8 @@ const FK=(fo,n)=>fo+'/'+n,isFr=k=>V.fr.includes(k),setFr=(ks,on)=>{ks.forEach(k=
 cmpN=(a,b)=>(V.sort==='za'?-1:1)*String(a).localeCompare(String(b),undefined,{sensitivity:'base',numeric:true}),
 cmpF=(ka,na,kb,nb)=>{const fa=V.fr.indexOf(ka),fb=V.fr.indexOf(kb);if(fa>=0||fb>=0)return fa<0?1:fb<0?-1:fa-fb;return cmpN(na,nb)},
 togSort=()=>{V.sort=V.sort==='az'?'za':'az';persist()};
-DI.push(['💾','Hifadhi Offline',()=>storageWin()]);
-DI.push(['🖥️','Device Manager',()=>openF('Programu (Programs)','Microsoft-DeviceManager.exe'),1]);DI.push(['🛡️','Backup & Restore',()=>openF('Programu (Programs)','Microsoft-Backup.exe'),1]);DI.push(['🧹','Storage Sense',()=>openF('Programu (Programs)','Microsoft-DiskCleanup.exe'),1]);DI.push(['📕','PDF Reader',()=>openF('Programu (Programs)','Microsoft-PDFReader.exe'),1]);DI.push(['🎥','Screen Recorder',()=>openF('Programu (Programs)','Microsoft-ScreenRecorder.exe'),1]);DI.push(['👥','Contacts',()=>openF('Programu (Programs)','Microsoft-Contacts.exe'),1]);DI.push(['📋','Clipboard History',()=>openF('Programu (Programs)','Microsoft-Clipboard.exe'),1]);DI.push(['🗣️','Text to Speech',()=>openF('Programu (Programs)','Microsoft-TextToSpeech.exe'),1]);DI.push(['📡','Network Status',()=>openF('Programu (Programs)','Microsoft-Network.exe'),1]);DI.push(['♿','Accessibility',()=>openF('Programu (Programs)','Microsoft-Accessibility.exe'),1]);DI.push(['💻','Visual Studio Code',()=>openF('Programu (Programs)','Visual-Studio-Code.exe'),1]);DI.push(['🐍','Python IDE',()=>openF('Programu (Programs)','Python-IDE.exe'),1]);DI.push(['🌐','HTML/CSS/JS Editor',()=>openF('Programu (Programs)','HTML-CSS-JS-Editor.exe'),1]);DI.push(['🔬','Scientific Calculator',()=>openF('Programu (Programs)','Scientific-Calculator.exe'),1]);DI.push(['🔌','Circuit Designer — KiCad Simulator',()=>openF('Programu (Programs)','Circuit-Designer.exe'),1]);DI.push(['🎧','Music DJ Mix',()=>openF('Programu (Programs)','Music-DJ-Mix.exe'),1]);DI.push(['📘','Facebook',()=>openF('Programu (Programs)','Facebook.exe'),1]);DI.push(['📸','Instagram',()=>openF('Programu (Programs)','Instagram.exe'),1]);DI.push(['🎵','TikTok',()=>openF('Programu (Programs)','TikTok.exe'),1]);DI.push(['▶️','YouTube',()=>openF('Programu (Programs)','YouTube.exe'),1]);
+DI.push([IA('off'),'Hifadhi Offline',()=>storageWin()]);
+DI.push([FIL('Microsoft-DeviceManager.exe'),'Device Manager',()=>openF('Programu (Programs)','Microsoft-DeviceManager.exe'),1]);DI.push([FIL('Microsoft-Backup.exe'),'Backup & Restore',()=>openF('Programu (Programs)','Microsoft-Backup.exe'),1]);DI.push([FIL('Microsoft-DiskCleanup.exe'),'Storage Sense',()=>openF('Programu (Programs)','Microsoft-DiskCleanup.exe'),1]);DI.push([FIL('Microsoft-PDFReader.exe'),'PDF Reader',()=>openF('Programu (Programs)','Microsoft-PDFReader.exe'),1]);DI.push([FIL('Microsoft-ScreenRecorder.exe'),'Screen Recorder',()=>openF('Programu (Programs)','Microsoft-ScreenRecorder.exe'),1]);DI.push([FIL('Microsoft-Contacts.exe'),'Contacts',()=>openF('Programu (Programs)','Microsoft-Contacts.exe'),1]);DI.push([FIL('Microsoft-Clipboard.exe'),'Clipboard History',()=>openF('Programu (Programs)','Microsoft-Clipboard.exe'),1]);DI.push([FIL('Microsoft-TextToSpeech.exe'),'Text to Speech',()=>openF('Programu (Programs)','Microsoft-TextToSpeech.exe'),1]);DI.push([FIL('Microsoft-Network.exe'),'Network Status',()=>openF('Programu (Programs)','Microsoft-Network.exe'),1]);DI.push([FIL('Microsoft-Accessibility.exe'),'Accessibility',()=>openF('Programu (Programs)','Microsoft-Accessibility.exe'),1]);DI.push([FIL('Visual-Studio-Code.exe'),'Visual Studio Code',()=>openF('Programu (Programs)','Visual-Studio-Code.exe'),1]);DI.push([FIL('Python-IDE.exe'),'Python IDE',()=>openF('Programu (Programs)','Python-IDE.exe'),1]);DI.push([FIL('HTML-CSS-JS-Editor.exe'),'HTML/CSS/JS Editor',()=>openF('Programu (Programs)','HTML-CSS-JS-Editor.exe'),1]);DI.push([FIL('Scientific-Calculator.exe'),'Scientific Calculator',()=>openF('Programu (Programs)','Scientific-Calculator.exe'),1]);DI.push([FIL('Circuit-Designer.exe'),'Circuit Designer — KiCad Simulator',()=>openF('Programu (Programs)','Circuit-Designer.exe'),1]);DI.push([FIL('Music-DJ-Mix.exe'),'Music DJ Mix',()=>openF('Programu (Programs)','Music-DJ-Mix.exe'),1]);DI.push([FIL('Facebook.exe'),'Facebook',()=>openF('Programu (Programs)','Facebook.exe'),1]);DI.push([FIL('Instagram.exe'),'Instagram',()=>openF('Programu (Programs)','Instagram.exe'),1]);DI.push([FIL('TikTok.exe'),'TikTok',()=>openF('Programu (Programs)','TikTok.exe'),1]);DI.push([FIL('YouTube.exe'),'YouTube',()=>openF('Programu (Programs)','YouTube.exe'),1]);
 const ORIG=DI.length;
 function startAdd(o,n){DI.push([fi(o[1]),n,()=>openE({n,o}),1,o])}
 const startFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.sp.some(p=>p.n===e.n&&p.o+''===e.o+'')){V.sp.push({o:e.o,n:e.n});startAdd(e.o,e.n)}};
@@ -567,9 +666,9 @@ function explorer(f){
  const status=()=>{stt.textContent=n+' vitu'+(sel.size?'  ·  '+sel.size+' vimechaguliwa':'')+(CB?'  ·  📋 '+CB.items.length+(CB.cut?' vimekatwa':' vimenakiliwa'):'')};
  const paint=()=>{body.querySelectorAll('.it').forEach(r=>r.classList.toggle('sel',sel.has(r.dataset.k)));status()};
  const pick=(k,e)=>{if(multi||e.ctrlKey||e.metaKey){sel.has(k)?sel.delete(k):sel.add(k)}else if(e.shiftKey&&last!=null){const a=order.indexOf(last),b=order.indexOf(k);order.slice(Math.min(a,b),Math.max(a,b)+1).forEach(x=>sel.add(x))}else{sel.clear();sel.add(k)}last=k;paint()};
- const nm=k=>k===BIN?'🗑️ Recycle Bin':k==='Desktop'?'🖥️ Desktop':'📁 '+k.split(' ')[0];
- function draw(){if(cur&&!V.F[cur])cur=null;ad.textContent='💻 Kompyuta Hii › Diski (C:)'+(cur?' › '+cur:'');side.innerHTML='';
-  const si=(t,c)=>{const d=E('div',c===cur?'on':'',t);d.onclick=()=>go(c);if(c)d.dataset.fold=c;side.append(d)};si('💻 Kompyuta Hii',null);keys().forEach(k=>si(nm(k),k));
+ const nm=k=>FD(k)+' '+(k===BIN?'Recycle Bin':k==='Desktop'?'Desktop':k.split(' ')[0]);
+ function draw(){if(cur&&!V.F[cur])cur=null;ad.textContent='Kompyuta Hii › Diski (C:)'+(cur?' › '+cur:'');side.innerHTML='';
+  const si=(t,c)=>{const d=E('div',c===cur?'on':'',t);d.onclick=()=>go(c);if(c)d.dataset.fold=c;side.append(d)};si(IA('pc')+' Kompyuta Hii',null);keys().forEach(k=>si(nm(k),k));
   body.innerHTML='';body.classList.add('lst');body.dataset.fold=cur||'';order=[];n=0;const t=q.value.toLowerCase();
   body.append(E('div','lh','<span>#</span><span></span><span>Jina</span><span>Aina</span>'));
   const mk=(ic,name,ty,fn,key)=>{n++;order.push(key);const cut=CB&&CB.cut&&cur&&CB.items.some(x=>x[0]===cur&&x[1]===key);
@@ -577,11 +676,11 @@ function explorer(f){
    i.ondblclick=()=>{if(!multi&&Date.now()-lpT>700)fn()};i.onclick=e=>{ACT=ctx;pick(key,e)};
    i.onpointerdown=e=>{if(!cur||e.pointerType!=='mouse'||e.button)return;if(!sel.has(key)&&!e.ctrlKey){sel.clear();sel.add(key);paint()}drag(e,S)};
    lp(i,(x,y)=>{ACT=ctx;if(!cur)return menu(x,y,[['Fungua',()=>go(key)],[isFr('k:'+key)?'⬇️ Toa mbele':'⬆️ Weka mbele',()=>setFr(['k:'+key],!isFr('k:'+key))],['Futa folda',()=>delF(key),!V.U.includes(key)]]);if(!sel.has(key)){sel.clear();sel.add(key);paint()}fileMenu(x,y,cur,[...sel])});body.append(i)};
-  if(!cur)keys().filter(k=>k.toLowerCase().includes(t)).sort((a,b)=>cmpF('k:'+a,a,'k:'+b,b)).forEach(k=>mk(k===BIN?'🗑️':k==='Desktop'?'🖥️':'📁',k,'Folda · '+V.F[k].length+' vitu',()=>go(k),k));
+  if(!cur)keys().filter(k=>k.toLowerCase().includes(t)).sort((a,b)=>cmpF('k:'+a,a,'k:'+b,b)).forEach(k=>mk(FD(k),k,'Folda · '+V.F[k].length+' vitu',()=>go(k),k));
   else V.F[cur].filter(e=>e.n.toLowerCase().includes(t)).sort((x,y)=>cmpF(FK(cur,x.n),x.n,FK(cur,y.n),y.n)).forEach(e=>mk(fi(e.o[1]),e.n,ext(e.n).toUpperCase()+' · Faili',()=>cur===BIN?alert('Rejesha faili kwanza ili kulifungua.'):openE(e),e.n));
   status()}
  lp(body,(x,y,e)=>{if(e.target.closest('.it'))return;ACT=ctx;menu(x,y,[['📋 Bandika (Paste)',()=>paste(cur),!CB||!cur],['Chagua zote',ctx.all,!cur],['➕ Folda mpya',newF,!!cur],['🔄 Onyesha upya',draw],cur===BIN?['🧹 Mwaga Recycle Bin',()=>del(V.F[BIN].map(a=>[BIN,a.n])),!V.F[BIN].length]:null].filter(Boolean))});
- q.oninput=draw;EXP.add(draw);draw();box.append(nav,tbr,row,stt);win('Explorer','📁',680,420,box,()=>{EXP.delete(draw);if(ACT===ctx)ACT=dctx})}
+ q.oninput=draw;EXP.add(draw);draw();box.append(nav,tbr,row,stt);win('Explorer',FD('Nyaraka'),680,420,box,()=>{EXP.delete(draw);if(ACT===ctx)ACT=dctx})}
 /* ----- Desktop ----- */
 const D=$('#desk');D.dataset.fold='Desktop';
 const dctx={folder:()=>'Desktop',S:()=>[...dsel].map(x=>['Desktop',x]),all:()=>{V.F.Desktop.forEach(e=>dsel.add(e.n));paintD()}};ACT=dctx;
@@ -700,7 +799,7 @@ function settings(){const box=wrap(),row=E('div'),side=E('div','sd'),main=E('div
   '🖥️ System':()=>{main.innerHTML='<h3>System</h3>';let c=card('☀️ Brightness');rng(c,'br',20);tog(card('<span style="flex:1">🌙 Night light</span>'),'nl');c=card('🔊 Volume');rng(c,'vol',0);tog(card('<span style="flex:1">🌿 Battery saver</span>'),'bs')},
   'ℹ️ About':()=>{main.innerHTML='<h3>About</h3>';card('<div><b>SADE-PC</b><br>Windows 11 Pro · Sade Computer<br>Version 23H2 · OS build 22631<br>Mafaili: '+Object.values(V.F).reduce((a,b)=>a+b.length,0)+' · Recycle Bin: '+V.F[BIN].length+'</div>')}};
  function draw(){side.innerHTML='';Object.keys(pg).forEach(k=>{const d=E('div',k===cur?'on':'',k);d.onclick=()=>{cur=k;draw()};side.append(d)});pg[cur]()}
- draw();win('Settings','⚙️',640,440,box)}
+ draw();win('Settings',IA('set'),640,440,box)}
 applyS();
 </script>
 <script>
@@ -784,7 +883,7 @@ async function importDir(){if(!window.showDirectoryPicker)return toast('Tumia Ch
 function clearCache(){if(!confirm('Futa mafaili ya mfumo yaliyohifadhiwa offline? (Mafaili yako uliyopakia hayafutwi)'))return Promise.resolve();
  return new Promise(r=>{const q=indexedDB.open('SadeComputerDB',1);q.onsuccess=()=>{const d=q.result,t=d.transaction(['files','meta'],'readwrite');t.objectStore('files').clear();t.objectStore('meta').clear();t.oncomplete=async()=>{d.close();try{await(await OP.dir('sade',false)).removeEntry('files',{recursive:true})}catch(_){}cnt();r()}};q.onerror=()=>r()})}
 /* ---------- Dirisha la "Hifadhi & Offline" ---------- */
-window.storageWin=function(){const b=E('div','s11');win('Hifadhi & Offline','💾',560,540,b);
+window.storageWin=function(){const b=E('div','s11');win('Hifadhi & Offline',IA('off'),560,540,b);
  const btn=(t,f)=>{const x=E('button','',t);x.style.cssText='padding:7px 12px;border:1px solid var(--bd);border-radius:6px;background:rgba(127,127,127,.15);color:inherit;cursor:pointer;font:inherit';x.onclick=f;return x},mb=n=>(n/1048576).toFixed(1)+' MB';
  const draw=async()=>{const[k,bl,est,per,dh]=await Promise.all([DB.keys(),BD.all('blobs'),st&&st.estimate?st.estimate():null,st&&st.persisted?st.persisted():null,BD.get('kv','dir')]);
   const tot=Object.values(FOLD).reduce((a,s)=>a+s.split(',').length,0),sz=(bl||[]).reduce((a,r)=>a+(r&&r.blob?r.blob.size:0),0);b.innerHTML='<h3>💾 Hifadhi & Offline</h3>';
@@ -806,88 +905,4 @@ const off=$('#off');if(off)off.onclick=storageWin;
 .s11 select{padding:6px 10px;border-radius:6px;border:1px solid var(--bd);background:rgba(127,127,127,.12);color:inherit;font:inherit}
 .s11 button.sb{padding:7px 12px;border:1px solid var(--bd);border-radius:6px;background:rgba(127,127,127,.15);color:inherit;cursor:pointer;font:inherit}
 .s11 button.sb:hover{background:rgba(127,127,127,.28)}
-.pv{width:min(100%,380px);aspect-ratio:16/9;border-radius:10px;border:1px solid var(--bd);position:relative;overflow:hidden;margin-bottom:12px;box-shadow:0 4px 18px #0004}
-.pv .pvt{position:absolute;left:0;right:0;bottom:0;height:12%;background:var(--mica);display:flex;gap:4%;justify-content:center;align-items:center}
-.pv .pvt i{width:5%;aspect-ratio:1;border-radius:2px;background:var(--ac)}
-.pv .pvi{position:absolute;left:4%;top:6%;display:flex;flex-direction:column;gap:10px}.pv .pvi i{width:18px;height:18px;border-radius:4px;background:#fff9}
-.wpg{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px;width:100%}
-.wpi{cursor:pointer;border-radius:8px;padding:5px;border:2px solid transparent;text-align:center;font-size:11px}
-.wpi:hover{background:rgba(127,127,127,.15)}.wpi.on{border-color:var(--ac);background:rgba(127,127,127,.12)}
-.wpt{aspect-ratio:16/10;border-radius:6px;background:#123 center/cover no-repeat;margin-bottom:5px;display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;border:1px solid var(--bd)}
-.wpi.on span::before{content:"✓ ";color:var(--ac);font-weight:700}
-.apr{display:flex;align-items:center;gap:10px;width:100%}.apr b{font-size:26px;font-weight:400}.apr div{flex:1;min-width:0}.apr small{opacity:.7;display:block}
-#desk>.ic{zoom:var(--is,1)}
-body.ra *{animation:none!important;transition:none!important}
-</style>
-<script>
-/* ===== SADE COMPUTER v12: picha 10 za Desktop, Settings mpya, programu 10 mpya za mfumo, Accessibility ===== */
-(()=>{
-const def={wf:'cover',ws:0,wc:-1,isz:100,hc:0,gs:0,inv:0,ra:0};
-Object.keys(def).forEach(k=>{if(Sx[k]===undefined)Sx[k]=def[k]});
-const say=m=>{const t=E('div','',m);t.style.cssText='position:fixed;left:50%;bottom:64px;transform:translateX(-50%);background:#1f2a44;color:#fff;padding:9px 16px;border-radius:20px;z-index:400000;box-shadow:0 4px 16px #0006;font:13px Segoe UI,system-ui,sans-serif;max-width:90vw;text-align:center';document.body.append(t);setTimeout(()=>t.remove(),3200)};
-
-/* ---------- PICHA 10 ZA DESKTOP (SVG, zinafanya kazi offline) ---------- */
-const rg=s=>()=>(s=(s*16807)%2147483647)/2147483647;
-const svg=b=>'url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">'+b+'</svg>')+'")';
-const G=(id,st,v)=>'<linearGradient id="'+id+'" '+(v||'x1="0" y1="0" x2="0" y2="1"')+'>'+st.map(s=>'<stop offset="'+s[0]+'" stop-color="'+s[1]+'"/>').join('')+'</linearGradient>';
-const R=(f)=>'<rect width="1600" height="900" fill="'+f+'"/>';
-const stars=(n,sd,y0,y1)=>{const r=rg(sd);let o='';for(let i=0;i<n;i++)o+='<circle cx="'+(r()*1600|0)+'" cy="'+(y0+r()*(y1-y0)|0)+'" r="'+(0.6+r()*1.6).toFixed(1)+'" fill="#fff" opacity="'+(0.35+r()*0.65).toFixed(2)+'"/>';return o};
-const wv=(y,a,l,c,o,ph)=>{let d='M'+(-ph)+' '+y;for(let x=-ph,s=1;x<1600;x+=l,s=-s)d+=' Q'+(x+l/2)+' '+(y-a*s)+' '+(x+l)+' '+y;return '<path d="'+d+' L1900 900 L-300 900Z" fill="'+c+'" opacity="'+o+'"/>'};
-const pines=(y,n,h,c,sd)=>{const r=rg(sd);let o='';for(let i=0;i<n;i++){const x=r()*1650-25,hh=h*(0.7+r()*0.6),w=hh*0.38;o+='<polygon points="'+x.toFixed(0)+','+(y-hh).toFixed(0)+' '+(x-w).toFixed(0)+','+y+' '+(x+w).toFixed(0)+','+y+'" fill="'+c+'"/>'}return o};
-const city=sd=>{const r=rg(sd);let o='',x=0;while(x<1600){const w=50+r()*80|0,h=120+r()*330|0,y=900-h;o+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="#120a2e"/>';for(let wy=y+14;wy<880;wy+=26)for(let wx=x+8;wx<x+w-10;wx+=16)if(r()>0.68)o+='<rect x="'+wx+'" y="'+wy+'" width="7" height="10" fill="#ffd66b" opacity="'+(0.5+r()*0.5).toFixed(2)+'"/>';x+=w+(r()*14|0)}return o};
-const far=sd=>{const r=rg(sd);let o='',x=-20;while(x<1600){const w=60+r()*90|0,h=200+r()*260|0;o+='<rect x="'+x+'" y="'+(900-h)+'" width="'+w+'" height="'+h+'" fill="#3a1b63"/>';x+=w+(r()*10|0)}return o};
-const palm=(x,y,s)=>'<g transform="translate('+x+' '+y+') scale('+s+')"><path d="M0 0 Q30 -200 -20 -380" stroke="#3b2a1a" stroke-width="18" fill="none" stroke-linecap="round"/>'+[-80,-45,-10,25,60,95,170,205].map(a=>'<path d="M-20 -380 Q60 -440 150 -380 Q70 -405 -20 -380Z" fill="#14532d" transform="rotate('+a+' -20 -380)"/>').join('')+'</g>';
-const tree=(x,y,s)=>'<g transform="translate('+x+' '+y+') scale('+s+')" fill="#120a14"><path d="M0 0 L2 -150 Q-5 -190 -50 -215 M2 -150 Q15 -190 70 -215" stroke="#120a14" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="-50" cy="-230" rx="130" ry="26"/><ellipse cx="75" cy="-225" rx="110" ry="22"/><ellipse cx="10" cy="-255" rx="95" ry="20"/></g>';
-const WN=['Bloom','Kilimanjaro Alfajiri','Zanzibar Pwani','Serengeti Machweo','Usiku wa Nyota','Bahari ya Buluu','Msitu wa Kijani','Jangwa la Dhahabu','Aurora','Jiji Usiku'];
-WP.length=0;WP.push(
-/* 1 Bloom */ svg('<defs><radialGradient id="bg" cx=".5" cy=".5" r=".8"><stop offset="0" stop-color="#2a7de1"/><stop offset="1" stop-color="#041a4d"/></radialGradient>'+G('p',[[0,'#bfe9ff'],[1,'#0a4fd6']],'x1="0" y1="0" x2="1" y2="1"')+'</defs>'+R('url(#bg)')+[0,1,2,3,4,5].map(i=>'<ellipse cx="800" cy="450" rx="360" ry="140" transform="rotate('+(i*30)+' 800 450)" fill="url(#p)" opacity=".5"/>').join('')+'<circle cx="800" cy="450" r="70" fill="#e6f6ff" opacity=".35"/>'),
-/* 2 Kilimanjaro */ svg('<defs>'+G('a',[[0,'#1b2a6b'],[.5,'#e9818f'],[1,'#ffd6a0']])+G('m',[[0,'#8d9bc4'],[1,'#4b5a8f']])+'</defs>'+R('url(#a)')+stars(40,1,0,420)+'<circle cx="1180" cy="560" r="80" fill="#fff1c2" opacity=".95"/><polygon points="250,760 640,330 760,250 880,320 1350,760" fill="url(#m)"/><polygon points="640,330 760,250 880,320 820,345 770,305 715,360 690,335" fill="#fff"/><polygon points="0,760 300,700 620,770 980,690 1300,760 1600,700 1600,900 0,900" fill="#2b3566"/><polygon points="0,830 400,790 800,840 1200,800 1600,840 1600,900 0,900" fill="#161d3d"/>'),
-/* 3 Zanzibar */ svg('<defs>'+G('s',[[0,'#6ccfff'],[1,'#e8f8ff']])+G('o',[[0,'#00c9d6'],[1,'#0a6f98']])+'</defs>'+R('url(#s)')+'<circle cx="360" cy="210" r="140" fill="#fff6b0" opacity=".3"/><circle cx="360" cy="210" r="64" fill="#fff3a0"/><ellipse cx="900" cy="170" rx="150" ry="28" fill="#fff" opacity=".85"/><ellipse cx="1010" cy="150" rx="100" ry="26" fill="#fff" opacity=".85"/><ellipse cx="520" cy="330" rx="120" ry="20" fill="#fff" opacity=".7"/><rect y="520" width="1600" height="220" fill="url(#o)"/>'+wv(600,6,160,'#ffffff','.18',0)+'<path d="M0 730 Q400 690 900 735 T1600 705 L1600 900 L0 900Z" fill="#f3dca5"/><path d="M0 730 Q400 690 900 735 T1600 705" stroke="#fff" stroke-width="8" fill="none" opacity=".7"/>'+palm(1300,840,1.25)+palm(1480,880,.9)),
-/* 4 Serengeti */ svg('<defs>'+G('a',[[0,'#3a0f4a'],[.5,'#e5484d'],[1,'#ffb347']])+'</defs>'+R('url(#a)')+'<circle cx="650" cy="650" r="230" fill="#ffd27a" opacity=".25"/><circle cx="650" cy="650" r="130" fill="#ffd27a"/><polygon points="0,770 400,740 900,775 1300,745 1600,770 1600,900 0,900" fill="#2a0f1c"/>'+tree(1130,790,1.1)+tree(300,800,.55)+'<polygon points="0,840 500,815 1000,845 1600,820 1600,900 0,900" fill="#120a14"/>'),
-/* 5 Usiku wa Nyota */ svg('<defs>'+G('a',[[0,'#02030f'],[1,'#17265a']])+'<mask id="mk"><rect width="1600" height="900" fill="#fff"/><circle cx="1285" cy="185" r="62" fill="#000"/></mask></defs>'+R('url(#a)')+stars(240,5,0,620)+'<circle cx="1250" cy="200" r="150" fill="#f4f1de" opacity=".07"/><circle cx="1250" cy="200" r="70" fill="#f4f1de" mask="url(#mk)"/><polygon points="0,720 220,560 420,690 640,520 900,700 1150,560 1400,690 1600,600 1600,900 0,900" fill="#0b1230"/><polygon points="0,800 300,720 650,810 1000,730 1350,805 1600,750 1600,900 0,900" fill="#050816"/>'),
-/* 6 Bahari */ svg('<defs>'+G('a',[[0,'#bfe8ff'],[1,'#2a9df4']])+'</defs>'+R('url(#a)')+'<circle cx="1150" cy="260" r="70" fill="#fffbe0"/>'+wv(420,10,300,'#5cc6f2',1,0)+wv(500,22,420,'#2aa0dc',1,150)+wv(590,30,500,'#1479b8',1,60)+wv(690,38,560,'#0a5a93',1,280)+wv(790,44,640,'#063e6b',1,100)),
-/* 7 Msitu */ svg('<defs>'+G('a',[[0,'#d3f0dc'],[1,'#86c997']])+G('f',[[0,'#ffffff00'],[1,'#ffffffcc']])+'</defs>'+R('url(#a)')+'<circle cx="1250" cy="200" r="90" fill="#fffbe3" opacity=".85"/><polygon points="0,560 250,430 520,540 800,400 1100,540 1380,420 1600,520 1600,900 0,900" fill="#6fb685"/>'+pines(560,60,170,'#3f8f5c',3)+'<rect y="430" width="1600" height="200" fill="url(#f)"/>'+pines(700,45,240,'#2d7048',4)+pines(830,30,340,'#1d4f33',5)+'<rect y="880" width="1600" height="20" fill="#143826"/>'),
-/* 8 Jangwa */ svg('<defs>'+G('a',[[0,'#ffe9b8'],[.6,'#f9b866'],[1,'#f08a4b']])+'</defs>'+R('url(#a)')+'<circle cx="1180" cy="420" r="190" fill="#fff3c9" opacity=".3"/><circle cx="1180" cy="420" r="95" fill="#fff6d5"/>'+wv(560,28,800,'#eab25b',1,100)+wv(660,50,900,'#d68a3c',1,350)+wv(770,42,640,'#b4672a',1,0)+wv(850,30,540,'#8a4a1c',1,200)),
-/* 9 Aurora */ svg('<defs>'+G('a',[[0,'#01060f'],[1,'#0b1f2e']])+G('g1',[[0,'#00ffa3'],[1,'#7a3cff']],'x1="0" y1="0" x2="1" y2="0"')+G('g2',[[0,'#2cffd6'],[1,'#0090ff']],'x1="0" y1="0" x2="1" y2="0"')+'<filter id="bl"><feGaussianBlur stdDeviation="22"/></filter></defs>'+R('url(#a)')+stars(200,9,0,520)+'<path d="M0 360 Q300 140 600 300 T1200 230 T1700 330 L1700 540 Q1300 420 900 530 T0 490Z" fill="url(#g1)" opacity=".6" filter="url(#bl)"/><path d="M0 430 Q350 260 700 380 T1400 300 T1800 400 L1800 560 Q1300 470 900 570 T0 540Z" fill="url(#g2)" opacity=".4" filter="url(#bl)"/><polygon points="0,740 260,600 520,720 820,580 1120,720 1400,620 1600,700 1600,900 0,900" fill="#050b14"/>'+pines(860,55,150,'#02060c',9)),
-/* 10 Jiji Usiku */ svg('<defs>'+G('a',[[0,'#14093b'],[.55,'#7a2a8a'],[1,'#ff8a5c']])+'</defs>'+R('url(#a)')+stars(60,10,0,380)+'<circle cx="1180" cy="300" r="60" fill="#ffe7c2" opacity=".9"/>'+far(11)+city(12))
-);
-const CK='sadewp_custom',FIT={cover:'center/cover no-repeat',contain:'center/contain no-repeat',stretch:'center/100% 100% no-repeat',center:'center/auto no-repeat'};
-const cUrl=()=>{try{return localStorage.getItem(CK)||''}catch(_){return ''}};
-const isCu=()=>Sx.wc===V.wp&&!!cUrl();
-const curWP=()=>isCu()?'url("'+cUrl()+'")':WP[V.wp%WP.length];
-const wpName=()=>isCu()?'Picha yako':WN[V.wp%WP.length];
-function applyWP(){document.body.style.background='#06122e '+curWP()+' '+(FIT[Sx.wf]||FIT.cover)}
-function applyA(){const r=document.documentElement,f=[];if(Sx.hc)f.push('contrast(1.3) saturate(1.15)');if(Sx.gs)f.push('grayscale(1)');if(Sx.inv)f.push('invert(1) hue-rotate(180deg)');r.style.filter=f.join(' ');r.style.setProperty('--is',Sx.isz/100);document.body.classList.toggle('ra',!!Sx.ra)}
-const _dd=drawDesk;drawDesk=function(){_dd();applyWP()};
-let SETD=null;
-setInterval(()=>{if(!Sx.ws)return;V.wp=(V.wp+1)%WP.length;Sx.wc=-1;sv();applyWP();SETD&&SETD()},3e5);
-
-/* ---------- ZANA 10 MPYA ZA MFUMO ---------- */
-const NEWAPPS=[['Microsoft-DeviceManager.exe','🖥️','Device Manager','Taarifa kamili za kifaa: CPU, RAM, skrini, betri, vipengele'],['Microsoft-Backup.exe','🛡️','Backup & Restore','Hifadhi nakala ya mipangilio na mafaili, kisha uirejeshe'],['Microsoft-DiskCleanup.exe','🧹','Storage Sense','Ona nafasi, futa Recycle Bin na cache ya mfumo'],['Microsoft-PDFReader.exe','📕','PDF Reader','Fungua na usome mafaili ya PDF'],['Microsoft-ScreenRecorder.exe','🎥','Screen Recorder','Picha ya skrini na kurekodi video ya skrini'],['Microsoft-Contacts.exe','👥','Contacts','Kitabu cha mawasiliano: piga, SMS, hamisha vCard/CSV'],['Microsoft-Clipboard.exe','📋','Clipboard History','Historia ya maandishi uliyonakili'],['Microsoft-TextToSpeech.exe','🗣️','Text to Speech','Soma maandishi kwa sauti (Kiswahili kama kipo)'],['Microsoft-Network.exe','📡','Network Status','Hali ya mtandao, kasi na jaribio la muunganisho'],['Microsoft-Accessibility.exe','♿','Accessibility','Ukubwa wa icons, utofautishaji, rangi na mwendo']];
-const clearSys=async()=>{await new Promise(r=>{try{const q=indexedDB.open('SadeComputerDB',1);q.onsuccess=()=>{const d=q.result,t=d.transaction(['files','meta'],'readwrite');t.objectStore('files').clear();t.objectStore('meta').clear();t.oncomplete=()=>{d.close();r()};t.onerror=()=>r()};q.onerror=()=>r()}catch(e){r()}});
- try{const d=await(await navigator.storage.getDirectory()).getDirectoryHandle('sade');await d.removeEntry('files',{recursive:true})}catch(e){}cnt()};
-window.SADE={V:()=>V,Sx,BIN,persist:()=>persist(),DB,saveS:()=>sv(),applyA,storageWin:()=>storageWin(),blob:(fo,n)=>window.blobOf2?window.blobOf2(fo,n):null,clearSys,wallpapers:WN};
-
-/* ---------- SETTINGS MPYA ---------- */
-function pickWP(){const i=E('input');i.type='file';i.accept='image/*';i.onchange=()=>{const f=i.files[0];if(!f)return;const im=new Image(),u=URL.createObjectURL(f);
- im.onload=()=>{const s=Math.min(1,1920/Math.max(im.width,im.height)),c=E('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
-  try{localStorage.setItem(CK,c.toDataURL('image/jpeg',.82))}catch(e){say('❌ Picha ni kubwa mno kuhifadhiwa. Jaribu picha ndogo.');return}
-  Sx.wc=V.wp;persist();SETD&&SETD();say('✅ Picha yako imewekwa kwenye Desktop')};im.onerror=()=>say('❌ Faili hili si picha');im.src=u};i.click()}
-settings=function(){
- const box=wrap(),tabs=E('div','bar stabs'),row=E('div'),side=E('div','sd'),main=E('div','s11');row.style.cssText='display:flex;flex:1;min-height:0';row.append(side,main);box.append(tabs,row);let cur='🎨 Personalization';
- const card=h=>{const c=E('div','card',h||'');main.append(c);return c};
- const tog=(c,k)=>{const s=E('div','swt'+(Sx[k]?' on':''));s.onclick=()=>{Sx[k]=Sx[k]?0:1;sv();applyS();applyA();applyWP();s.classList.toggle('on')};c.append(s)};
- const rng=(c,k,min,max)=>{const i=E('input');i.type='range';i.min=min;i.max=max||100;i.value=Sx[k];i.style.cssText='flex:1;accent-color:var(--ac)';i.oninput=()=>{Sx[k]=+i.value;sv();applyS();applyA()};c.append(i);return i};
- const btn=(c,t,f)=>{const b=E('button','sb',t);b.onclick=f;c.append(b)};
- const sw=(t,k)=>{const c=card('<span style="flex:1">'+t+'</span>');const s=E('div','swt'+(Sx[k]?' on':''));s.onclick=()=>{Sx[k]=Sx[k]?0:1;if(k==='air'&&Sx.air)Sx.wifi=Sx.bt=0;if((k==='wifi'||k==='bt')&&Sx[k])Sx.air=0;sv();applyS();draw()};c.append(s)};
- const PG={
- '🎨 Personalization':()=>{main.innerHTML='<h3>Personalization</h3>';
-  const pv=E('div','pv','<div class="pvi"><i></i><i></i><i></i></div><div class="pvt"><i></i><i></i><i></i><i></i></div>');pv.style.background='#06122e '+curWP()+' '+(FIT[Sx.wf]||FIT.cover);main.append(pv);
-  main.append(E('div','','<b>'+wpName()+'</b> <span style="opacity:.7">— picha ya sasa ya Desktop</span>'));main.lastChild.style.cssText='margin:-4px 0 12px';
-  const g=card('<div style="flex-basis:100%;font-weight:600">Chagua picha ya Desktop (picha 10)</div>'),gr=E('div','wpg');g.append(gr);
-  WP.forEach((u,i)=>{const on=!isCu()&&V.wp%WP.length===i,d=E('div','wpi'+(on?' on':''),'<div class="wpt"></div><span>'+(i+1)+'. '+WN[i]+'</span>');d.firstChild.style.backgroundImage=u;d.onclick=()=>{V.wp=i;Sx.wc=-1;persist();draw()};gr.append(d)});
-  const cu=cUrl(),t=E('div','wpi'+(isCu()?' on':''),'<div class="wpt">'+(cu?'':'➕')+'</div><span>'+(cu?'Picha yako':'Pakia picha yako')+'</span>');if(cu)t.firstChild.style.backgroundImage='url("'+cu+'")';t.onclick=()=>{if(cu){Sx.wc=V.wp;persist();draw()}else pickWP()};gr.append(t);
-  const u=card('');btn(u,'📤 Pakia picha kutoka kompyuta',pickWP);if(cu)btn(u,'🗑️ Ondoa picha yangu',()=>{try{localStorage.removeItem(CK)}catch(_){}Sx.wc=-1;persist();draw()});
-  const f=card('<span style="flex:1">Mpangilio wa picha</span>'),sl=E('select');[['cover','Jaza (Fill)'],['contain','Kaa (Fit)'],['stretch','Nyoosha (Stretch)'],['center','Katikati (Center)']].forEach(o=>{const op=E('option','',o[1]);op.value=o[0];if(Sx.wf===o[0])op.selected=true;sl.append(op)});sl.onchange=()=>{Sx.wf=sl.value;sv();applyWP();draw()};f.append(sl);
-  tog(card('<span style="flex:1">🔁 Badilisha picha kiotomatiki kila dakika 5</span>'),'ws');
-  const a=card('Accent color');['#0067c0','#107c10','#c42b1c','#8764b8','#ca5010','#00b7c3','#e3008c','#767676'].forEach(c=>{
+.pv{width:min(100%,380px);aspect-ratio:16/9;border-radius:10px;border:1px solid var(--bd);position:relative;overflow:hidden;margin-bottom:12px
