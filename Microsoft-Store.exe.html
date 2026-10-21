@@ -79,7 +79,7 @@ select{background:var(--card);color:var(--fg);border:1px solid var(--bd);border-
 </style></head><body>
 <div id="rail"></div>
 <div id="wrap">
- <div id="top"><button id="bk" title="Nyuma">←</button><div id="sb"><span>🔍</span><input id="q" placeholder="Tafuta programu, michezo, mafaili…" autocomplete="off"></div><div id="av" title="Lightness">L</div></div>
+ <div id="top"><button id="bk" title="Back">←</button><div id="sb"><span>🔍</span><input id="q" placeholder="Search apps, games, files…" autocomplete="off"></div><div id="av" title="Lightness">L</div></div>
  <div id="main"></div>
 </div>
 <script>
@@ -88,7 +88,7 @@ let D={items:[],inst:[]},ready=false;
 const ask=(a,x)=>{try{parent.postMessage(Object.assign({sadeStore:a},x||{}),'*')}catch(_){}if(a!=='get'){setTimeout(poll,250);setTimeout(poll,900)}};
 addEventListener('message',e=>{if(e.data&&e.data.sadeStoreData){D=e.data.sadeStoreData;ready=true;badges();paint()}});
 /* ====== HALI ====== */
-const S={page:'home',q:'',cat:'Zote',key:null,tab:'inst',sort:'az',hist:[],dl:[],hero:0,upd:0,gcat:'Zote'};
+const S={page:'home',q:'',cat:'All',key:null,tab:'inst',sort:'az',hist:[],dl:[],hero:0,upd:0,gcat:'All'};
 const $=s=>document.querySelector(s),main=$('#main');
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const hash=s=>{let h=7;for(const c of String(s))h=(h*31+c.charCodeAt(0))>>>0;return h};
@@ -98,7 +98,7 @@ const title=n=>/\.(exe|lnk)$/i.test(n)?n.replace(/\.[^.]+$/,'').replace(/-/g,' '
 const rating=n=>(3.6+(hash(n)%14)/10).toFixed(1),votes=n=>(120+hash(n+'v')%9000).toLocaleString('en-US'),size=n=>{const m=2+hash(n+'s')%180;return m+' MB'};
 const ver=n=>'1.'+(hash(n)%9)+'.'+(hash(n+'x')%20);
 const catOf=f=>String(f).split(' ')[0];
-const CATN={Nyaraka:'Nyaraka',Picha:'Picha',Video:'Video',Muziki:'Muziki',Programu:'Programu',Code:'Msimbo',Zilizobanwa:'Zilizobanwa',Database:'Hifadhidata',Mfumo:'Mfumo',Diski:'Diski',Desktop:'Desktop'};
+const CATN={Nyaraka:'Documents',Picha:'Pictures',Video:'Videos',Muziki:'Music',Programu:'Apps',Code:'Code',Zilizobanwa:'Archives',Database:'Databases',Mfumo:'System',Diski:'Disks',Desktop:'Desktop'};
 const catN=c=>CATN[c]||c;
 const GAMEY=/game|music|dj|youtube|tiktok|facebook|instagram|mchezo|wimbo|video|filamu/i;
 function apps(){const L=[];
@@ -115,9 +115,68 @@ function readParent(){try{const P=parent,ev=P.eval,V=ev('V'),ICN=ev('ICN'),ico=e
  const items=(V.store||[]).filter(s=>s&&Array.isArray(s.o)).map(s=>({id:s.id,n:s.n,o:s.o,from:s.d,e:emo(s.o[1])}));return{items,inst}}catch(e){S.perr=String(e);return null}}
 let lastSig='';function poll(){const d=readParent();if(!d)return;S.noaddon=!parent.__storeAddon;S.aerr=parent.__storeAddonErr||'';const sig=JSON.stringify(d)+S.noaddon+S.aerr;if(ready&&sig===lastSig)return;lastSig=sig;D=d;ready=true;badges();paint()}
 setInterval(poll,1000);addEventListener('focus',poll);
+/* ====== SELF-INSTALL: Store adds its own Install/Uninstall engine to Sade Computer ====== */
+function SADE_ADDON(){
+const PF='Programu (Programs)',SN='Microsoft-Store.exe';
+V.store=V.store||[];
+/* --- zana --- */
+const sameO=(a,b)=>a[0]===b[0]&&a[1]===b[1];
+const copies=o=>{const r=[];Object.keys(V.F).forEach(f=>{if(f!==BIN)V.F[f].forEach(e=>e&&Array.isArray(e.o)&&sameO(e.o,o)&&r.push([f,e]))});return r};
+const isGone=o=>V.store.some(s=>sameO(s.o,o))&&!copies(o).length;
+const emo=n=>ICN[n]||ico[ext(n)]||'📄';
+const diO=d=>{if(d[4])return d[4];const m=/openF\('([^']+)'\s*,\s*'([^']+)'\)/.exec(String(d[2]));return m?[m[1],m[2]]:null};
+function toast(m){const t=E('div','',m);t.style.cssText='position:fixed;left:50%;bottom:64px;transform:translateX(-50%);background:#1f2a44;color:#fff;padding:9px 16px;border-radius:20px;z-index:400000;box-shadow:0 4px 16px #0006;font:13px Segoe UI,system-ui,sans-serif;max-width:90vw;text-align:center';document.body.append(t);setTimeout(()=>t.remove(),3200)}
+/* --- UNINSTALL: faili linatoka kwenye kompyuta na kwenda Store --- */
+function uninstallO(o,pref,ask){if(o[1]===SN)return 0;const cs=copies(o);if(!cs.length)return 0;
+ const home=cs.find(x=>x[0]===pref)||cs[0],name=home[1].n;
+ if(ask!==0&&!confirm('Uninstall "'+name+'"?\nIt will move to Microsoft Store (you can put it back with Install).'))return 0;
+ V.store.push({id:'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),n:name,o,d:home[0]==='Desktop'?o[0]:home[0],t:Date.now()});
+ cs.forEach(([f,e])=>V.F[f]=V.F[f].filter(x=>x!==e));
+ V.pin=V.pin.filter(p=>!(p.t==='f'&&sameO(p.o,o)));
+ persist();toast('🛍️ "'+name+'" moved to Microsoft Store');return 1}
+function uninstall(items){const ok=items.length>1?confirm('Uninstall '+items.length+' items? They will move to Microsoft Store.'):1;if(!ok)return;
+ items.forEach(([fo,n])=>{const e=get(fo,n);if(e&&fo!==BIN)uninstallO(e.o,fo,0)});if(items.length===1){}}
+/* --- INSTALL: kutoka Store linarudi kwenye folda lake --- */
+function install(id){const s=V.store.find(x=>x.id===id);if(!s)return;
+ const d=(V.F[s.d]&&s.d!==BIN)?s.d:'Desktop';V.F[d].push({n:uniq(d,s.n),o:s.o});V.store=V.store.filter(x=>x!==s);persist();toast('✅ "'+s.n+'" installed again → '+d.split(' ')[0])}
+/* --- kuzuia kufungua faili lililoondolewa --- */
+const _o=openF;openF=function(f,n){if(f!=='@imp'&&isGone([f,n])){toast('🛍️ "'+n+'" is uninstalled. Restore it from Microsoft Store → Install.');return}return _o.apply(this,arguments)};
+/* --- chaguo la Uninstall kwenye menyu ya kubofya kulia / kubonyeza muda mrefu --- */
+let EXTRA=null,xt;
+const _menu=menu;menu=function(x,y,items){if(EXTRA){items=items.concat([null],EXTRA);EXTRA=null}_menu(x,y,items)};
+const _fm=fileMenu;fileMenu=function(x,y,fo,names){if(fo!==BIN&&names.some(n=>{const e=get(fo,n);return e&&e.o[1]!==SN}))EXTRA=[['🛍️ Uninstall',()=>uninstall(names.map(n=>[fo,n]))]];_fm(x,y,fo,names);EXTRA=null};
+/* --- icons za programu kwenye Desktop: Uninstall + ficha zilizoondolewa --- */
+const targetO=t=>{if(!t||!t.closest)return null;let el;
+ if(el=t.closest('#menu .sa')){const k=[...el.parentNode.children].indexOf(el),d=DI[k];return d?diO(d):null}
+ if(el=t.closest('#pins button')){const j=[...el.parentNode.children].indexOf(el),L=V.pin.filter(p=>p.t!=='d'||DI[p.k]),p=L[j];return p?(p.t==='d'?diO(DI[p.k]):p.o):null}
+ if(el=t.closest('#desk .ic')){const k=el.dataset.k;if(k&&k[0]==='#'){const d=DI[+k.slice(1)];return d?diO(d):null}const e=V.F.Desktop.find(x=>x.n===k);return e?e.o:null}
+ return null};
+const armAt=e=>{const o=targetO(e.target);if(!o||o[1]===SN)return;EXTRA=[['🛍️ Uninstall',()=>uninstallO(o,null,0)]];clearTimeout(xt);xt=setTimeout(()=>EXTRA=null,900)};
+addEventListener('contextmenu',armAt,true);addEventListener('touchstart',armAt,{capture:true,passive:true});
+const _dd=drawDesk;drawDesk=function(){_dd();DI.forEach((d,k)=>{const o=diO(d);if(!o||d[3])return;const el=D.querySelector(':scope>.ic[data-k="#'+k+'"]');if(el&&isGone(o))el.remove()})};
+const hideStart=()=>{const g=M.querySelector('.pg6');if(g)[...g.children].forEach((c,k)=>{const d=DI[k],o=d&&diO(d);if(o&&isGone(o))c.style.display='none'})};
+new MutationObserver(hideStart).observe(M,{childList:true,subtree:true});
+const _dp=drawPins;drawPins=function(){_dp();const P=$('#pins');let j=0;V.pin.forEach(p=>{if(p.t==='d'&&!DI[p.k])return;const b=P.children[j++];const o=p.t==='d'?diO(DI[p.k]):p.o;if(b&&o&&isGone(o))b.style.display='none'})};
+/* --- mawasiliano na dirisha la Store --- */
+const SRC=new Set(),pack=()=>{const seen=new Set(),inst=[];
+ Object.keys(V.F).forEach(f=>{if(f===BIN)return;V.F[f].forEach(e=>{if(!e||!Array.isArray(e.o))return;const k=e.o+'';if(seen.has(k))return;seen.add(k);inst.push({n:e.n,f,o:e.o,e:emo(e.o[1]),lock:e.o[1]===SN})})});
+ return{items:V.store.map(s=>({id:s.id,n:s.n,o:s.o,from:s.d,e:emo(s.o[1])})),inst}};
+const push=w=>{try{w.postMessage({sadeStoreData:pack()},'*')}catch(_){SRC.delete(w)}};
+addEventListener('message',e=>{const d=e.data;if(!d||!d.sadeStore)return;SRC.add(e.source);
+ if(d.sadeStore==='install')install(d.id);
+ else if(d.sadeStore==='installAll')V.store.slice().forEach(s=>install(s.id));
+ else if(d.sadeStore==='uninstall'&&d.o)uninstallO(d.o,null,0);
+ else if(d.sadeStore==='open'&&d.o){const c=copies(d.o)[0];openE(c?c[1]:{n:d.o[1],o:d.o})}
+ push(e.source)});
+EXP.add(()=>SRC.forEach(push));
+window.__storeAddon=1;
+persist();
+
+}
+function inject(){try{const P=parent;if(!P||!P.document||P.__storeAddon||P.__storeAddonErr||P.__storeInjected)return;P.__storeInjected=1;const sc=P.document.createElement('script');sc.textContent='try{('+SADE_ADDON.toString()+')()}catch(e){window.__storeAddonErr=String(e&&e.stack||e).slice(0,300)}';P.document.head.appendChild(sc)}catch(_){}}
 /* ====== RAIL ====== */
 const IC={all:'<path d="M3 6a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',home:'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',apps:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',game:'<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4M16 11v.01M18.5 13.5v.01"/>',lib:'<path d="M4 4v16M9 4v16M14 6l5 14M14 6l-3 1"/>',dl:'<path d="M12 3v12M7 11l5 5 5-5M4 21h16"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17v.01"/>'};
-const NAV=[['home','Mwanzo','home'],['apps','Programu','apps'],['game','Burudani','game'],['lib','Maktaba','lib'],['all','Mafaili','all'],['dl','Vipakuliwa','dl'],['help','Msaada','help']];
+const NAV=[['home','Home','home'],['apps','Apps','apps'],['game','Fun','game'],['lib','Library','lib'],['all','Files','all'],['dl','Downloads','dl'],['help','Help','help']];
 function rail(){const r=$('#rail');r.innerHTML='';NAV.forEach(([p,l,i])=>{if(p==='help')r.append(Object.assign(document.createElement('div'),{className:'sp'}));
  const b=document.createElement('button');b.className='ri'+(S.page===p||(S.page==='detail'&&S.from===p)?' on':'');b.id='n-'+p;b.title=l;
  b.innerHTML=`<svg viewBox="0 0 24 24">${IC[i]}</svg>${l}`;b.onclick=()=>go(p);r.append(b)});badges()}
@@ -132,16 +191,16 @@ $('#q').oninput=e=>{const v=e.target.value.trim();if(v&&S.page!=='search'){S.his
  if(!v&&S.page==='search'){const h=S.hist.pop();S.page=h?h.page:'home';S.key=h?h.key:null}S.q=v.toLowerCase();paint()};
 /* ====== KUPAKUA / UNINSTALL ====== */
 function install(a){if(!a||a.st!=='removed'||dlOf(a)||NOA())return;const d={id:a.id,n:a.n,e:a.e,p:0,done:0};S.dl.unshift(d);badges();
- const t=setInterval(()=>{d.p+=6+Math.random()*14;if(d.p>=100){d.p=100;clearInterval(t);d.done=Date.now();ask('install',{id:d.id});toast('✅ '+title(d.n)+' imewekwa',['Fungua',()=>{const x=apps().find(z=>z.st==='inst'&&z.n===d.n);x&&ask('open',{o:x.o})}]);badges()}
+ const t=setInterval(()=>{d.p+=6+Math.random()*14;if(d.p>=100){d.p=100;clearInterval(t);d.done=Date.now();ask('install',{id:d.id});toast('✅ '+title(d.n)+' installed',['Open',()=>{const x=apps().find(z=>z.st==='inst'&&z.n===d.n);x&&ask('open',{o:x.o})}]);badges()}
   tick()},140);paint()}
 function tick(){document.querySelectorAll('[data-p]').forEach(el=>{const d=S.dl.find(x=>x.id===el.dataset.p);if(d)el.style.width=Math.min(100,d.p)+'%'});
- document.querySelectorAll('[data-pt]').forEach(el=>{const d=S.dl.find(x=>x.id===el.dataset.pt);if(d)el.textContent=d.done?'Imekamilika':'Inapakua '+Math.round(d.p)+'%'})}
-const NOA=()=>{if(S.noaddon){toast('Pakia index.html mpya (na ufute cache) ili Install/Uninstall zifanye kazi');return 1}};
+ document.querySelectorAll('[data-pt]').forEach(el=>{const d=S.dl.find(x=>x.id===el.dataset.pt);if(d)el.textContent=d.done?'Completed':'Downloading '+Math.round(d.p)+'%'})}
+const NOA=()=>{if(S.noaddon){inject();toast('Please try again in a moment');return 1}};
 const uninstall=a=>{if(NOA())return;ask('uninstall',{o:a.o})},open_=a=>{try{parent.eval('openE')({n:a.n,o:a.o})}catch(_){ask('open',{o:a.o})}};
 /* ====== VIPANDE ====== */
 function act(a,small){const b=document.createElement('button');b.className='btn'+(small?' sm':'');b.onclick=e=>e.stopPropagation();
- if(a.st==='removed'){const d=dlOf(a);if(d){b.disabled=true;b.textContent='Inapakua…';b.dataset.pt=a.id}else{b.textContent='Install';b.onclick=e=>{e.stopPropagation();install(a)}}}
- else{b.textContent='Fungua';b.classList.add('s');b.onclick=e=>{e.stopPropagation();open_(a)}}return b}
+ if(a.st==='removed'){const d=dlOf(a);if(d){b.disabled=true;b.textContent='Downloading…';b.dataset.pt=a.id}else{b.textContent='Install';b.onclick=e=>{e.stopPropagation();install(a)}}}
+ else{b.textContent='Open';b.classList.add('s');b.onclick=e=>{e.stopPropagation();open_(a)}}return b}
 function tile(a){const t=document.createElement('div');t.className='tile';t.onclick=()=>go('detail',a.key);
  t.innerHTML=`<div class="ico" style="background:${grad(a.n)}">${a.e}</div><b title="${esc(a.n)}">${esc(title(a.n))}</b><small>${esc(catN(a.cat))}</small>${stars(a.n)}`;
  const d=dlOf(a);if(d)t.insertAdjacentHTML('beforeend',`<div class="pbar"><i data-p="${a.id}" style="width:${d.p}%"></i></div>`);t.append(act(a,1));return t}
@@ -152,14 +211,14 @@ function list(a){const r=document.createElement('div');r.className='lst';r.oncli
  const d=dlOf(a);if(d)r.querySelector('.nm').insertAdjacentHTML('beforeend',`<div class="pbar"><i data-p="${a.id}" style="width:${d.p}%"></i></div>`);
  r.append(act(a,1));
  if(a.st==='inst'&&!a.lock){const u=document.createElement('button');u.className='btn s d sm';u.textContent='Uninstall';u.onclick=e=>{e.stopPropagation();uninstall(a)};r.append(u)}return r}
-const chips=(cats,cur,fn)=>{const c=document.createElement('div');c.className='chips';cats.forEach(x=>{const b=document.createElement('button');b.className='chip'+(x===cur?' on':'');b.textContent=x==='Zote'?'Zote':catN(x);b.onclick=()=>fn(x);c.append(b)});return c};
+const chips=(cats,cur,fn)=>{const c=document.createElement('div');c.className='chips';cats.forEach(x=>{const b=document.createElement('button');b.className='chip'+(x===cur?' on':'');b.textContent=x==='All'?'All':catN(x);b.onclick=()=>fn(x);c.append(b)});return c};
 const empty=(i,t)=>`<div class="empty"><div>${i}</div>${t}</div>`;
 const sorter=l=>l.slice().sort((a,b)=>(S.sort==='za'?-1:1)*a.n.localeCompare(b.n,undefined,{sensitivity:'base'}));
 /* ====== PAGE: MWANZO ====== */
 const HERO=[
- {c:'linear-gradient(120deg,#0b3d91,#0078d4 60%,#50e6ff)',k:'Microsoft Store',t:'Karibu kwenye Microsoft Store',p:'Pata programu, michezo na mafaili yako yote mahali pamoja. Weka, ondoa na rudisha wakati wowote.',e:'🛍️',b:['Tazama Maktaba',()=>go('lib')]},
- {c:'linear-gradient(120deg,#6a1b9a,#c2185b 60%,#ff7043)',k:'Rudisha',t:'Ulifuta kitu kimakosa?',p:'Programu na mafaili uliyo-Uninstall yanasubiri hapa. Bonyeza Install nalo linarudi kwenye folda lake.',e:'♻️',b:['Zilizoondolewa',()=>{S.tab='rem';go('lib')}]},
- {c:'linear-gradient(120deg,#1b5e20,#43a047 60%,#c5e1a5)',k:'Burudani',t:'Michezo, muziki na video',p:'Gundua programu za burudani zilizopo kwenye kompyuta yako.',e:'🎮',b:['Gundua',()=>go('game')]}];
+ {c:'linear-gradient(120deg,#0b3d91,#0078d4 60%,#50e6ff)',k:'Microsoft Store',t:'Welcome to Microsoft Store',p:'Find your apps, games and files all in one place. Install, remove and restore at any time.',e:'🛍️',b:['View Library',()=>go('lib')]},
+ {c:'linear-gradient(120deg,#6a1b9a,#c2185b 60%,#ff7043)',k:'Restore',t:'Removed something by mistake?',p:'Apps and files you uninstalled wait here. Press Install and they go back to their folder.',e:'♻️',b:['Removed',()=>{S.tab='rem';go('lib')}]},
+ {c:'linear-gradient(120deg,#1b5e20,#43a047 60%,#c5e1a5)',k:'Entertainment',t:'Games, music and video',p:'Discover the entertainment apps on your computer.',e:'🎮',b:['Discover',()=>go('game')]}];
 let ht;
 function hero(){const h=document.createElement('div');h.className='hero';
  HERO.forEach((s,i)=>{const d=document.createElement('div');d.className='sl'+(i===S.hero?' on':'');d.style.background=s.c;d.innerHTML=`<small>${s.k}</small><h3>${s.t}</h3><p>${s.p}</p><div class="big">${s.e}</div>`;
@@ -170,75 +229,75 @@ function hero(){const h=document.createElement('div');h.className='hero';
  function reset(){clearInterval(ht);ht=setInterval(()=>{if(!document.body.contains(h))return clearInterval(ht);sh(S.hero+1)},5500)}reset();return h}
 function home(){const A=apps(),rem=A.filter(a=>a.st==='removed'),ins=A.filter(a=>a.st==='inst'&&!a.lock);
  main.append(hero());
- if(rem.length){main.append(sec('Zilizoondolewa — zirudishe',['Ona zote',()=>{S.tab='rem';go('lib')}]),row(rem.slice(0,12)))}
+ if(rem.length){main.append(sec('Removed — get them back',['See all',()=>{S.tab='rem';go('lib')}]),row(rem.slice(0,12)))}
  const exe=ins.filter(a=>/\.exe$/i.test(a.n)).sort((a,b)=>rating(b.n)-rating(a.n));
- if(exe.length)main.append(sec('Programu maarufu',['Zote',()=>go('apps')]),row(exe.slice(0,12)));
+ if(exe.length)main.append(sec('Popular apps',['All',()=>go('apps')]),row(exe.slice(0,12)));
  const g=ins.filter(a=>GAMEY.test(a.n)||['Video','Muziki'].includes(a.cat));
- if(g.length)main.append(sec('Michezo na burudani',['Zote',()=>go('game')]),row(g.slice(0,12)));
+ if(g.length)main.append(sec('Games & entertainment',['All',()=>go('game')]),row(g.slice(0,12)));
  const ot=ins.filter(a=>!/\.exe$/i.test(a.n)).sort((a,b)=>rating(b.n)-rating(a.n));
- if(ot.length)main.append(sec('Mafaili yako',['Maktaba',()=>go('lib')]),row(ot.slice(0,12)));
- if(!A.length)main.append(Object.assign(document.createElement('div'),{innerHTML:empty('🛍️','Hakuna kitu bado.')}))}
+ if(ot.length)main.append(sec('Your files',['Library',()=>go('lib')]),row(ot.slice(0,12)));
+ if(!A.length)main.append(Object.assign(document.createElement('div'),{innerHTML:empty('🛍️','Nothing here yet.')}))}
 /* ====== PAGE: PROGRAMU / BURUDANI ====== */
 function catalog(kind){const A=apps().filter(a=>!a.lock);
  const l=kind==='all'?A:kind==='game'?A.filter(a=>GAMEY.test(a.n)||['Video','Muziki'].includes(a.cat)):A.filter(a=>/\.(exe|msi|lnk|bat|cmd|ps1|dll|sys)$/i.test(a.n));
- main.innerHTML='';main.append(Object.assign(document.createElement('h1'),{textContent:kind==='all'?'Mafaili yote':kind==='game'?'Burudani':'Programu'}));
- const cs=['Zote',...new Set(l.map(a=>a.cat))],cur=cs.includes(S.cat)?S.cat:'Zote';
+ main.innerHTML='';main.append(Object.assign(document.createElement('h1'),{textContent:kind==='all'?'All files':kind==='game'?'Entertainment':'Apps'}));
+ const cs=['All',...new Set(l.map(a=>a.cat))],cur=cs.includes(S.cat)?S.cat:'All';
  main.append(chips(cs,cur,x=>{S.cat=x;paint()}));
- const f=cur==='Zote'?l:l.filter(a=>a.cat===cur);
- if(!f.length){main.insertAdjacentHTML('beforeend',empty('📦','Hakuna kitu kwenye sehemu hii.'));return}
+ const f=cur==='All'?l:l.filter(a=>a.cat===cur);
+ if(!f.length){main.insertAdjacentHTML('beforeend',empty('📦','Nothing in this section.'));return}
  const g=document.createElement('div');g.className='grid';sorter(f).forEach(a=>g.append(tile(a)));main.append(g)}
 /* ====== PAGE: MAKTABA ====== */
 function library(){const A=apps(),rem=A.filter(a=>a.st==='removed'),ins=A.filter(a=>a.st==='inst');
- main.append(Object.assign(document.createElement('h1'),{textContent:'Maktaba'}));
- const tb=document.createElement('div');tb.className='tabs';[['inst','Zilizowekwa ('+ins.length+')'],['rem','Zilizoondolewa ('+rem.length+')']].forEach(([k,l])=>{const b=document.createElement('button');b.className='tab'+(S.tab===k?' on':'');b.textContent=l;b.onclick=()=>{S.tab=k;paint()};tb.append(b)});main.append(tb);
+ main.append(Object.assign(document.createElement('h1'),{textContent:'Library'}));
+ const tb=document.createElement('div');tb.className='tabs';[['inst','Installed ('+ins.length+')'],['rem','Removed ('+rem.length+')']].forEach(([k,l])=>{const b=document.createElement('button');b.className='tab'+(S.tab===k?' on':'');b.textContent=l;b.onclick=()=>{S.tab=k;paint()};tb.append(b)});main.append(tb);
  const bar=document.createElement('div');bar.className='bar';bar.innerHTML='<span></span>';
- const up=document.createElement('button');up.className='btn s';up.textContent=S.upd===1?'Inatafuta…':'↻ Pata masasisho';up.disabled=S.upd===1;
- up.onclick=()=>{S.upd=1;paint();setTimeout(()=>{S.upd=2;paint();toast('Kila kitu kimesasishwa')},1400)};bar.append(up);
- if(S.tab==='rem'&&rem.length>1){const ia=document.createElement('button');ia.className='btn';ia.textContent='⬇ Install zote ('+rem.length+')';ia.onclick=()=>rem.forEach(install);bar.append(ia)}
- const so=document.createElement('select');so.innerHTML='<option value="az">Jina A→Z</option><option value="za">Jina Z→A</option>';so.value=S.sort;so.onchange=()=>{S.sort=so.value;paint()};bar.append(so);main.append(bar);
- if(S.upd===2)main.insertAdjacentHTML('beforeend','<div class="rv">✅ Programu zako zote ni za kisasa.</div>');
+ const up=document.createElement('button');up.className='btn s';up.textContent=S.upd===1?'Checking…':'↻ Check for updates';up.disabled=S.upd===1;
+ up.onclick=()=>{S.upd=1;paint();setTimeout(()=>{S.upd=2;paint();toast('Everything is up to date')},1400)};bar.append(up);
+ if(S.tab==='rem'&&rem.length>1){const ia=document.createElement('button');ia.className='btn';ia.textContent='⬇ Install all ('+rem.length+')';ia.onclick=()=>rem.forEach(install);bar.append(ia)}
+ const so=document.createElement('select');so.innerHTML='<option value="az">Name A→Z</option><option value="za">Name Z→A</option>';so.value=S.sort;so.onchange=()=>{S.sort=so.value;paint()};bar.append(so);main.append(bar);
+ if(S.upd===2)main.insertAdjacentHTML('beforeend','<div class="rv">✅ All your apps are up to date.</div>');
  const L=S.tab==='rem'?rem:ins;
- if(!L.length){main.insertAdjacentHTML('beforeend',S.tab==='rem'?empty('♻️','Hakuna kilichoondolewa.<br>Ukiondoa faili kwa <b>Uninstall</b>, litaonekana hapa.'):empty('📚','Hakuna kitu.'));return}
+ if(!L.length){main.insertAdjacentHTML('beforeend',S.tab==='rem'?empty('♻️','Nothing removed.<br>Files you remove with <b>Uninstall</b> will show up here.'):empty('📚','Nothing here.'));return}
  sorter(L).forEach(a=>main.append(list(a)))}
 /* ====== PAGE: VIPAKULIWA ====== */
-function downloads(){main.append(Object.assign(document.createElement('h1'),{textContent:'Vipakuliwa na masasisho'}));
- if(!S.dl.length){main.insertAdjacentHTML('beforeend',empty('⬇️','Hakuna vipakuliwa.<br>Bonyeza <b>Install</b> kwenye programu ili kuanza.'));return}
- const b=document.createElement('div');b.className='bar';b.innerHTML='<span>'+S.dl.filter(d=>!d.done).length+' vinaendelea · '+S.dl.filter(d=>d.done).length+' vimekamilika</span>';
- const c=document.createElement('button');c.className='btn s';c.textContent='Futa historia';c.onclick=()=>{S.dl=S.dl.filter(d=>!d.done);paint();badges()};b.append(c);main.append(b);
+function downloads(){main.append(Object.assign(document.createElement('h1'),{textContent:'Downloads & updates'}));
+ if(!S.dl.length){main.insertAdjacentHTML('beforeend',empty('⬇️','No downloads.<br>Press <b>Install</b> on an app to start.'));return}
+ const b=document.createElement('div');b.className='bar';b.innerHTML='<span>'+S.dl.filter(d=>!d.done).length+' in progress · '+S.dl.filter(d=>d.done).length+' completed</span>';
+ const c=document.createElement('button');c.className='btn s';c.textContent='Clear history';c.onclick=()=>{S.dl=S.dl.filter(d=>!d.done);paint();badges()};b.append(c);main.append(b);
  S.dl.forEach(d=>{const r=document.createElement('div');r.className='lst';r.style.cursor='default';
-  r.innerHTML=`<div class="ico" style="background:${grad(d.n)}">${d.e}</div><div class="nm"><b>${esc(title(d.n))}</b><small data-pt="${d.id}">${d.done?'Imekamilika':'Inapakua '+Math.round(d.p)+'%'}</small><div class="pbar"><i data-p="${d.id}" style="width:${d.p}%"></i></div></div>`;
-  if(d.done){const o=document.createElement('button');o.className='btn s sm';o.textContent='Fungua';o.onclick=()=>{const x=apps().find(z=>z.st==='inst'&&z.n===d.n);x?open_(x):toast('Faili halipo')};r.append(o)}main.append(r)})}
+  r.innerHTML=`<div class="ico" style="background:${grad(d.n)}">${d.e}</div><div class="nm"><b>${esc(title(d.n))}</b><small data-pt="${d.id}">${d.done?'Completed':'Downloading '+Math.round(d.p)+'%'}</small><div class="pbar"><i data-p="${d.id}" style="width:${d.p}%"></i></div></div>`;
+  if(d.done){const o=document.createElement('button');o.className='btn s sm';o.textContent='Open';o.onclick=()=>{const x=apps().find(z=>z.st==='inst'&&z.n===d.n);x?open_(x):toast('File not found')};r.append(o)}main.append(r)})}
 /* ====== PAGE: MAELEZO ====== */
 function detail(){const a=byKey(S.key);
- if(!a){main.innerHTML=empty('🔍','Programu hii haipatikani tena.<br><button class="btn" style="margin-top:12px" id="gb">Rudi Mwanzo</button>');$('#gb').onclick=()=>go('home');return}
+ if(!a){main.innerHTML=empty('🔍','This app is no longer available.<br><button class="btn" style="margin-top:12px" id="gb">Back to Home</button>');$('#gb').onclick=()=>go('home');return}
  const h=document.createElement('div');h.className='dh';
- h.innerHTML=`<div class="ico" style="background:${grad(a.n)}">${a.e}</div><div class="info"><h1>${esc(title(a.n))}</h1><div class="pub">Sade Computer</div><div class="st" style="margin-top:4px">${esc(catN(a.cat))} · ${a.st==='inst'?'Imewekwa':'Haijawekwa'}</div>
- <div class="facts"><div><b><u style="text-decoration:none;color:#f7a800">★</u> ${rating(a.n)}</b><small>${votes(a.n)} maoni</small></div><div><b>${size(a.n)}</b><small>Ukubwa</small></div><div><b>3+</b><small>Umri</small></div><div><b>${ver(a.n)}</b><small>Toleo</small></div></div><div id="ab" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"></div></div>`;
+ h.innerHTML=`<div class="ico" style="background:${grad(a.n)}">${a.e}</div><div class="info"><h1>${esc(title(a.n))}</h1><div class="pub">Sade Computer</div><div class="st" style="margin-top:4px">${esc(catN(a.cat))} · ${a.st==='inst'?'Installed':'Not installed'}</div>
+ <div class="facts"><div><b><u style="text-decoration:none;color:#f7a800">★</u> ${rating(a.n)}</b><small>${votes(a.n)} reviews</small></div><div><b>${size(a.n)}</b><small>Size</small></div><div><b>3+</b><small>Age</small></div><div><b>${ver(a.n)}</b><small>Version</small></div></div><div id="ab" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"></div></div>`;
  main.append(h);const ab=h.querySelector('#ab');ab.append(act(a));
  const d=dlOf(a);if(d)ab.insertAdjacentHTML('beforeend',`<div style="flex:1;min-width:120px"><div class="pbar"><i data-p="${a.id}" style="width:${d.p}%"></i></div></div>`);
  if(a.st==='inst'&&!a.lock){const u=document.createElement('button');u.className='btn s d';u.textContent='Uninstall';u.onclick=()=>uninstall(a);ab.append(u)}
- if(a.lock)ab.insertAdjacentHTML('beforeend','<span class="st">Programu ya mfumo — haiwezi kuondolewa</span>');
- main.append(sec('Picha za skrini'));const sh=document.createElement('div');sh.className='shots';for(let i=0;i<4;i++){const s=document.createElement('div');s.className='shot';s.style.background=grad(a.n+i);s.textContent=a.e;sh.append(s)}main.append(sh);
- main.append(sec('Maelezo'));main.insertAdjacentHTML('beforeend',`<p class="desc">${esc(title(a.n))} ni ${/\.(exe|msi|lnk)$/i.test(a.n)?'programu':'faili'} kutoka kategoria ya <b>${esc(catN(a.cat))}</b>. Inaweza kuwekwa au kuondolewa wakati wowote kupitia Microsoft Store, na ukiirudisha itarudi kwenye folda lake la asili bila kupoteza mpangilio wako.</p>`);
- main.append(sec('Maelezo ya ziada'));
- main.insertAdjacentHTML('beforeend',`<div class="kv"><span>Mchapishaji</span><div>Sade Computer</div><span>Folda asili</span><div>${esc(catN(a.cat))}</div><span>Aina ya faili</span><div>${esc((a.n.split('.').pop()||'').toUpperCase())}</div><span>Toleo</span><div>${ver(a.n)}</div><span>Ukubwa</span><div>${size(a.n)}</div><span>Imesasishwa</span><div>${new Date(Date.now()-(hash(a.n)%90)*864e5).toLocaleDateString('sw-TZ')}</div><span>Mfumo</span><div>Windows 11 · Sade Computer</div></div>`);
- main.append(sec('Maoni na ukadiriaji'));
- [['Asha M.','Inafanya kazi vizuri, ni nyepesi na rahisi kutumia.'],['Juma K.','Nimeirudisha kutoka Store bila shida yoyote. Safi!'],['Neema T.','Ingekuwa bora zaidi na mandhari ya giza.']].forEach(([n,t],i)=>main.insertAdjacentHTML('beforeend',`<div class="rv"><b>${n}</b> <span class="st"><u>${'★'.repeat(5-(i===2?1:0))}</u></span><br>${t}<br><small>${new Date(Date.now()-(i+2)*864e5*3).toLocaleDateString('sw-TZ')}</small></div>`));
+ if(a.lock)ab.insertAdjacentHTML('beforeend','<span class="st">System app — cannot be removed</span>');
+ main.append(sec('Screenshots'));const sh=document.createElement('div');sh.className='shots';for(let i=0;i<4;i++){const s=document.createElement('div');s.className='shot';s.style.background=grad(a.n+i);s.textContent=a.e;sh.append(s)}main.append(sh);
+ main.append(sec('Description'));main.insertAdjacentHTML('beforeend',`<p class="desc">${esc(title(a.n))} is ${/\.(exe|msi|lnk)$/i.test(a.n)?'an app':'a file'} from the <b>${esc(catN(a.cat))}</b> category. It can be installed or removed at any time through Microsoft Store, and when you restore it, it returns to its original folder with your layout intact.</p>`);
+ main.append(sec('Additional information'));
+ main.insertAdjacentHTML('beforeend',`<div class="kv"><span>Publisher</span><div>Sade Computer</div><span>Original folder</span><div>${esc(catN(a.cat))}</div><span>File type</span><div>${esc((a.n.split('.').pop()||'').toUpperCase())}</div><span>Version</span><div>${ver(a.n)}</div><span>Size</span><div>${size(a.n)}</div><span>Updated</span><div>${new Date(Date.now()-(hash(a.n)%90)*864e5).toLocaleDateString('en-GB')}</div><span>Mfumo</span><div>Windows 11 · Sade Computer</div></div>`);
+ main.append(sec('Ratings & reviews'));
+ [['Asha M.','Works great, lightweight and easy to use.'],['Juma K.','Restored it from the Store with no trouble at all. Great!'],['Neema T.','Would be even better with a dark theme.']].forEach(([n,t],i)=>main.insertAdjacentHTML('beforeend',`<div class="rv"><b>${n}</b> <span class="st"><u>${'★'.repeat(5-(i===2?1:0))}</u></span><br>${t}<br><small>${new Date(Date.now()-(i+2)*864e5*3).toLocaleDateString('en-GB')}</small></div>`));
  const sim=apps().filter(x=>x.cat===a.cat&&x.key!==a.key&&!x.lock).slice(0,10);
- if(sim.length){main.append(sec('Zinazofanana'),row(sim))}}
+ if(sim.length){main.append(sec('Similar'),row(sim))}}
 /* ====== PAGE: TAFUTA / MSAADA ====== */
-function search(){main.append(Object.assign(document.createElement('h1'),{textContent:'Matokeo ya "'+esc($('#q').value)+'"'}));
+function search(){main.append(Object.assign(document.createElement('h1'),{textContent:'Results for "'+esc($('#q').value)+'"'}));
  const L=apps().filter(a=>a.n.toLowerCase().includes(S.q)||catN(a.cat).toLowerCase().includes(S.q));
- if(!L.length){main.insertAdjacentHTML('beforeend',empty('🔍','Hakuna kilichopatikana.'));return}
+ if(!L.length){main.insertAdjacentHTML('beforeend',empty('🔍','Nothing found.'));return}
  sorter(L).forEach(a=>main.append(list(a)))}
-function help(){main.append(Object.assign(document.createElement('h1'),{textContent:'Msaada'}));
- [['Jinsi ya kuondoa (Uninstall)','Bonyeza kulia (au bonyeza muda mrefu) faili lolote kisha chagua "Uninstall". Litahamia Microsoft Store.'],['Jinsi ya kurudisha','Fungua Maktaba → Zilizoondolewa, kisha bonyeza Install. Litarudi kwenye folda lake la asili.'],['Programu za mfumo','Microsoft Store haiwezi kuondolewa.'],['Vipakuliwa','Angalia maendeleo ya Install kwenye ukurasa wa Vipakuliwa.']]
+function help(){main.append(Object.assign(document.createElement('h1'),{textContent:'Help'}));
+ [['How to remove (Uninstall)','Right-click (or long-press) any app or file and choose "Uninstall", or press Uninstall in the Store. It moves to Microsoft Store.'],['How to restore','Open Library → Removed, then press Install. It returns to its original folder.'],['System apps','Microsoft Store cannot be removed.'],['Downloads','Track the progress of Install on the Downloads page.']]
  .forEach(([t,d])=>main.insertAdjacentHTML('beforeend',`<div class="rv"><b>${t}</b><br>${d}</div>`))}
 /* ====== CHORA ====== */
 function paint(){const sy=main.scrollTop;main.innerHTML='';
- if(!ready){main.innerHTML='<div class="warn">⚠ Store inasubiri mfumo wa Sade Computer… Ikiendelea kuonekana hivi, <b>index.html</b> kwenye website yako ni ya zamani (haina kiambatisho cha Store) au kivinjari kinatumia nakala ya zamani. Pakia index.html mpya, kisha futa cache (Site settings → Clear data) na ufungue upya.</div>';return}
+ if(!ready){main.innerHTML='<div class="warn">Connecting to Sade Computer…</div>';return}
  if(!S.perr||ready){}
  ({home,all:()=>catalog('all'),apps:()=>catalog('app'),game:()=>catalog('game'),lib:library,dl:downloads,detail,search,help}[S.page]||home)();
   $('#bk').disabled=!S.hist.length;main.scrollTop=sy;tick()}
-rail();paint();poll();ask('get');setInterval(()=>{if(!ready)ask('get')},1000);
+inject();rail();paint();poll();ask('get');setInterval(()=>{if(!ready)ask('get')},1000);
 </script></body></html>
