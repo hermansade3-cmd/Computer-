@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="sw"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Microsoft Store</title>
+<style>
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#f3f3f3;--card:#fff;--card2:#f9f9f9;--fg:#1a1a1a;--mut:#5f5f5f;--bd:#e5e5e5;--ac:#0067c0;--acf:#fff;--hov:rgba(0,0,0,.055);--sh:0 2px 8px rgba(0,0,0,.08)}
+@media(prefers-color-scheme:dark){:root{--bg:#202020;--card:#2b2b2b;--card2:#323232;--fg:#fff;--mut:#b5b5b5;--bd:#3d3d3d;--ac:#4cc2ff;--acf:#000;--hov:rgba(255,255,255,.08);--sh:0 2px 8px rgba(0,0,0,.4)}}
+body{font:14px "Segoe UI Variable","Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--fg);height:100vh;display:flex;overflow:hidden;user-select:none}
+button{font:inherit;color:inherit;cursor:pointer}
+/* rail */
+#rail{width:68px;flex:none;display:flex;flex-direction:column;align-items:center;padding:8px 4px;gap:2px;border-right:1px solid var(--bd)}
+.ri{width:60px;padding:8px 2px 6px;border:0;background:none;border-radius:8px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--fg);position:relative}
+.ri svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ri:hover{background:var(--hov)}.ri.on{background:var(--hov);font-weight:600}
+.ri.on::before{content:"";position:absolute;left:-4px;top:50%;margin-top:-9px;width:3px;height:18px;border-radius:2px;background:var(--ac)}
+.ri i{position:absolute;top:2px;right:6px;min-width:16px;height:16px;border-radius:8px;background:var(--ac);color:var(--acf);font:600 10px/16px sans-serif;text-align:center;font-style:normal;padding:0 4px}
+.sp{flex:1}
+/* main */
+#wrap{flex:1;min-width:0;display:flex;flex-direction:column}
+#top{display:flex;align-items:center;gap:8px;padding:10px 16px}
+#bk{width:32px;height:32px;border:0;background:none;border-radius:6px;font-size:16px}#bk:hover:not(:disabled){background:var(--hov)}#bk:disabled{opacity:.3;cursor:default}
+#sb{flex:1;max-width:520px;margin:0 auto;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-bottom:2px solid var(--bd);border-radius:20px;padding:0 14px;height:34px}
+#sb:focus-within{border-bottom-color:var(--ac)}#sb input{flex:1;border:0;background:none;outline:0;font:inherit;color:var(--fg);user-select:text;min-width:0}
+#av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0078d4,#50e6ff);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+#main{flex:1;overflow:auto;padding:4px 20px 28px}
+h1{font-size:24px;font-weight:600;margin:6px 0 14px}h2{font-size:18px;font-weight:600}
+.sec{margin:22px 0 8px;display:flex;align-items:center;gap:10px}.sec h2{flex:1}
+.lnk{background:none;border:0;color:var(--ac);font-size:13px;padding:4px 8px;border-radius:5px}.lnk:hover{background:var(--hov)}
+/* hero */
+.hero{position:relative;height:200px;border-radius:12px;overflow:hidden;box-shadow:var(--sh);margin-top:4px}
+.sl{position:absolute;inset:0;padding:28px 34px;display:flex;flex-direction:column;justify-content:center;gap:8px;color:#fff;opacity:0;transition:opacity .5s;pointer-events:none}
+.sl.on{opacity:1;pointer-events:auto}.sl small{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.sl h3{font-size:28px;font-weight:600;max-width:70%}.sl p{max-width:62%;opacity:.92;line-height:1.45}
+.sl .big{position:absolute;right:34px;top:50%;transform:translateY(-50%);font-size:100px;filter:drop-shadow(0 6px 14px #0006)}
+.dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px}
+.dots b{width:7px;height:7px;border-radius:4px;background:#fff7;cursor:pointer;transition:.2s}.dots b.on{width:20px;background:#fff}
+.hb{position:absolute;top:50%;margin-top:-16px;width:32px;height:32px;border-radius:50%;border:0;background:#0005;color:#fff;font-size:15px;opacity:0;transition:.2s}
+.hero:hover .hb{opacity:1}.hb.l{left:8px}.hb.r{right:8px}
+/* buttons */
+.btn{background:var(--ac);color:var(--acf);border:1px solid transparent;border-radius:5px;padding:6px 16px;font-weight:600;white-space:nowrap}
+.btn:hover{filter:brightness(1.1)}.btn:disabled{opacity:.6;cursor:default;filter:none}
+.btn.s{background:var(--card2);color:var(--fg);border-color:var(--bd);font-weight:400}.btn.s:hover{background:var(--hov);filter:none}
+.btn.w{background:#fff;color:#0067c0}.btn.sm{padding:3px 14px;font-size:13px}
+.btn.d:hover{background:#c42b1c;color:#fff;border-color:#c42b1c}
+/* rows & tiles */
+.row{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin}
+.tile{flex:none;width:158px;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:5px;cursor:pointer;box-shadow:var(--sh);transition:transform .12s}
+.tile:hover{transform:translateY(-2px);background:var(--card2)}
+.ico{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 2px 6px rgba(0,0,0,.25);flex:none}
+.tile b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:4px}
+.tile small,.lst small{color:var(--mut);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st{color:var(--mut);font-size:12px}.st u{text-decoration:none;color:#f7a800}
+.tile .btn{margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}.grid .tile{width:auto}
+.lst{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer}
+.lst:hover{background:var(--card2)}.lst .ico{width:44px;height:44px;font-size:24px;border-radius:9px}.lst .nm{flex:1;min-width:0}.lst .nm b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:1px solid var(--bd);background:var(--card);border-radius:16px;padding:4px 14px;font-size:13px}.chip:hover{background:var(--hov)}.chip.on{background:var(--ac);color:var(--acf);border-color:var(--ac)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--bd);margin-bottom:12px}
+.tab{background:none;border:0;padding:8px 14px;border-bottom:3px solid transparent;border-radius:4px 4px 0 0}.tab.on{border-bottom-color:var(--ac);font-weight:600}.tab:hover{background:var(--hov)}
+.bar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}.bar span{flex:1;color:var(--mut)}
+select{background:var(--card);color:var(--fg);border:1px solid var(--bd);border-radius:5px;padding:5px 8px;font:inherit}
+.empty{text-align:center;color:var(--mut);padding:44px 20px;line-height:1.7}.empty div{font-size:54px;margin-bottom:6px}
+/* detail */
+.dh{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-top:8px}.dh .ico{width:112px;height:112px;font-size:60px;border-radius:22px}
+.dh .info{flex:1;min-width:200px}.dh h1{margin:0 0 2px}.pub{color:var(--ac);font-size:13px}
+.facts{display:flex;gap:0;margin:14px 0;flex-wrap:wrap}.facts div{padding:0 18px;border-left:1px solid var(--bd);text-align:center;min-width:80px}.facts div:first-child{border:0;padding-left:0;text-align:left}
+.facts b{display:block;font-size:16px}.facts small{color:var(--mut);font-size:11px}
+.shots{display:flex;gap:12px;overflow-x:auto;padding:4px 0 10px}.shot{flex:none;width:260px;height:150px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:54px;box-shadow:var(--sh);color:#fff}
+.desc{line-height:1.6;max-width:760px;color:var(--fg)}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:8px 12px;font-size:13px;max-width:560px}.kv span{color:var(--mut)}
+.rv{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:12px;margin-bottom:8px;max-width:760px}.rv small{color:var(--mut)}
+/* progress */
+.pbar{height:4px;border-radius:2px;background:var(--bd);overflow:hidden;margin-top:6px}.pbar i{display:block;height:100%;background:var(--ac);width:0;transition:width .12s}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--card);border:1px solid var(--bd);box-shadow:0 6px 24px rgba(0,0,0,.35);border-radius:8px;padding:10px 16px;z-index:9;display:flex;gap:10px;align-items:center;animation:up .25s}
+@keyframes up{from{opacity:0;transform:translate(-50%,12px)}}
+.warn{background:#fff4ce;color:#5c4400;padding:10px 14px;border-radius:8px;margin:10px 0}
+@media(max-width:520px){#rail{width:52px}.ri{width:48px;font-size:0}.sl h3{font-size:20px;max-width:100%}.sl p,.sl .big{display:none}#main{padding:4px 12px 24px}}
+</style></head><body>
+<div id="rail"></div>
+<div id="wrap">
+ <div id="top"><button id="bk" title="Nyuma">←</button><div id="sb"><span>🔍</span><input id="q" placeholder="Tafuta programu, michezo, mafaili…" autocomplete="off"></div><div id="av" title="Lightness">L</div></div>
+ <div id="main"></div>
+</div>
+<script>
+/* ====== MAWASILIANO NA SADE COMPUTER ====== */
+let D={items:[],inst:[]},ready=false;
+const ask=(a,x)=>{try{parent.postMessage(Object.assign({sadeStore:a},x||{}),'*')}catch(_){}};
+addEventListener('message',e=>{if(e.data&&e.data.sadeStoreData){D=e.data.sadeStoreData;ready=true;badges();paint()}});
+/* ====== HALI ====== */
+const S={page:'home',q:'',cat:'Zote',key:null,tab:'inst',sort:'az',hist:[],dl:[],hero:0,upd:0,gcat:'Zote'};
+const $=s=>document.querySelector(s),main=$('#main');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hash=s=>{let h=7;for(const c of String(s))h=(h*31+c.charCodeAt(0))>>>0;return h};
+const GR=[['#0078d4','#50e6ff'],['#8e24aa','#ec407a'],['#2e7d32','#9ccc65'],['#e64a19','#ffb300'],['#00838f','#26c6da'],['#3949ab','#7986cb'],['#c62828','#ff7043'],['#455a64','#90a4ae']];
+const grad=n=>{const g=GR[hash(n)%GR.length];return `linear-gradient(135deg,${g[0]},${g[1]})`};
+const title=n=>/\.(exe|lnk)$/i.test(n)?n.replace(/\.[^.]+$/,'').replace(/-/g,' '):n;
+const rating=n=>(3.6+(hash(n)%14)/10).toFixed(1),votes=n=>(120+hash(n+'v')%9000).toLocaleString('en-US'),size=n=>{const m=2+hash(n+'s')%180;return m+' MB'};
+const ver=n=>'1.'+(hash(n)%9)+'.'+(hash(n+'x')%20);
+const catOf=f=>String(f).split(' ')[0];
+const CATN={Nyaraka:'Nyaraka',Picha:'Picha',Video:'Video',Muziki:'Muziki',Programu:'Programu',Code:'Msimbo',Zilizobanwa:'Zilizobanwa',Database:'Hifadhidata',Mfumo:'Mfumo',Diski:'Diski',Desktop:'Desktop'};
+const catN=c=>CATN[c]||c;
+const GAMEY=/game|music|dj|youtube|tiktok|facebook|instagram|mchezo|wimbo|video|filamu/i;
+function apps(){const L=[];
+ D.items.forEach(x=>L.push({key:'r:'+x.id,id:x.id,n:x.n,e:x.e,st:'removed',cat:catOf(x.from)}));
+ D.inst.forEach(x=>L.push({key:'i:'+x.o,o:x.o,n:x.n,e:x.e,st:'inst',cat:catOf(x.f),lock:x.lock}));
+ return L}
+const byKey=k=>apps().find(a=>a.key===k);
+const dlOf=a=>S.dl.find(d=>d.id===a.id&&!d.done);
+function stars(n){const r=+rating(n);return `<span class="st"><u>★</u> ${r} · ${votes(n)}</span>`}
+function toast(m,btn){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;if(btn){const b=document.createElement('button');b.className='btn sm';b.textContent=btn[0];b.onclick=()=>{t.remove();btn[1]()};t.append(b)}document.body.append(t);setTimeout(()=>t.remove(),4200)}
+/* ====== RAIL ====== */
+const IC={home:'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',apps:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',game:'<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4M16 11v.01M18.5 13.5v.01"/>',lib:'<path d="M4 4v16M9 4v16M14 6l5 14M14 6l-3 1"/>',dl:'<path d="M12 3v12M7 11l5 5 5-5M4 21h16"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17v.01"/>'};
+const NAV=[['home','Mwanzo','home'],['apps','Programu','apps'],['game','Burudani','game'],['lib','Maktaba','lib'],['dl','Vipakuliwa','dl'],['help','Msaada','help']];
+function rail(){const r=$('#rail');r.innerHTML='';NAV.forEach(([p,l,i])=>{if(p==='help')r.append(Object.assign(document.createElement('div'),{className:'sp'}));
+ const b=document.createElement('button');b.className='ri'+(S.page===p||(S.page==='detail'&&S.from===p)?' on':'');b.id='n-'+p;b.title=l;
+ b.innerHTML=`<svg viewBox="0 0 24 24">${IC[i]}</svg>${l}`;b.onclick=()=>go(p);r.append(b)});badges()}
+function badges(){const n=D.items.length,a=S.dl.filter(d=>!d.done).length;
+ [['lib',n],['dl',a]].forEach(([p,v])=>{const b=$('#n-'+p);if(!b)return;const o=b.querySelector('i');o&&o.remove();if(v)b.insertAdjacentHTML('beforeend','<i>'+v+'</i>')})}
+/* ====== NAVIGASHENI ====== */
+function go(p,key){if(S.page!==p||S.key!==key)S.hist.push({page:S.page,key:S.key,from:S.from,q:S.q});
+ if(p==='detail')S.from=S.page==='detail'?S.from:S.page;else S.from=null;
+ S.page=p;S.key=key||null;if(p!=='search'){S.q='';$('#q').value=''}rail();paint();main.scrollTop=0}
+$('#bk').onclick=()=>{const h=S.hist.pop();if(!h)return;S.page=h.page;S.key=h.key;S.from=h.from;S.q=h.q;$('#q').value=h.q;rail();paint()};
+$('#q').oninput=e=>{const v=e.target.value.trim();if(v&&S.page!=='search'){S.hist.push({page:S.page,key:S.key,from:S.from,q:''});S.page='search';rail()}
+ if(!v&&S.page==='search'){const h=S.hist.pop();S.page=h?h.page:'home';S.key=h?h.key:null}S.q=v.toLowerCase();paint()};
+/* ====== KUPAKUA / UNINSTALL ====== */
+function install(a){if(!a||a.st!=='removed'||dlOf(a))return;const d={id:a.id,n:a.n,e:a.e,p:0,done:0};S.dl.unshift(d);badges();
+ const t=setInterval(()=>{d.p+=6+Math.random()*14;if(d.p>=100){d.p=100;clearInterval(t);d.done=Date.now();ask('install',{id:d.id});toast('✅ '+title(d.n)+' imewekwa',['Fungua',()=>{const x=apps().find(z=>z.st==='inst'&&z.n===d.n);x&&ask('open',{o:x.o})}]);badges()}
+  tick()},140);paint()}
+function tick(){document.querySelectorAll('[data-p]').forEach(el=>{const d=S.dl.find(x=>x.id===el.dataset.p);if(d)el.style.width=Math.min(100,d.p)+'%'});
+ document.querySelectorAll('[data-pt]').forEach(el=>{const d=S.dl.find(x=>x.id===el.dataset.pt);if(d)el.textContent=d.done?'Imekamilika':'Inapakua '+Math.round(d.p)+'%'})}
+const uninstall=a=>ask('uninstall',{o:a.o}),open_=a=>ask('open',{o:a.o});
+/* ====== VIPANDE ====== */
+function act(a,small){const b=document.createElement('button');b.className='btn'+(small?' sm':'');b.onclick=e=>e.stopPropagation();
+ if(a.st==='removed'){const d=dlOf(a);if(d){b.disabled=true;b.textContent='Inapakua…';b.dataset.pt=a.id}else{b.textContent=small?'Pata':'Install';b.onclick=e=>{e.stopPropagation();install(a)}}}
+ else{b.textContent='Fungua';b.classList.add('s');b.onclick=e=>{e.stopPropagation();open_(a)}}return b}
+function tile(a){const t=document.createElement('div');t.className='tile';t.onclick=()=>go('detail',a.key);
+ t.innerHTML=`<div class="ico" style="background:${grad(a.n)}">${a.e}</div><b title="${esc(a.n)}">${esc(title(a.n))}</b><small>${esc(catN(a.cat))}</small>${stars(a.n)}`;
+ const d=dlOf(a);if(d)t.insertAdjacentHTML('beforeend',`<div class="pbar"><i data-p="${a.id}" style="width:${d.p}%"></i></div>`);t.append(act(a,1));return t}
+function row(list){const r=document.createElement('div');r.className='row';list.forEach(a=>r.append(tile(a)));return r}
+function sec(t,link){const s=document.createElement('div');s.className='sec';s.innerHTML='<h2>'+t+'</h2>';if(link){const b=document.createElement('button');b.className='lnk';b.textContent=link[0]+' ›';b.onclick=link[1];s.append(b)}return s}
+function list(a){const r=document.createElement('div');r.className='lst';r.onclick=()=>go('detail',a.key);
+ r.innerHTML=`<div class="ico" style="background:${grad(a.n)}">${a.e}</div><div class="nm"><b>${esc(title(a.n))}</b><small>${esc(catN(a.cat))} · ${size(a.n)}</small></div>`;
+ const d=dlOf(a);if(d)r.querySelector('.nm').insertAdjacentHTML('beforeend',`<div class="pbar"><i data-p="${a.id}" style="width:${d.p}%"></i></div>`);
+ r.append(act(a,1));
+ if(a.st==='inst'&&!a.lock){const u=document.createElement('button');u.className='btn s d sm';u.textContent='Uninstall';u.onclick=e=>{e.stopPropagation();uninstall(a)};r.append(u)}return r}
+const chips=(cats,cur,fn)=>{const c=document.createElement('div');c.className='chips';cats.forEach(x=>{const b=document.createElement('button');b.className='chip'+(x===cur?' on':'');b.textContent=x==='Zote'?'Zote':catN(x);b.onclick=()=>fn(x);c.append(b)});return c};
+const empty=(i,t)=>`<div class="empty"><div>${i}</div>${t}</div>`;
+const sorter=l=>l.slice().sort((a,b)=>(S.sort==='za'?-1:1)*a.n.localeCompare(b.n,undefined,{sensitivity:'base'}));
+/* ====== PAGE: MWANZO ====== */
+const HERO=[
+ {c:'linear-gradient(120deg,#0b3d91,#0078d4 60%,#50e6ff)',k:'Microsoft Store',t:'Karibu kwenye Microsoft Store',p:'Pata programu, michezo na mafaili yako yote mahali pamoja. Weka, ondoa na rudisha wakati wowote.',e:'🛍️',b:['Tazama Maktaba',()=>go('lib')]},
+ {c:'linear-gradient(120deg,#6a1b9a,#c2185b 60%,#ff7043)',k:'Rudisha',t:'Ulifuta kitu kimakosa?',p:'Programu na mafaili uliyo-Uninstall yanasubiri hapa. Bonyeza Install nalo linarudi kwenye folda lake.',e:'♻️',b:['Zilizoondolewa',()=>{S.tab='rem';go('lib')}]},
+ {c:'linear-gradient(120deg,#1b5e20,#43a047 60%,#c5e1a5)',k:'Burudani',t:'Michezo, muziki na video',p:'Gundua programu za burudani zilizopo kwenye kompyuta yako.',e:'🎮',b:['Gundua',()=>go('game')]}];
+let ht;
+function hero(){const h=document.createElement('div');h.className='hero';
+ HERO.forEach((s,i)=>{const d=document.createElement('div');d.className='sl'+(i===S.hero?' on':'');d.style.background=s.c;d.innerHTML=`<small>${s.k}</small><h3>${s.t}</h3><p>${s.p}</p><div class="big">${s.e}</div>`;
+  const b=document.createElement('button');b.className='btn w';b.style.alignSelf='flex-start';b.textContent=s.b[0];b.onclick=s.b[1];d.append(b);h.append(d)});
+ const dt=document.createElement('div');dt.className='dots';HERO.forEach((_,i)=>{const b=document.createElement('b');b.className=i===S.hero?'on':'';b.onclick=()=>sh(i);dt.append(b)});h.append(dt);
+ const mk=(c,f)=>{const b=document.createElement('button');b.className='hb '+c;b.textContent=c==='l'?'‹':'›';b.onclick=f;h.append(b)};mk('l',()=>sh(S.hero-1));mk('r',()=>sh(S.hero+1));
+ function sh(i){S.hero=(i+HERO.length)%HERO.length;h.querySelectorAll('.sl').forEach((x,k)=>x.classList.toggle('on',k===S.hero));dt.querySelectorAll('b').forEach((x,k)=>x.classList.toggle('on',k===S.hero));reset()}
+ function reset(){clearInterval(ht);ht=setInterval(()=>{if(!document.body.contains(h))return clearInterval(ht);sh(S.hero+1)},5500)}reset();return h}
+function home(){const A=apps(),rem=A.filter(a=>a.st==='removed'),ins=A.filter(a=>a.st==='inst'&&!a.lock);
+ main.append(hero());
+ if(rem.length){main.append(sec('Zilizoondolewa — zirudishe',['Ona zote',()=>{S.tab='rem';go('lib')}]),row(rem.slice(0,12)))}
+ const exe=ins.filter(a=>/\.exe$/i.test(a.n)).sort((a,b)=>rating(b.n)-rating(a.n));
+ if(exe.length)main.append(sec('Programu maarufu',['Zote',()=>go('apps')]),row(exe.slice(0,12)));
+ const g=ins.filter(a=>GAMEY.test(a.n)||['Video','Muziki'].includes(a.cat));
+ if(g.length)main.append(sec('Michezo na burudani',['Zote',()=>go('game')]),row(g.slice(0,12)));
+ const ot=ins.filter(a=>!/\.exe$/i.test(a.n)).sort((a,b)=>rating(b.n)-rating(a.n));
+ if(ot.length)main.append(sec('Mafaili yako',['Maktaba',()=>go('lib')]),row(ot.slice(0,12)));
+ if(!A.length)main.append(Object.assign(document.createElement('div'),{innerHTML:empty('🛍️','Hakuna kitu bado.')}))}
+/* ====== PAGE: PROGRAMU / BURUDANI ====== */
+function catalog(kind){const A=apps().filter(a=>!a.lock);
+ const l=kind==='game'?A.filter(a=>GAMEY.test(a.n)||['Video','Muziki'].includes(a.cat)):A.filter(a=>/\.(exe|msi|lnk|bat|cmd|ps1|dll|sys)$/i.test(a.n));
+ main.innerHTML='';main.append(Object.assign(document.createElement('h1'),{textContent:kind==='game'?'Burudani':'Programu'}));
+ const cs=['Zote',...new Set(l.map(a=>a.cat))],cur=cs.includes(S.cat)?S.cat:'Zote';
+ main.append(chips(cs,cur,x=>{S.cat=x;paint()}));
+ const f=cur==='Zote'?l:l.filter(a=>a.cat===cur);
+ if(!f.length){main.insertAdjacentHTML('beforeend',empty('📦','Hakuna kitu kwenye sehemu hii.'));return}
+ const g=document.createElement('div');g.className='grid';sorter(f).forEach(a=>g.append(tile(a)));main.append(g)}
+/* ====== PAGE: MAKTABA ====== */
+function library(){const A=apps(),rem=A.filter(a=>a.st==='removed'),ins=A.filter(a=>a.st==='inst');
+ main.append(Object.assign(document.createElement('h1'),{textContent:'Maktaba'}));
+ const tb=document.createElement('div');tb.className='tabs';[['inst','Zilizowekwa ('+ins.length+')'],['rem','Zilizoondolewa ('+rem.length+')']].forEach(([k,l])=>{const b=document.createElement('button');b.className='tab'+(S.tab===k?' on':'');b.textContent=l;b.onclick=()=>{S.tab=k;paint()};tb.append(b)});main.append(tb);
+ const bar=document.createElement('div');bar.className='bar';bar.innerHTML='<span></span>';
+ const up=document.createElement('button');up.className='btn s';up.textContent=S.upd===1?'Inatafuta…':'↻ Pata masasisho';up.disabled=S.upd===1;
+ up.onclick=()=>{S.upd=1;paint();setTimeout(()=>{S.upd=2;paint();toast('Kila kitu kimesasishwa')},1400)};bar.append(up);
+ if(S.tab==='rem'&&rem.length>1){const ia=document.createElement('button');ia.className='btn';ia.textContent='⬇ Install zote ('+rem.length+')';ia.onclick=()=>rem.forEach(install);bar.append(ia)}
+ const so=document.createElement('select');so.innerHTML='<option value="az">Jina A→Z</option><option value="za">Jina Z→A</option>';so.value=S.sort;so.onchange=()=>{S.sort=so.value;paint()};bar.append(so);main.append(bar);
+ if(S.upd===2)main.insertAdjacentHTML('beforeend','<div class="rv">✅ Programu zako zote ni za kisasa.</div>');
+ const L=S.tab==='rem'?rem:ins;
+ if(!L.length){main.insertAdjacentHTML('beforeend',S.tab==='rem'?empty('♻️','Hakuna kilichoondolewa.<br>Ukiondoa faili kwa <b>Uninstall</b>, litaonekana hapa.'):empty('📚','Hakuna kitu.'));return}
+ sorter(L).forEach(a=>main.append(list(a)))}
+/* ====== PAGE: VIPAKULIWA ====== */
+function downloads(){main.append(Object.assign(document.createElement('h1'),{textContent:'Vipakuliwa na masasisho'}));
+ if(!S.dl.length){main.insertAdjacentHTML('beforeend',empty('⬇️','Hakuna vipakuliwa.<br>Bonyeza <b>Install</b> kwenye programu ili kuanza.'));return}
+ const b=document.createElement('div');b.className='bar';b.innerHTML='<span>'+S.dl.filter(d=>!d.done).length+' vinaendelea · '+S.dl.filter(d=>d.done).length+' vimekamilika</span>';
+ const c=document.createElement('button');c.className='btn s';c.textContent='Futa historia';c.onclick=()=>{S.dl=S.dl.filter(d=>!d.done);paint();badges()};b.append(c);main.append(b);
+ S.dl.forEach(d=>{const r=document.createElement('div');r.className='lst';r.style.cursor='default';
+  r.innerHTML=`<div class="ico" style="background:${grad(d.n)}">${d.e}</div><div class="nm"><b>${esc(title(d.n))}</b><small data-pt="${d.id}">${d.done?'Imekamilika':'Inapakua '+Math.round(d.p)+'%'}</small><div class="pbar"><i data-p="${d.id}" style="width:${d.p}%"></i></div></div>`;
+  if(d.done){const o=document.createElement('button');o.className='btn s sm';o.textContent='Fungua';o.onclick=()=>{const x=apps().find(z=>z.st==='inst'&&z.n===d.n);x?open_(x):toast('Faili halipo')};r.append(o)}main.append(r)})}
+/* ====== PAGE: MAELEZO ====== */
+function detail(){const a=byKey(S.key);
+ if(!a){main.innerHTML=empty('🔍','Programu hii haipatikani tena.<br><button class="btn" style="margin-top:12px" id="gb">Rudi Mwanzo</button>');$('#gb').onclick=()=>go('home');return}
+ const h=document.createElement('div');h.className='dh';
+ h.innerHTML=`<div class="ico" style="background:${grad(a.n)}">${a.e}</div><div class="info"><h1>${esc(title(a.n))}</h1><div class="pub">Sade Computer</div><div class="st" style="margin-top:4px">${esc(catN(a.cat))} · ${a.st==='inst'?'Imewekwa':'Haijawekwa'}</div>
+ <div class="facts"><div><b><u style="text-decoration:none;color:#f7a800">★</u> ${rating(a.n)}</b><small>${votes(a.n)} maoni</small></div><div><b>${size(a.n)}</b><small>Ukubwa</small></div><div><b>3+</b><small>Umri</small></div><div><b>${ver(a.n)}</b><small>Toleo</small></div></div><div id="ab" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"></div></div>`;
+ main.append(h);const ab=h.querySelector('#ab');ab.append(act(a));
+ const d=dlOf(a);if(d)ab.insertAdjacentHTML('beforeend',`<div style="flex:1;min-width:120px"><div class="pbar"><i data-p="${a.id}" style="width:${d.p}%"></i></div></div>`);
+ if(a.st==='inst'&&!a.lock){const u=document.createElement('button');u.className='btn s d';u.textContent='Uninstall';u.onclick=()=>uninstall(a);ab.append(u)}
+ if(a.lock)ab.insertAdjacentHTML('beforeend','<span class="st">Programu ya mfumo — haiwezi kuondolewa</span>');
+ main.append(sec('Picha za skrini'));const sh=document.createElement('div');sh.className='shots';for(let i=0;i<4;i++){const s=document.createElement('div');s.className='shot';s.style.background=grad(a.n+i);s.textContent=a.e;sh.append(s)}main.append(sh);
+ main.append(sec('Maelezo'));main.insertAdjacentHTML('beforeend',`<p class="desc">${esc(title(a.n))} ni ${/\.(exe|msi|lnk)$/i.test(a.n)?'programu':'faili'} kutoka kategoria ya <b>${esc(catN(a.cat))}</b>. Inaweza kuwekwa au kuondolewa wakati wowote kupitia Microsoft Store, na ukiirudisha itarudi kwenye folda lake la asili bila kupoteza mpangilio wako.</p>`);
+ main.append(sec('Maelezo ya ziada'));
+ main.insertAdjacentHTML('beforeend',`<div class="kv"><span>Mchapishaji</span><div>Sade Computer</div><span>Folda asili</span><div>${esc(catN(a.cat))}</div><span>Aina ya faili</span><div>${esc((a.n.split('.').pop()||'').toUpperCase())}</div><span>Toleo</span><div>${ver(a.n)}</div><span>Ukubwa</span><div>${size(a.n)}</div><span>Imesasishwa</span><div>${new Date(Date.now()-(hash(a.n)%90)*864e5).toLocaleDateString('sw-TZ')}</div><span>Mfumo</span><div>Windows 11 · Sade Computer</div></div>`);
+ main.append(sec('Maoni na ukadiriaji'));
+ [['Asha M.','Inafanya kazi vizuri, ni nyepesi na rahisi kutumia.'],['Juma K.','Nimeirudisha kutoka Store bila shida yoyote. Safi!'],['Neema T.','Ingekuwa bora zaidi na mandhari ya giza.']].forEach(([n,t],i)=>main.insertAdjacentHTML('beforeend',`<div class="rv"><b>${n}</b> <span class="st"><u>${'★'.repeat(5-(i===2?1:0))}</u></span><br>${t}<br><small>${new Date(Date.now()-(i+2)*864e5*3).toLocaleDateString('sw-TZ')}</small></div>`));
+ const sim=apps().filter(x=>x.cat===a.cat&&x.key!==a.key&&!x.lock).slice(0,10);
+ if(sim.length){main.append(sec('Zinazofanana'),row(sim))}}
+/* ====== PAGE: TAFUTA / MSAADA ====== */
+function search(){main.append(Object.assign(document.createElement('h1'),{textContent:'Matokeo ya "'+esc($('#q').value)+'"'}));
+ const L=apps().filter(a=>a.n.toLowerCase().includes(S.q)||catN(a.cat).toLowerCase().includes(S.q));
+ if(!L.length){main.insertAdjacentHTML('beforeend',empty('🔍','Hakuna kilichopatikana.'));return}
+ sorter(L).forEach(a=>main.append(list(a)))}
+function help(){main.append(Object.assign(document.createElement('h1'),{textContent:'Msaada'}));
+ [['Jinsi ya kuondoa (Uninstall)','Bonyeza kulia (au bonyeza muda mrefu) faili lolote kisha chagua "Uninstall". Litahamia Microsoft Store.'],['Jinsi ya kurudisha','Fungua Maktaba → Zilizoondolewa, kisha bonyeza Install. Litarudi kwenye folda lake la asili.'],['Programu za mfumo','Microsoft Store haiwezi kuondolewa.'],['Vipakuliwa','Angalia maendeleo ya Install kwenye ukurasa wa Vipakuliwa.']]
+ .forEach(([t,d])=>main.insertAdjacentHTML('beforeend',`<div class="rv"><b>${t}</b><br>${d}</div>`))}
+/* ====== CHORA ====== */
+function paint(){const sy=main.scrollTop;main.innerHTML='';
+ if(!ready){main.innerHTML='<div class="warn">⚠ Store inasubiri mfumo wa Sade Computer… Hakikisha umeweka kiambatisho (store-addon) kwenye index.html.</div>';return}
+ ({home,apps:()=>catalog('app'),game:()=>catalog('game'),lib:library,dl:downloads,detail,search,help}[S.page]||home)();
+ $('#bk').disabled=!S.hist.length;main.scrollTop=sy;tick()}
+rail();paint();ask('get');let n=0;const iv=setInterval(()=>{if(ready||++n>6)return clearInterval(iv);ask('get')},500);
+</script></body></html>
