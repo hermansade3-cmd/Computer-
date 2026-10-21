@@ -102,16 +102,16 @@ const CATN={Nyaraka:'Nyaraka',Picha:'Picha',Video:'Video',Muziki:'Muziki',Progra
 const catN=c=>CATN[c]||c;
 const GAMEY=/game|music|dj|youtube|tiktok|facebook|instagram|mchezo|wimbo|video|filamu/i;
 function apps(){const L=[];
- D.items.forEach(x=>L.push({key:'r:'+x.id,id:x.id,n:x.n,e:x.e,st:'removed',cat:catOf(x.from)}));
- D.inst.forEach(x=>L.push({key:'i:'+x.o,o:x.o,n:x.n,e:x.e,st:'inst',cat:catOf(x.f),lock:x.lock}));
+ D.items.forEach(x=>L.push({key:'a:'+x.o,id:x.id,o:x.o,n:x.n,e:x.e,st:'removed',cat:catOf(x.from)}));
+ D.inst.forEach(x=>L.push({key:'a:'+x.o,o:x.o,n:x.n,e:x.e,st:'inst',cat:catOf(x.f),lock:x.lock}));
  return L}
 const byKey=k=>apps().find(a=>a.key===k);
 const dlOf=a=>S.dl.find(d=>d.id===a.id&&!d.done);
 function stars(n){const r=+rating(n);return `<span class="st"><u>★</u> ${r} · ${votes(n)}</span>`}
 function toast(m,btn){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;if(btn){const b=document.createElement('button');b.className='btn sm';b.textContent=btn[0];b.onclick=()=>{t.remove();btn[1]()};t.append(b)}document.body.append(t);setTimeout(()=>t.remove(),4200)}
 /* ====== RAIL ====== */
-const IC={home:'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',apps:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',game:'<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4M16 11v.01M18.5 13.5v.01"/>',lib:'<path d="M4 4v16M9 4v16M14 6l5 14M14 6l-3 1"/>',dl:'<path d="M12 3v12M7 11l5 5 5-5M4 21h16"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17v.01"/>'};
-const NAV=[['home','Mwanzo','home'],['apps','Programu','apps'],['game','Burudani','game'],['lib','Maktaba','lib'],['dl','Vipakuliwa','dl'],['help','Msaada','help']];
+const IC={all:'<path d="M3 6a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',home:'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',apps:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',game:'<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4M16 11v.01M18.5 13.5v.01"/>',lib:'<path d="M4 4v16M9 4v16M14 6l5 14M14 6l-3 1"/>',dl:'<path d="M12 3v12M7 11l5 5 5-5M4 21h16"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17v.01"/>'};
+const NAV=[['home','Mwanzo','home'],['apps','Programu','apps'],['game','Burudani','game'],['lib','Maktaba','lib'],['all','Mafaili','all'],['dl','Vipakuliwa','dl'],['help','Msaada','help']];
 function rail(){const r=$('#rail');r.innerHTML='';NAV.forEach(([p,l,i])=>{if(p==='help')r.append(Object.assign(document.createElement('div'),{className:'sp'}));
  const b=document.createElement('button');b.className='ri'+(S.page===p||(S.page==='detail'&&S.from===p)?' on':'');b.id='n-'+p;b.title=l;
  b.innerHTML=`<svg viewBox="0 0 24 24">${IC[i]}</svg>${l}`;b.onclick=()=>go(p);r.append(b)});badges()}
@@ -133,7 +133,7 @@ function tick(){document.querySelectorAll('[data-p]').forEach(el=>{const d=S.dl.
 const uninstall=a=>ask('uninstall',{o:a.o}),open_=a=>ask('open',{o:a.o});
 /* ====== VIPANDE ====== */
 function act(a,small){const b=document.createElement('button');b.className='btn'+(small?' sm':'');b.onclick=e=>e.stopPropagation();
- if(a.st==='removed'){const d=dlOf(a);if(d){b.disabled=true;b.textContent='Inapakua…';b.dataset.pt=a.id}else{b.textContent=small?'Pata':'Install';b.onclick=e=>{e.stopPropagation();install(a)}}}
+ if(a.st==='removed'){const d=dlOf(a);if(d){b.disabled=true;b.textContent='Inapakua…';b.dataset.pt=a.id}else{b.textContent='Install';b.onclick=e=>{e.stopPropagation();install(a)}}}
  else{b.textContent='Fungua';b.classList.add('s');b.onclick=e=>{e.stopPropagation();open_(a)}}return b}
 function tile(a){const t=document.createElement('div');t.className='tile';t.onclick=()=>go('detail',a.key);
  t.innerHTML=`<div class="ico" style="background:${grad(a.n)}">${a.e}</div><b title="${esc(a.n)}">${esc(title(a.n))}</b><small>${esc(catN(a.cat))}</small>${stars(a.n)}`;
@@ -173,8 +173,8 @@ function home(){const A=apps(),rem=A.filter(a=>a.st==='removed'),ins=A.filter(a=
  if(!A.length)main.append(Object.assign(document.createElement('div'),{innerHTML:empty('🛍️','Hakuna kitu bado.')}))}
 /* ====== PAGE: PROGRAMU / BURUDANI ====== */
 function catalog(kind){const A=apps().filter(a=>!a.lock);
- const l=kind==='game'?A.filter(a=>GAMEY.test(a.n)||['Video','Muziki'].includes(a.cat)):A.filter(a=>/\.(exe|msi|lnk|bat|cmd|ps1|dll|sys)$/i.test(a.n));
- main.innerHTML='';main.append(Object.assign(document.createElement('h1'),{textContent:kind==='game'?'Burudani':'Programu'}));
+ const l=kind==='all'?A:kind==='game'?A.filter(a=>GAMEY.test(a.n)||['Video','Muziki'].includes(a.cat)):A.filter(a=>/\.(exe|msi|lnk|bat|cmd|ps1|dll|sys)$/i.test(a.n));
+ main.innerHTML='';main.append(Object.assign(document.createElement('h1'),{textContent:kind==='all'?'Mafaili yote':kind==='game'?'Burudani':'Programu'}));
  const cs=['Zote',...new Set(l.map(a=>a.cat))],cur=cs.includes(S.cat)?S.cat:'Zote';
  main.append(chips(cs,cur,x=>{S.cat=x;paint()}));
  const f=cur==='Zote'?l:l.filter(a=>a.cat===cur);
@@ -230,7 +230,7 @@ function help(){main.append(Object.assign(document.createElement('h1'),{textCont
 /* ====== CHORA ====== */
 function paint(){const sy=main.scrollTop;main.innerHTML='';
  if(!ready){main.innerHTML='<div class="warn">⚠ Store inasubiri mfumo wa Sade Computer… Hakikisha umeweka kiambatisho (store-addon) kwenye index.html.</div>';return}
- ({home,apps:()=>catalog('app'),game:()=>catalog('game'),lib:library,dl:downloads,detail,search,help}[S.page]||home)();
+ ({home,all:()=>catalog('all'),apps:()=>catalog('app'),game:()=>catalog('game'),lib:library,dl:downloads,detail,search,help}[S.page]||home)();
  $('#bk').disabled=!S.hist.length;main.scrollTop=sy;tick()}
 rail();paint();ask('get');let n=0;const iv=setInterval(()=>{if(ready||++n>6)return clearInterval(iv);ask('get')},500);
 </script></body></html>
