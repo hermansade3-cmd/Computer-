@@ -862,4 +862,5 @@ async function openImp(key){const fr=E('iframe');fr.style.cssText='flex:1;border
  else fr.srcdoc='<body style="font:14px sans-serif;padding:20px"><h3>'+esc(r.name)+'</h3><p>'+(r.blob.size/1024).toFixed(1)+' KB</p><p>Aina hii haiwezi kuonyeshwa hapa. Tumia "⬇️ Hifadhi kwenye Kompyuta".</p>'}
 const _openF=openF;openF=function(f,n){return f==='@imp'?openImp(n):_openF(f,n)};
 /* ---------- Kupata maudhui ya faili (blob) kwa ajili ya drag-out / download ---------- */
-async function blobOf(fo,n){co
+async function blobOf(fo,n){
+ 
