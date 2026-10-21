@@ -229,8 +229,8 @@ function help(){main.append(Object.assign(document.createElement('h1'),{textCont
  .forEach(([t,d])=>main.insertAdjacentHTML('beforeend',`<div class="rv"><b>${t}</b><br>${d}</div>`))}
 /* ====== CHORA ====== */
 function paint(){const sy=main.scrollTop;main.innerHTML='';
- if(!ready){main.innerHTML='<div class="warn">⚠ Store inasubiri mfumo wa Sade Computer… Hakikisha umeweka kiambatisho (store-addon) kwenye index.html.</div>';return}
+ if(!ready){main.innerHTML='<div class="warn">⚠ Store inasubiri mfumo wa Sade Computer… Ikiendelea kuonekana hivi, <b>index.html</b> kwenye website yako ni ya zamani (haina kiambatisho cha Store) au kivinjari kinatumia nakala ya zamani. Pakia index.html mpya, kisha futa cache (Site settings → Clear data) na ufungue upya.</div>';return}
  ({home,all:()=>catalog('all'),apps:()=>catalog('app'),game:()=>catalog('game'),lib:library,dl:downloads,detail,search,help}[S.page]||home)();
  $('#bk').disabled=!S.hist.length;main.scrollTop=sy;tick()}
-rail();paint();ask('get');let n=0;const iv=setInterval(()=>{if(ready||++n>6)return clearInterval(iv);ask('get')},500);
+rail();paint();ask('get');setInterval(()=>{if(!ready)ask('get')},1000);
 </script></body></html>
