@@ -85,7 +85,7 @@ select{background:var(--card);color:var(--fg);border:1px solid var(--bd);border-
 <script>
 /* ====== MAWASILIANO NA SADE COMPUTER ====== */
 let D={items:[],inst:[]},ready=false;
-const ask=(a,x)=>{try{parent.postMessage(Object.assign({sadeStore:a},x||{}),'*')}catch(_){}};
+const ask=(a,x)=>{try{parent.postMessage(Object.assign({sadeStore:a},x||{}),'*')}catch(_){}if(a!=='get'){setTimeout(poll,250);setTimeout(poll,900)}};
 addEventListener('message',e=>{if(e.data&&e.data.sadeStoreData){D=e.data.sadeStoreData;ready=true;badges();paint()}});
 /* ====== HALI ====== */
 const S={page:'home',q:'',cat:'Zote',key:null,tab:'inst',sort:'az',hist:[],dl:[],hero:0,upd:0,gcat:'Zote'};
@@ -109,6 +109,12 @@ const byKey=k=>apps().find(a=>a.key===k);
 const dlOf=a=>S.dl.find(d=>d.id===a.id&&!d.done);
 function stars(n){const r=+rating(n);return `<span class="st"><u>★</u> ${r} · ${votes(n)}</span>`}
 function toast(m,btn){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;if(btn){const b=document.createElement('button');b.className='btn sm';b.textContent=btn[0];b.onclick=()=>{t.remove();btn[1]()};t.append(b)}document.body.append(t);setTimeout(()=>t.remove(),4200)}
+/* ====== KUSOMA MFUMO MOJA KWA MOJA (mafaili yote + yatakayoongezwa yanaonekana yenyewe) ====== */
+function readParent(){try{const P=parent,ev=P.eval,V=ev('V'),ICN=ev('ICN'),ico=ev('ico'),ext=ev('ext'),BIN=ev('BIN'),emo=n=>ICN[n]||ico[ext(n)]||'📄',seen=new Set(),inst=[];
+ Object.keys(V.F).forEach(f=>{if(f===BIN||!Array.isArray(V.F[f]))return;V.F[f].forEach(e=>{if(!e||!Array.isArray(e.o)||typeof e.n!=='string')return;const k=e.o+'';if(seen.has(k))return;seen.add(k);inst.push({n:e.n,f,o:e.o,e:emo(e.o[1]),lock:e.o[1]==='Microsoft-Store.exe'})})});
+ const items=(V.store||[]).filter(s=>s&&Array.isArray(s.o)).map(s=>({id:s.id,n:s.n,o:s.o,from:s.d,e:emo(s.o[1])}));return{items,inst}}catch(e){S.perr=String(e);return null}}
+let lastSig='';function poll(){const d=readParent();if(!d)return;S.noaddon=!parent.__storeAddon;S.aerr=parent.__storeAddonErr||'';const sig=JSON.stringify(d)+S.noaddon+S.aerr;if(ready&&sig===lastSig)return;lastSig=sig;D=d;ready=true;badges();paint()}
+setInterval(poll,1000);addEventListener('focus',poll);
 /* ====== RAIL ====== */
 const IC={all:'<path d="M3 6a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',home:'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',apps:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',game:'<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4M16 11v.01M18.5 13.5v.01"/>',lib:'<path d="M4 4v16M9 4v16M14 6l5 14M14 6l-3 1"/>',dl:'<path d="M12 3v12M7 11l5 5 5-5M4 21h16"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17v.01"/>'};
 const NAV=[['home','Mwanzo','home'],['apps','Programu','apps'],['game','Burudani','game'],['lib','Maktaba','lib'],['all','Mafaili','all'],['dl','Vipakuliwa','dl'],['help','Msaada','help']];
@@ -125,12 +131,13 @@ $('#bk').onclick=()=>{const h=S.hist.pop();if(!h)return;S.page=h.page;S.key=h.ke
 $('#q').oninput=e=>{const v=e.target.value.trim();if(v&&S.page!=='search'){S.hist.push({page:S.page,key:S.key,from:S.from,q:''});S.page='search';rail()}
  if(!v&&S.page==='search'){const h=S.hist.pop();S.page=h?h.page:'home';S.key=h?h.key:null}S.q=v.toLowerCase();paint()};
 /* ====== KUPAKUA / UNINSTALL ====== */
-function install(a){if(!a||a.st!=='removed'||dlOf(a))return;const d={id:a.id,n:a.n,e:a.e,p:0,done:0};S.dl.unshift(d);badges();
+function install(a){if(!a||a.st!=='removed'||dlOf(a)||NOA())return;const d={id:a.id,n:a.n,e:a.e,p:0,done:0};S.dl.unshift(d);badges();
  const t=setInterval(()=>{d.p+=6+Math.random()*14;if(d.p>=100){d.p=100;clearInterval(t);d.done=Date.now();ask('install',{id:d.id});toast('✅ '+title(d.n)+' imewekwa',['Fungua',()=>{const x=apps().find(z=>z.st==='inst'&&z.n===d.n);x&&ask('open',{o:x.o})}]);badges()}
   tick()},140);paint()}
 function tick(){document.querySelectorAll('[data-p]').forEach(el=>{const d=S.dl.find(x=>x.id===el.dataset.p);if(d)el.style.width=Math.min(100,d.p)+'%'});
  document.querySelectorAll('[data-pt]').forEach(el=>{const d=S.dl.find(x=>x.id===el.dataset.pt);if(d)el.textContent=d.done?'Imekamilika':'Inapakua '+Math.round(d.p)+'%'})}
-const uninstall=a=>ask('uninstall',{o:a.o}),open_=a=>ask('open',{o:a.o});
+const NOA=()=>{if(S.noaddon){toast('Pakia index.html mpya (na ufute cache) ili Install/Uninstall zifanye kazi');return 1}};
+const uninstall=a=>{if(NOA())return;ask('uninstall',{o:a.o})},open_=a=>{try{parent.eval('openE')({n:a.n,o:a.o})}catch(_){ask('open',{o:a.o})}};
 /* ====== VIPANDE ====== */
 function act(a,small){const b=document.createElement('button');b.className='btn'+(small?' sm':'');b.onclick=e=>e.stopPropagation();
  if(a.st==='removed'){const d=dlOf(a);if(d){b.disabled=true;b.textContent='Inapakua…';b.dataset.pt=a.id}else{b.textContent='Install';b.onclick=e=>{e.stopPropagation();install(a)}}}
@@ -230,7 +237,9 @@ function help(){main.append(Object.assign(document.createElement('h1'),{textCont
 /* ====== CHORA ====== */
 function paint(){const sy=main.scrollTop;main.innerHTML='';
  if(!ready){main.innerHTML='<div class="warn">⚠ Store inasubiri mfumo wa Sade Computer… Ikiendelea kuonekana hivi, <b>index.html</b> kwenye website yako ni ya zamani (haina kiambatisho cha Store) au kivinjari kinatumia nakala ya zamani. Pakia index.html mpya, kisha futa cache (Site settings → Clear data) na ufungue upya.</div>';return}
+ if(!S.perr||ready){}
  ({home,all:()=>catalog('all'),apps:()=>catalog('app'),game:()=>catalog('game'),lib:library,dl:downloads,detail,search,help}[S.page]||home)();
+ if(S.noaddon||S.aerr)main.insertAdjacentHTML('afterbegin','<div class="warn">⚠ Mafaili yote yanaonyeshwa, lakini kiambatisho cha Store hakipo/hakifanyi kazi kwenye <b>index.html</b> ya website yako, kwa hiyo Install/Uninstall havitafanya kazi. Pakia index.html mpya, futa cache (Site settings → Clear data) kisha ufungue upya.'+(S.aerr?'<br><small>'+esc(S.aerr)+'</small>':'')+'</div>');
  $('#bk').disabled=!S.hist.length;main.scrollTop=sy;tick()}
-rail();paint();ask('get');setInterval(()=>{if(!ready)ask('get')},1000);
+rail();paint();poll();ask('get');setInterval(()=>{if(!ready)ask('get')},1000);
 </script></body></html>
