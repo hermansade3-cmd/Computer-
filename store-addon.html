@@ -1,0 +1,58 @@
+<script>
+/* ===== MICROSOFT STORE ADD-ON =====
+   Bandika script hii MWISHONI mwa index.html (kabla ya </body>, baada ya script ya mwisho). */
+(()=>{
+const PF='Programu (Programs)',SN='Microsoft-Store.exe';
+V.store=V.store||[];
+/* --- sajili Microsoft Store kama programu --- */
+APP_SPEC[SN]=['#0078d4','#50e6ff','case'];ICN[SN]='🛍️';
+if(!FOLD[PF].split(',').includes(SN))FOLD[PF]+=','+SN;
+if(!V.seen[PF+'/'+SN]){V.seen[PF+'/'+SN]=1;V.F[PF].push({n:SN,o:[PF,SN]})}
+DI.push([FIL(SN),'Microsoft Store',()=>openF(PF,SN)]);
+/* --- zana --- */
+const sameO=(a,b)=>a[0]===b[0]&&a[1]===b[1];
+const copies=o=>{const r=[];Object.keys(V.F).forEach(f=>{if(f!==BIN)V.F[f].forEach(e=>sameO(e.o,o)&&r.push([f,e]))});return r};
+const isGone=o=>V.store.some(s=>sameO(s.o,o))&&!copies(o).length;
+const emo=n=>ICN[n]||ico[ext(n)]||'📄';
+const diO=d=>{if(d[4])return d[4];const m=/openF\('([^']+)'\s*,\s*'([^']+)'\)/.exec(String(d[2]));return m?[m[1],m[2]]:null};
+function toast(m){const t=E('div','',m);t.style.cssText='position:fixed;left:50%;bottom:64px;transform:translateX(-50%);background:#1f2a44;color:#fff;padding:9px 16px;border-radius:20px;z-index:400000;box-shadow:0 4px 16px #0006;font:13px Segoe UI,system-ui,sans-serif;max-width:90vw;text-align:center';document.body.append(t);setTimeout(()=>t.remove(),3200)}
+/* --- UNINSTALL: faili linatoka kwenye kompyuta na kwenda Store --- */
+function uninstallO(o,pref,ask){if(o[1]===SN)return 0;const cs=copies(o);if(!cs.length)return 0;
+ const home=cs.find(x=>x[0]===pref)||cs[0],name=home[1].n;
+ if(ask!==0&&!confirm('Uninstall "'+name+'"?\nLitahamishwa kwenye Microsoft Store (unaweza kuliweka tena kwa Install).'))return 0;
+ V.store.push({id:'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),n:name,o,d:home[0]==='Desktop'?o[0]:home[0],t:Date.now()});
+ cs.forEach(([f,e])=>V.F[f]=V.F[f].filter(x=>x!==e));
+ V.pin=V.pin.filter(p=>!(p.t==='f'&&sameO(p.o,o)));
+ persist();toast('🛍️ "'+name+'" limehamia Microsoft Store');return 1}
+function uninstall(items){const ok=items.length>1?confirm('Uninstall vitu '+items.length+'? Vitahamia Microsoft Store.'):1;if(!ok)return;
+ items.forEach(([fo,n])=>{const e=get(fo,n);if(e&&fo!==BIN)uninstallO(e.o,fo,0)});if(items.length===1){}}
+/* --- INSTALL: kutoka Store linarudi kwenye folda lake --- */
+function install(id){const s=V.store.find(x=>x.id===id);if(!s)return;
+ const d=(V.F[s.d]&&s.d!==BIN)?s.d:'Desktop';V.F[d].push({n:uniq(d,s.n),o:s.o});V.store=V.store.filter(x=>x!==s);persist();toast('✅ "'+s.n+'" limewekwa tena → '+d.split(' ')[0])}
+/* --- kuzuia kufungua faili lililoondolewa --- */
+const _o=openF;openF=function(f,n){if(f!=='@imp'&&isGone([f,n])){toast('🛍️ "'+n+'" limeondolewa. Lirudishe kupitia Microsoft Store → Install.');return}return _o.apply(this,arguments)};
+/* --- chaguo la Uninstall kwenye menyu ya kubofya kulia / kubonyeza muda mrefu --- */
+let EXTRA=null,xt;
+const _menu=menu;menu=function(x,y,items){if(EXTRA){items=items.concat([null],EXTRA);EXTRA=null}_menu(x,y,items)};
+const _fm=fileMenu;fileMenu=function(x,y,fo,names){if(fo!==BIN&&names.some(n=>{const e=get(fo,n);return e&&e.o[1]!==SN}))EXTRA=[['🛍️ Uninstall (peleka Microsoft Store)',()=>uninstall(names.map(n=>[fo,n]))]];_fm(x,y,fo,names);EXTRA=null};
+/* --- icons za programu kwenye Desktop: Uninstall + ficha zilizoondolewa --- */
+function arm(el,o){const set=()=>{EXTRA=[['🛍️ Uninstall (peleka Microsoft Store)',()=>uninstallO(o,null)]];clearTimeout(xt);xt=setTimeout(()=>EXTRA=null,900)};
+ el.addEventListener('contextmenu',set,true);el.addEventListener('touchstart',set,{capture:true,passive:true})}
+const _dd=drawDesk;drawDesk=function(){_dd();DI.forEach((d,k)=>{const o=diO(d);if(!o||d[3])return;const el=D.querySelector(':scope>.ic[data-k="#'+k+'"]');if(!el)return;if(isGone(o))el.remove();else arm(el,o)})};
+const hideStart=()=>{const g=M.querySelector('.pg6');if(g)[...g.children].forEach((c,k)=>{const d=DI[k],o=d&&diO(d);if(o&&isGone(o))c.style.display='none'})};
+new MutationObserver(hideStart).observe(M,{childList:true,subtree:true});
+const _dp=drawPins;drawPins=function(){_dp();const P=$('#pins');let j=0;V.pin.forEach(p=>{if(p.t==='d'&&!DI[p.k])return;const b=P.children[j++];const o=p.t==='d'?diO(DI[p.k]):p.o;if(b&&o&&isGone(o))b.style.display='none'})};
+/* --- mawasiliano na dirisha la Store --- */
+const SRC=new Set(),pack=()=>{const seen=new Set(),inst=[];
+ Object.keys(V.F).forEach(f=>{if(f===BIN)return;V.F[f].forEach(e=>{const k=e.o+'';if(seen.has(k))return;seen.add(k);inst.push({n:e.n,f,o:e.o,e:emo(e.o[1]),lock:e.o[1]===SN})})});
+ return{items:V.store.map(s=>({id:s.id,n:s.n,from:s.d,e:emo(s.o[1])})),inst}};
+const push=w=>{try{w.postMessage({sadeStoreData:pack()},'*')}catch(_){SRC.delete(w)}};
+addEventListener('message',e=>{const d=e.data;if(!d||!d.sadeStore)return;SRC.add(e.source);
+ if(d.sadeStore==='install')install(d.id);
+ else if(d.sadeStore==='installAll')V.store.slice().forEach(s=>install(s.id));
+ else if(d.sadeStore==='uninstall'&&d.o)uninstallO(d.o,null);
+ push(e.source)});
+EXP.add(()=>SRC.forEach(push));
+persist();
+})();
+</script>
