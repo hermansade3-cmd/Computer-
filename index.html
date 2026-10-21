@@ -522,6 +522,8 @@ const fi=FIL;
 <script>const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const ext=n=>n.split('.').pop().toLowerCase();
+const TTO={'HTML-CSS-JS-Editor':'HTML/CSS/JS Editor','Visual-Studio-Code':'Visual Studio Code','Python-IDE':'Python IDE','Circuit-Designer':'Circuit Designer','Music-DJ-Mix':'Music DJ Mix','Microsoft-QRCode':'QR Code','Microsoft-PDFReader':'PDF Reader'};
+const TT=n=>{n=String(n);const b=n.replace(/\.[^.]+$/,'')||n;return TTO[b]||b.replace(/-/g,' ')};
 /* ===== WINDOWS ===== */
 let Z=10,wins=[];
 function win(title,icon,w,h,body,onclose){
@@ -582,7 +584,7 @@ addEventListener('load',()=>{setTimeout(cnt,300);setTimeout(sync,1500)});addEven
 if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 /* ===== OPEN FILE ===== */
 async function openF(f,n){const s=f.split(' ')[0],P=paths(s,n).slice(0,5),key=s+'/'+n;
- const fr=E('iframe');fr.allow='camera;microphone;geolocation;clipboard-read;clipboard-write;display-capture;autoplay;fullscreen';fr.style.cssText='flex:1;border:0;width:100%;background:#fff';fr.onload=()=>{if(TAP)try{fr.contentDocument.activeElement.blur()}catch(_){}};win(n,fi(n),640,430,fr);
+ const fr=E('iframe');fr.allow='camera;microphone;geolocation;clipboard-read;clipboard-write;display-capture;autoplay;fullscreen';fr.style.cssText='flex:1;border:0;width:100%;background:#fff';fr.onload=()=>{if(TAP)try{fr.contentDocument.activeElement.blur()}catch(_){}};win(TT(n),fi(n),640,430,fr);
  const r=await fetchF(s,n);
  if(r&&r.txt!=null)DB.put(key,{html:r.txt,t:Date.now()}).then(cnt);
  if(r)fr.src=r.p;
@@ -648,7 +650,7 @@ function startAdd(o,n){DI.push([fi(o[1]),n,()=>openE({n,o}),1,o])}
 const startFile=(fo,n)=>{const e=get(fo,n);if(e&&!V.sp.some(p=>p.n===e.n&&p.o+''===e.o+'')){V.sp.push({o:e.o,n:e.n});startAdd(e.o,e.n)}};
 V.sp.forEach(p=>startAdd(p.o,p.n));
 DI.forEach(d=>{if(d[1]==='Recycle Bin')d[2]=()=>explorer(BIN)});
-function openE(e){if(!e)return;openF(e.o[0],e.o[1]);const w=wins[wins.length-1];if(w&&e.n!==e.o[1]){const s=w.el.querySelector('.h span');if(s)s.innerHTML=fi(e.o[1])+' &nbsp;'+esc(e.n)}}
+function openE(e){if(!e)return;openF(e.o[0],e.o[1]);const w=wins[wins.length-1];if(w&&e.n!==e.o[1]){const s=w.el.querySelector('.h span');if(s)s.innerHTML=fi(e.o[1])+' &nbsp;'+esc(TT(e.n))}}
 /* ----- menyu ya kubofya kulia / kubonyeza muda mrefu ----- */
 const CM=E('div');CM.id='cm';document.body.append(CM);
 function menu(x,y,items){CM.innerHTML='';items.forEach(it=>{if(!it){CM.append(E('hr'));return}const d=E('div',it[2]?'off':'',it[0]);if(!it[2])d.onclick=ev=>{ev.stopPropagation();CM.style.display='none';it[1]()};CM.append(d)});CM.style.display='block';const r=CM.getBoundingClientRect();CM.style.left=Math.max(4,Math.min(x,innerWidth-r.width-4))+'px';CM.style.top=Math.max(4,Math.min(y,innerHeight-r.height-4))+'px'}
@@ -854,13 +856,10 @@ async function importFile(f,fo){const x=f.name.includes('.')?ext(f.name):'dat',k
  await BD.put('blobs',key,{blob:f,name:f.name,type:f.type||MT[x]||''});OP.put('imported/'+key,f);
  const d=V.F[fo]&&fo!==BIN?fo:'Desktop';V.F[d].push({n:uniq(d,f.name),o:['@imp',key]})}
 window.pickUpload=fo=>{const i=E('input');i.type='file';i.multiple=true;i.onchange=async()=>{for(const f of i.files)await importFile(f,fo);persist();toast('📤 Mafaili '+i.files.length+' yamepakiwa → '+fo)};i.click()};
-async function openImp(key){const fr=E('iframe');fr.style.cssText='flex:1;border:0;width:100%;background:#fff';win(key,fi(key),640,430,fr);
- const r=await BD.get('blobs',key);if(!r){fr.srcdoc='<p style="font:14px sans-serif;padding:20px">⚠ Faili halipo kwenye hifadhi.</p>';return}
+async function openImp(key){const fr=E('iframe');fr.style.cssText='flex:1;border:0;width:100%;background:#fff';const wo=win('...',fi(key),640,430,fr);
+ const r=await BD.get('blobs',key);if(r){const t=TT(r.name);wo.el.querySelector('.h span').innerHTML=fi(key)+' &nbsp;'+esc(t);wo.tk.title=t}if(!r){fr.srcdoc='<p style="font:14px sans-serif;padding:20px">⚠ Faili halipo kwenye hifadhi.</p>';return}
  const t=r.type||'';if(/^(image|video|audio|text)\/|pdf|html|json|xml/.test(t))fr.src=URL.createObjectURL(new Blob([r.blob],{type:t+(/^text\//.test(t)?';charset=utf-8':'')}));
  else fr.srcdoc='<body style="font:14px sans-serif;padding:20px"><h3>'+esc(r.name)+'</h3><p>'+(r.blob.size/1024).toFixed(1)+' KB</p><p>Aina hii haiwezi kuonyeshwa hapa. Tumia "⬇️ Hifadhi kwenye Kompyuta".</p>'}
 const _openF=openF;openF=function(f,n){return f==='@imp'?openImp(n):_openF(f,n)};
 /* ---------- Kupata maudhui ya faili (blob) kwa ajili ya drag-out / download ---------- */
-async function blobOf(fo,n){const e=get(fo,n);if(!e)return null;
- if(e.o[0]==='@imp'){const r=await BD.get('blobs',e.o[1]);return r?{blob:new Blob([r.blob],{type:r.type||'application/octet-stream'}),name:e.n}:null}
- const s=e.o[0].split(' ')[0],c=await DB.get(s+'/'+e.o[1]);let h=c&&c.html;if(h==null){const r=await fetchF(s,e.o[1]);h=r&&r.txt}
- if(h==null)h='<!DOCTYPE html><meta charset="utf-8"><body style="font:14px sans-serif;padding:20px"><h3>'+esc(e.o[1])+'</h3><p>Faili halijahifadhiwa bado — fungua
+async function blobOf(fo,n){co
