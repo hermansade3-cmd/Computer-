@@ -863,17 +863,4 @@ const _openF=openF;openF=function(f,n){return f==='@imp'?openImp(n):_openF(f,n)}
 async function blobOf(fo,n){const e=get(fo,n);if(!e)return null;
  if(e.o[0]==='@imp'){const r=await BD.get('blobs',e.o[1]);return r?{blob:new Blob([r.blob],{type:r.type||'application/octet-stream'}),name:e.n}:null}
  const s=e.o[0].split(' ')[0],c=await DB.get(s+'/'+e.o[1]);let h=c&&c.html;if(h==null){const r=await fetchF(s,e.o[1]);h=r&&r.txt}
- if(h==null)h='<!DOCTYPE html><meta charset="utf-8"><body style="font:14px sans-serif;padding:20px"><h3>'+esc(e.o[1])+'</h3><p>Faili halijahifadhiwa bado — fungua Sade Computer ukiwa online mara moja.</p>';
- return{blob:new Blob([h],{type:'text/html;charset=utf-8'}),name:e.n+'.html'}}
-async function fsWrite(d,p,b){p=[].concat(p).map(safe);const f=p.pop();for(const s of p)d=await d.getDirectoryHandle(s,{create:true});const h=await d.getFileHandle(f,{create:true}),w=await h.createWritable();await w.write(b);await w.close()}
-window.saveOut=async items=>{const L=(await Promise.all(items.map(a=>blobOf(...a)))).filter(Boolean);if(!L.length)return;
- if(L.length>1&&window.showDirectoryPicker){try{const d=await showDirectoryPicker({mode:'readwrite'});for(const x of L)await fsWrite(d,x.name,x.blob);toast('✅ Mafaili '+L.length+' yamehifadhiwa');return}catch(e){if(e.name==='AbortError')return}}
- for(const x of L){const a=E('a');a.href=URL.createObjectURL(x.blob);a.download=x.name;document.body.append(a);a.click();a.remove();await new Promise(r=>setTimeout(r,300))}toast('⬇️ Imepakuliwa: '+L.length)};
-/* ---------- DRAG: toa nje kwenda Desktop halisi (Chrome/Edge) + ndani ya app (nakili kwenda Desktop) ---------- */
-const READY={};drag=function(){};
-document.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button)return;const el=e.target.closest&&e.target.closest('.it[data-k],.ic[data-k]');if(!el||el.dataset.fold||el.dataset.k[0]==='#')return;
- let fo='Desktop';if(el.classList.contains('it')){const b=el.closest('.grid');fo=b&&b.dataset.fold;if(!fo)return}
- el.draggable=true;const k=fo+'\0'+el.dataset.k;
- blobOf(fo,el.dataset.k).then(r=>{if(r){if(READY[k])URL.revokeObjectURL(READY[k].url);READY[k]={url:URL.createObjectURL(r.blob),name:r.name,type:r.blob.type||'application/octet-stream'}}})},true);
-document.addEventListener('dragstart',e=>{const el=e.target.closest&&e.target.closest('.it[data-k],.ic[data-k]');if(!el||!el.draggable)return;let fo='Desktop',names;
- if(el.classList.contains('ic'))names=[...D.querySelectorAll(':scope>.ic.s')].map(x=>x.dataset.k)
+ if(h==null)h='<!DOCTYPE html><meta charset="utf-8"><body style="font:14px sans-serif;padding:20px"><h3>'+esc(e.o[1])+'</h3><p>Faili halijahifadhiwa bado — fungua
